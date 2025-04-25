@@ -1,4 +1,4 @@
-package org.fabiojava.timebank.timebank;
+package org.fabiojava.timebank;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

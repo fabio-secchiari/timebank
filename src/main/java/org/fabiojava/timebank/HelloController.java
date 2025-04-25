@@ -1,4 +1,4 @@
-package org.fabiojava.timebank.timebank;
+package org.fabiojava.timebank;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
