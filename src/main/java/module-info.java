@@ -1,8 +1,29 @@
-module org.fabiojava.timebank.timebank {
+module TimeBank {
     requires javafx.controls;
     requires javafx.fxml;
+    requires javafx.graphics;
+    requires spring.context;
+    requires spring.boot;
+    requires spring.boot.autoconfigure;
+    requires spring.beans;
+    requires spring.core;
+    requires static lombok;
+    requires java.logging;
+    requires java.sql;
+    requires spring.jdbc;
+    requires spring.aop;
+    requires spring.data.jpa;
+    requires spring.security.crypto;
 
-
-    opens org.fabiojava.timebank to javafx.fxml;
-    exports org.fabiojava.timebank;
+    // Apri tutti i pacchetti necessari
+    opens org.fabiojava.timebank;
+    opens org.fabiojava.timebank.infrastructure.adapters.database;
+    opens org.fabiojava.timebank.infrastructure.adapters.repositories;
+    opens org.fabiojava.timebank.domain.services;
+    opens org.fabiojava.timebank.domain.ports.database;
+    opens org.fabiojava.timebank.domain.model;
+    opens org.fabiojava.timebank.gui.controllers;
+    opens org.fabiojava.timebank.gui;
+    opens org.fabiojava.timebank.gui.utils;
+    opens org.fabiojava.timebank.infrastructure.config;
 }
