@@ -1,8 +1,6 @@
 package org.fabiojava.timebank.infrastructure.adapters.database;
 
-import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.fabiojava.timebank.domain.exceptions.DatabaseException;
 import org.fabiojava.timebank.domain.ports.database.DatabaseConnection;
 import org.fabiojava.timebank.domain.ports.mapper.QueryMapper;

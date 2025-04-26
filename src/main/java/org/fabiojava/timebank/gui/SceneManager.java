@@ -8,7 +8,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.java.Log;
 import org.fabiojava.timebank.gui.utils.SpringFXMLLoader;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;

@@ -12,19 +12,15 @@
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
-   <VBox prefHeight="53.0" prefWidth="271.0">
-      <children>
-         <Label text="Inserisci l'username:" />
-      
-                <TextField fx:id="usernameField" promptText="Username" />
-      </children>
-   </VBox>
-   <VBox prefHeight="45.0" prefWidth="271.0">
-      <children>
-         <Label text="Inserisci la password:" />
-          <PasswordField fx:id="passwordField" promptText="Password" />
-      </children>
-   </VBox>
+    <VBox prefHeight="53.0" prefWidth="271.0">
+        <Label text="Inserisci l'username:"/>
+
+        <TextField fx:id="usernameField" promptText="Username"/>
+    </VBox>
+    <VBox prefHeight="45.0" prefWidth="271.0">
+        <Label text="Inserisci la password:"/>
+        <PasswordField fx:id="passwordField" promptText="Password"/>
+    </VBox>
    <ButtonBar nodeOrientation="RIGHT_TO_LEFT" prefHeight="40.0" prefWidth="349.0" translateX="10.0">
      <buttons>
            <Button fx:id="exitButton" nodeOrientation="LEFT_TO_RIGHT" onAction="#handleExit" text="Esci" />

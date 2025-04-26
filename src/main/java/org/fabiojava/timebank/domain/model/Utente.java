@@ -1,8 +1,6 @@
 package org.fabiojava.timebank.domain.model;
 
 import lombok.*;
-import org.fabiojava.timebank.domain.ports.repositories.UtenteRepository;
-import org.fabiojava.timebank.infrastructure.adapters.repositories.SqlServerUtenteRepositoryImpl;
 
 import java.time.LocalDateTime;
 

@@ -1,9 +1,7 @@
 package org.fabiojava.timebank.gui.controllers;
 
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import lombok.NoArgsConstructor;
 import lombok.extern.java.Log;
 import org.fabiojava.timebank.domain.services.UtenteService;
 import org.fabiojava.timebank.gui.SceneManager;

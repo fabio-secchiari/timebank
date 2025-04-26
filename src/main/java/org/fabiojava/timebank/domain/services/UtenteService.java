@@ -24,7 +24,7 @@ public class UtenteService {
 
     public void registraUtente(String matricola, String username, String password,
                                String nome, String cognome, String email,
-                               String indirizzo, String codDipartimento, String telefono) {
+                               String indirizzo, String telefono) {
         String encodedPassword = passwordEncoder.encode(password);
 
         Utente nuovoUtente = new Utente(
