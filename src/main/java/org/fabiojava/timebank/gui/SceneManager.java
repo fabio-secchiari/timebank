@@ -36,6 +36,7 @@ public class SceneManager {
     private final Map<SceneType, Scene> scenes = new HashMap<>();
     @Setter
     private Stage primaryStage;
+
     private final SpringFXMLLoader springFXMLLoader;
 
     public SceneManager(SpringFXMLLoader springFXMLLoader) {

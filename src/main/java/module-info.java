@@ -14,6 +14,8 @@ module TimeBank {
     requires spring.aop;
     requires spring.data.jpa;
     requires spring.security.crypto;
+    requires spring.context.support;
+    requires jakarta.mail;
 
     // Apri tutti i pacchetti necessari
     opens org.fabiojava.timebank;
@@ -26,4 +28,6 @@ module TimeBank {
     opens org.fabiojava.timebank.gui;
     opens org.fabiojava.timebank.gui.utils;
     opens org.fabiojava.timebank.infrastructure.config;
+    opens org.fabiojava.timebank.domain.dto;
+    opens org.fabiojava.timebank.domain.ports;
 }

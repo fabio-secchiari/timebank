@@ -23,20 +23,20 @@
             <TextField fx:id="usernameField" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
             <Label text="Password:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-            <TextField fx:id="nomeField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+         <PasswordField fx:id="passwordField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
             <Label text="Email:" GridPane.rowIndex="2" />
+         <TextField fx:id="emailField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+         <Label text="Nome:" GridPane.rowIndex="3" />
+            <TextField fx:id="nomeField" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+         <Label text="Cognome:" GridPane.rowIndex="4" />
             <TextField fx:id="cognomeField" GridPane.columnIndex="1" GridPane.rowIndex="4" />
 
             <Label text="Matricola:" GridPane.rowIndex="5" />
             <TextField fx:id="matricolaField" GridPane.columnIndex="1" GridPane.rowIndex="5" />
 
             <Label text="Telefono:" GridPane.rowIndex="6" />
-         <PasswordField fx:id="passwordField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
          <TextField fx:id="telefonoField" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-         <TextField fx:id="emailField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-         <Label text="Nome:" GridPane.rowIndex="3" />
-         <Label text="Cognome:" GridPane.rowIndex="4" />
          <Label text="Indirizzo:" GridPane.rowIndex="7" />
          <TextField fx:id="indirizzoField" prefWidth="149.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
          <columnConstraints>
@@ -59,5 +59,11 @@
             <Button fx:id="registerButton" onAction="#handleRegister" text="Registrati" />
             <Button fx:id="cancelButton" onAction="#handleCancel" text="Annulla" />
         </HBox>
+      <Label fx:id="errorMessage" textFill="RED">
+         <VBox.margin>
+            <Insets top="15.0" />
+         </VBox.margin>
+      </Label>
+      <TextField fx:id="codeField" visible="false" />
     </VBox>
 </AnchorPane>

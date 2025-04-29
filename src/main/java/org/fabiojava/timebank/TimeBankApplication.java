@@ -10,6 +10,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Component;
 
 import java.util.logging.Level;
@@ -20,6 +21,7 @@ import java.util.logging.Level;
 @EnableJpaRepositories(basePackages = "org.fabiojava.timebank")
 @EntityScan(basePackages = "org.fabiojava.timebank")
 @Component
+@EnableAsync
 public class TimeBankApplication extends Application {
     private ConfigurableApplicationContext springContext;
     private SceneManager sceneManager;
