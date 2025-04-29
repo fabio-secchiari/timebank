@@ -12,15 +12,15 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane prefHeight="554.0" prefWidth="321.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.fabiojava.timebank.gui.controllers.RegisterController">
+<AnchorPane prefHeight="554.0" prefWidth="482.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.fabiojava.timebank.gui.controllers.RegisterController">
     <VBox alignment="CENTER" layoutX="20.0" layoutY="18.0" prefHeight="480.0" prefWidth="281.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="18.0">
         <padding>
             <Insets bottom="20" left="20" right="20" top="20" />
         </padding>
 
-        <GridPane hgap="10" prefHeight="308.0" prefWidth="241.0" vgap="10">
-            <Label text="Username:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-            <TextField fx:id="usernameField" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+        <GridPane hgap="10" prefHeight="293.0" prefWidth="402.0" vgap="10">
+            <Label prefHeight="17.0" prefWidth="107.0" text="Username:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+            <TextField fx:id="usernameField" prefHeight="25.0" prefWidth="293.0" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
             <Label text="Password:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
          <PasswordField fx:id="passwordField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
@@ -40,8 +40,8 @@
          <Label text="Indirizzo:" GridPane.rowIndex="7" />
          <TextField fx:id="indirizzoField" prefWidth="149.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
          <columnConstraints>
-            <ColumnConstraints />
-            <ColumnConstraints />
+            <ColumnConstraints maxWidth="98.66670735677083" minWidth="93.33333333333333" prefWidth="93.33333333333333" />
+            <ColumnConstraints maxWidth="299.3333333333333" minWidth="293.9999593098958" prefWidth="299.3333333333333" />
          </columnConstraints>
          <rowConstraints>
             <RowConstraints />

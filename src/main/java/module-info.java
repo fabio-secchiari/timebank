@@ -16,6 +16,8 @@ module TimeBank {
     requires spring.security.crypto;
     requires spring.context.support;
     requires jakarta.mail;
+    requires jasypt.spring.boot;
+
 
     // Apri tutti i pacchetti necessari
     opens org.fabiojava.timebank;

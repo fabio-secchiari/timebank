@@ -1,5 +1,6 @@
 package org.fabiojava.timebank;
 
+import com.ulisesbocchio.jasyptspringboot.annotation.EnableEncryptableProperties;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import lombok.extern.java.Log;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.logging.Level;
 
+@EnableEncryptableProperties
 @Log
 @SpringBootApplication
 @Configuration(proxyBeanMethods = false)
