@@ -7,6 +7,7 @@ import org.fabiojava.timebank.infrastructure.adapters.mapper.UtenteMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -53,16 +54,21 @@ public class SqlServerUtenteRepositoryImpl implements UtenteRepository {
     }
 
     @Override
-    public Optional<Utente> findAll() {
+    public List<Utente> findAll() {
         String sql = "SELECT * FROM utenti";
-        return databaseConnection.executeQuery(sql, UtenteMapper::toEntity);
+        return databaseConnection.executeQuery(sql, UtenteMapper::toEntity)
+                .stream().toList();
     }
 
-    // TODO ora aggiorna a metà
     @Override
     public void update(Utente utente) {
-        String sql = "UPDATE utenti SET nome = ?, email = ?,  WHERE matricola = ?";
-        databaseConnection.executeUpdate(sql, utente.getNome(), utente.getEmail(), utente.getMatricola());
+        String sql = "UPDATE utenti SET nome = ?, email = ?, cognome = ? WHERE matricola = ?";
+        databaseConnection.executeUpdate(sql,
+                utente.getNome(),
+                utente.getEmail(),
+                utente.getMatricola(),
+                utente.getCognome()
+        );
     }
 
     @Override

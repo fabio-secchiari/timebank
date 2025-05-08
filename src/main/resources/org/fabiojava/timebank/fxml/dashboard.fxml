@@ -3,6 +3,9 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -10,12 +13,17 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<VBox alignment="CENTER" prefHeight="499.0" prefWidth="697.0" spacing="5.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.fabiojava.timebank.gui.controllers.DashboardController">
-
+<VBox alignment="CENTER" prefHeight="499.0" prefWidth="697.0" spacing="5.0" xmlns="http://javafx.com/javafx/21.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.fabiojava.timebank.gui.controllers.DashboardController">
+    <MenuBar>
+        <Menu text="Strumenti">
+            <MenuItem onAction="#handleLogout" text="Esci" />
+            <MenuItem onAction="#handleExit" text="Chiudi" />
+        </Menu>
+    </MenuBar>
     <!-- Sezione superiore con gauge e liste -->
     <HBox alignment="CENTER_LEFT" spacing="20">
         <!-- Contatore ore (ProgressBar orizzontale) -->
-        <VBox alignment="CENTER" minWidth="273.0" prefHeight="235.0" prefWidth="273.0" spacing="10">
+        <VBox alignment="CENTER" minWidth="187.0" prefHeight="219.0" prefWidth="187.0" spacing="10">
             <Text style="-fx-font-size: 16;" text="Le tue ore disponibili" />
             <ProgressBar fx:id="creditBar" prefHeight="51.0" prefWidth="250" progress="0.0" />
 
@@ -28,14 +36,14 @@
         <VBox alignment="CENTER" spacing="10" HBox.hgrow="ALWAYS">
             <Text style="-fx-font-size: 16;" text="Le tue richieste:" textAlignment="CENTER" underline="true" />
             <ListView fx:id="userRequestsList" VBox.vgrow="ALWAYS" />
-            <Button fx:id="newRequestButton" text="Nuova richiesta" textAlignment="CENTER" />
+            <Button fx:id="newRequestButton" onAction="#nuovoInserimento" text="Nuova richiesta" textAlignment="CENTER" />
         </VBox>
 
         <!-- Lista offerte utente -->
         <VBox alignment="CENTER" spacing="10" HBox.hgrow="ALWAYS">
             <Text style="-fx-font-size: 16;" text="Le tue offerte:" underline="true" />
             <ListView fx:id="userOffersList" VBox.vgrow="ALWAYS" />
-            <Button fx:id="newOfferButton" text="Nuova offerta" />
+            <Button fx:id="newOfferButton" onAction="#nuovoInserimento" text="Nuova offerta" />
          <HBox.margin>
             <Insets />
          </HBox.margin>

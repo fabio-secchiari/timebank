@@ -17022,7 +17022,7 @@ int</ExtendedProperties>
     <table id="5601" parent="5586" name="RICHIESTE">
       <CreatedTimestamp>2025-04-25.19:31:12.933</CreatedTimestamp>
       <DataRetentionPeriod>-1</DataRetentionPeriod>
-      <ModifiedTimestamp>2025-04-25.19:31:12.947</ModifiedTimestamp>
+      <ModifiedTimestamp>2025-05-08.21:44:42.130</ModifiedTimestamp>
       <ObjectId>1157579162</ObjectId>
       <LedgerViewId>0</LedgerViewId>
       <LobDataSpaceId>0</LobDataSpaceId>
@@ -17656,7 +17656,7 @@ int</ExtendedProperties>
     </column>
     <column id="5712" parent="5601" name="note">
       <Position>9</Position>
-      <StoredType>varchar(500 char)|0s</StoredType>
+      <StoredType>varchar(2500 char)|0s</StoredType>
     </column>
     <column id="5713" parent="5601" name="data_inserimento">
       <Position>10</Position>

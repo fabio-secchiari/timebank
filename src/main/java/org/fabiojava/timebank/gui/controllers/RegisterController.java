@@ -7,11 +7,11 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import org.fabiojava.timebank.domain.dto.EmailDto;
 import org.fabiojava.timebank.domain.model.Utente;
-import org.fabiojava.timebank.domain.ports.EmailService;
+import org.fabiojava.timebank.domain.ports.repositories.UtenteRepository;
+import org.fabiojava.timebank.domain.services.EmailService;
 import org.fabiojava.timebank.domain.services.UtenteService;
-import org.fabiojava.timebank.gui.SceneManager;
+import org.fabiojava.timebank.gui.services.SceneManager;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Controller;
 
 import java.util.Optional;
@@ -27,6 +27,9 @@ public class RegisterController {
 
     @Autowired
     private SceneManager sceneManager;
+
+    @Autowired
+    private UtenteRepository utenteRepository;
 
     @FXML
     public Button registerButton;
@@ -111,7 +114,7 @@ public class RegisterController {
 
         RegisterState state = validateFields();
         if(state == RegisterState.REGISTRAZIONE_AVVENUTA_CON_SUCCESSO) {
-            Optional<Utente> utente = utenteService.trovaUtentePerMatricola(matricolaField.getText());
+            Optional<Utente> utente = utenteRepository.findByMatricola(matricolaField.getText());
             if(utente.isPresent()){
                 showError(RegisterState.MATRICOLA_GIA_ESISTENTE);
                 return;
@@ -123,13 +126,12 @@ public class RegisterController {
         }
     }
 
-    @Async
     public void showEmailConfirm() {
         showError(RegisterState.INSERISCI_QUI_IL_CODICE_DI_VERIFICA_RICEVUTO_VIA_EMAIL);
         codeField.setVisible(true);
         registerButton.setDisable(true);
         codeField.textProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue.equals(randomCode)){
+            if (newValue.equals(randomCode)) {
                 String username = usernameField.getText().trim();
                 String password = passwordField.getText().trim();
                 String nome = nomeField.getText().trim();
@@ -147,7 +149,7 @@ public class RegisterController {
                 }
                 showError(RegisterState.REGISTRAZIONE_AVVENUTA_CON_SUCCESSO);
                 try {
-                    Thread.sleep(5000);
+                    Thread.sleep(2000);
                     resetScene(true);
                     sceneManager.switchScene(SceneManager.SceneType.LOGIN, "TimeBank - Login");
                 } catch (Exception e) {

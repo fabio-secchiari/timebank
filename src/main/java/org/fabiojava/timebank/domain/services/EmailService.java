@@ -1,4 +1,4 @@
-package org.fabiojava.timebank.domain.ports;
+package org.fabiojava.timebank.domain.services;
 
 import org.fabiojava.timebank.domain.dto.EmailDto;
 

@@ -17,6 +17,7 @@ module TimeBank {
     requires spring.context.support;
     requires jakarta.mail;
     requires jasypt.spring.boot;
+    requires jakarta.annotation;
 
 
     // Apri tutti i pacchetti necessari
@@ -27,9 +28,9 @@ module TimeBank {
     opens org.fabiojava.timebank.domain.ports.database;
     opens org.fabiojava.timebank.domain.model;
     opens org.fabiojava.timebank.gui.controllers;
-    opens org.fabiojava.timebank.gui;
+    opens org.fabiojava.timebank.gui.services;
     opens org.fabiojava.timebank.gui.utils;
     opens org.fabiojava.timebank.infrastructure.config;
     opens org.fabiojava.timebank.domain.dto;
-    opens org.fabiojava.timebank.domain.ports;
+    opens org.fabiojava.timebank.domain.ports.repositories;
 }

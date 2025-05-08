@@ -3,11 +3,14 @@ package org.fabiojava.timebank.gui.controllers;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import lombok.extern.java.Log;
+import org.fabiojava.timebank.domain.model.Utente;
 import org.fabiojava.timebank.domain.services.UtenteService;
-import org.fabiojava.timebank.gui.SceneManager;
+import org.fabiojava.timebank.gui.services.SceneManager;
+import org.fabiojava.timebank.gui.services.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import java.util.Optional;
 import java.util.logging.Level;
 
 @Controller
@@ -35,11 +38,18 @@ public class LoginController {
     @FXML
     private Label errorLabel;
 
-    @Autowired
-    private UtenteService utenteService;
+    private final UtenteService utenteService;
+    private final SceneManager sceneManager;
+    private final SessionManager sessionManager;
+
+    private Optional<Utente> utente;
 
     @Autowired
-    private SceneManager sceneManager;
+    public LoginController(UtenteService utenteService, SceneManager sceneManager, SessionManager sessionManager) {
+        this.utenteService = utenteService;
+        this.sceneManager = sceneManager;
+        this.sessionManager = sessionManager;
+    }
 
     @FXML
     public void initialize() {
@@ -67,6 +77,8 @@ public class LoginController {
             boolean loginSuccessful = validateLogin(username, password);
 
             if (loginSuccessful) {
+                log.log(Level.INFO, "Login effettuato con successo");
+                sessionManager.setCurrentUser(utente);
                 sceneManager.switchScene(SceneManager.SceneType.DASHBOARD, "TimeBank - Dashboard");
             } else {
                 showError("Credenziali non valide",
@@ -81,7 +93,7 @@ public class LoginController {
     }
 
     private boolean validateLogin(String username, String password) {
-        return utenteService.verificaCredenziali(username, password);
+        return (utente = utenteService.verificaCredenziali(username, password)).isPresent();
     }
 
     private void showError(String header, String content) {
@@ -99,6 +111,7 @@ public class LoginController {
     }
 
     @FXML
-    public void handlePswRecover(){}
+    public void handlePswRecover(){ //TODO
+    }
 
 }

@@ -14,13 +14,11 @@ public class UtenteService {
     private final UtenteRepository utenteRepository;
     private final PasswordEncoder passwordEncoder;
 
-
     @Autowired
     public UtenteService(UtenteRepository utenteRepository, PasswordEncoder passwordEncoder) {
         this.utenteRepository = utenteRepository;
         this.passwordEncoder = passwordEncoder;
     }
-
 
     public void registraUtente(String matricola, String username, String password,
                                String nome, String cognome, String email,
@@ -43,18 +41,19 @@ public class UtenteService {
     }
 
 
-    public boolean verificaCredenziali(String username, String password) {
-        Optional<Utente> utente = utenteRepository.findByUsername(username);
-        return utente.map(u -> passwordEncoder.matches(password, u.getPassword()))
-                .orElse(false);
+    public Optional<Utente> verificaCredenziali(String username, String password) {
+        Optional<Utente> utenteOpt = utenteRepository.findByUsername(username);
+        if (utenteOpt.isPresent()) {
+            Utente utente = utenteOpt.get();
+            if (passwordEncoder.matches(password, utente.getPassword())) {
+                return utenteOpt;
+            }
+        }
+        return Optional.empty();
     }
 
     public boolean esisteMatricola(String matricola) {
         return utenteRepository.findByMatricola(matricola).isPresent();
-    }
-
-    public Optional<Utente> trovaUtentePerMatricola(String matricola) {
-        return utenteRepository.findByMatricola(matricola);
     }
 
     public void aggiungiOreUtente(String matricola, int ore) {

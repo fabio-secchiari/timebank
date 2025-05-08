@@ -2,8 +2,6 @@ package org.fabiojava.timebank.domain.model;
 
 import lombok.*;
 
-import java.time.LocalDateTime;
-
 @Getter
 @Setter
 @ToString
@@ -12,13 +10,11 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class Attivita {
     private Long id;
-    private String titolo;
+    private String nome;
     private String descrizione;
-    private int orePreviste;
-    private StatoAttivita stato;
-    private String matricolaCreatore;
-    private LocalDateTime dataCreazione;
-    private String categoria;
+    private int durataMinOre;
+    private int durataMaxOre;
+    private Long idCategoria;
 
     public enum StatoAttivita {
         DISPONIBILE,

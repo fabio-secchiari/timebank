@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public class Richiesta {
     private Long idRichiesta;
     private String matricolaRichiedente;
-    private int idAttivita;
+    private Long idAttivita;
     private LocalDate dataInizio;
     private LocalDate dataFine;
     private int oreRichieste;
@@ -23,14 +23,14 @@ public class Richiesta {
     private String note;
     private LocalDateTime dataInserimento;
 
-    enum StatoRichiesta {
+    public enum StatoRichiesta {
         CANCELLATA,
         COMPLETATA,
         ASSEGNATA,
         APERTA,
     }
 
-    enum PrioritaRichiesta {
+    public enum PrioritaRichiesta {
         URGENTE,
         ALTA,
         NORMALE,

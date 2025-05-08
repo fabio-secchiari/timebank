@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public class Offerta {
     private Long id;
     private String matricolaOfferente;
-    private int idAttivita;
+    private Long idAttivita;
     private LocalDate dataInizio;
     private LocalDate dataFine;
     private int oreDisponibili;
@@ -22,7 +22,7 @@ public class Offerta {
     private String note;
     private LocalDateTime dataInserimento;
 
-    enum StatoOfferta {
+    public enum StatoOfferta {
         CANCELLATA,
         COMPLETATA,
         PRENOTATA,
