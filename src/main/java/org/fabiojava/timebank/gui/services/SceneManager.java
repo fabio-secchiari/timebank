@@ -28,7 +28,8 @@ public class SceneManager {
         LOGIN("/org/fabiojava/timebank/fxml/login.fxml"),
         DASHBOARD("/org/fabiojava/timebank/fxml/dashboard.fxml"),
         SIGNUP("/org/fabiojava/timebank/fxml/register.fxml"),
-        INSERTION("/org/fabiojava/timebank/fxml/offer-request.fxml");
+        INSERTION("/org/fabiojava/timebank/fxml/offer-request.fxml"),
+        ATTIVITA("/org/fabiojava/timebank/fxml/attivita.fxml");
 
         private final String fxmlPath;
 

@@ -14,7 +14,7 @@ public class AttivitaMapper {
                 resultSet.getString("descrizione"),
                 resultSet.getInt("durata_minima_ore"),
                 resultSet.getInt("durata_massima_ore"),
-                resultSet.getLong("id_categoria")
+                resultSet.getString("categoria")
         );
     }
 }

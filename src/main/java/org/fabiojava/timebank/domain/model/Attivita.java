@@ -14,7 +14,7 @@ public class Attivita {
     private String descrizione;
     private int durataMinOre;
     private int durataMaxOre;
-    private Long idCategoria;
+    private String categoria;
 
     public enum StatoAttivita {
         DISPONIBILE,

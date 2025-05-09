@@ -27,20 +27,19 @@ public class OfferRequestController {
     private final OffertaRepository offertaRepository;
     private final AttivitaRepository attivitaRepository;
 
-    @FXML   public RadioButton offerRadio;
-    @FXML   public RadioButton requestRadio;
-    @FXML   public ToggleGroup insertType;
-    @FXML   public Button submitButton;
+    @FXML   private RadioButton offerRadio;
+    @FXML   private RadioButton requestRadio;
+    @FXML   private ToggleGroup insertType;
+    @FXML   private Button submitButton;
 
-    @FXML   public TextArea descriptionArea;
-    @FXML   public TextField hoursField;
-    @FXML   public TextArea noteField;
-    @FXML   public Button newAttivitaButton;
+    @FXML   private TextField hoursField;
+    @FXML   private TextArea noteField;
+    @FXML   private Button newAttivitaButton;
 
-    @FXML   public ComboBox<String> attivitaField;
-    @FXML   public DatePicker endDateField;
-    @FXML   public DatePicker startDateField;
-    @FXML   public Label errorMessage;
+    @FXML   private ComboBox<String> attivitaField;
+    @FXML   private DatePicker endDateField;
+    @FXML   private DatePicker startDateField;
+    @FXML   private Label errorMessage;
 
     @Autowired
     public OfferRequestController(SceneManager sceneManager, SessionManager sessionManager, RichiestaRepository richiestaRepository, OffertaRepository offertaRepository, AttivitaRepository attivitaRepository) {
@@ -107,7 +106,6 @@ public class OfferRequestController {
         if(endDateField.getValue() == null) return true;
         if(startDateField.getValue() == null) return true;
         if(hoursField.getText().isEmpty()) return true;
-        if(descriptionArea.getText().isEmpty()) return true;
         if(noteField.getText().isEmpty()) return true;
         // controllo sulla validità
         if(startDateField.getValue().isAfter(endDateField.getValue())) return true;
@@ -124,6 +122,6 @@ public class OfferRequestController {
     }
 
     public void addAttivita(ActionEvent actionEvent) {
-        // TODO AGGIUNGI ATTIVITA
+        sceneManager.switchScene(SceneManager.SceneType.ATTIVITA, "TimeBank - Nuova attività");
     }
 }

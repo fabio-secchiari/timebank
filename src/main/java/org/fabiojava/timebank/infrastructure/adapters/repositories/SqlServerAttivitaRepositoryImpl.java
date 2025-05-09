@@ -21,12 +21,12 @@ public class SqlServerAttivitaRepositoryImpl implements AttivitaRepository {
 
     @Override
     public void save(Attivita attivita) {
-        String sql = "INSERT INTO attivita (nome_attivita, descrizione, id_categoria, durata_minima_ore, durata_massima_ore)" +
+        String sql = "INSERT INTO attivita (nome_attivita, descrizione, categoria, durata_minima_ore, durata_massima_ore)" +
                 "VALUES (?, ?, ?, ?, ?)";
         databaseConnection.executeUpdate(sql,
                 attivita.getNome(),
                 attivita.getDescrizione(),
-                attivita.getIdCategoria(),
+                attivita.getCategoria(),
                 attivita.getDurataMinOre(),
                 attivita.getDurataMaxOre()
         );
