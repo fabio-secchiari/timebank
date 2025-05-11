@@ -2,8 +2,8 @@ package org.fabiojava.timebank.domain.model;
 
 import lombok.*;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.sql.Date;
+import java.sql.Timestamp;
 
 @Getter
 @Setter
@@ -12,15 +12,13 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Prenotazione {
-    private Long idPrenotazione;
-    private Long idOfferta;
-    private Long idRichiesta;
-    private LocalDateTime dataPrenotazione;
-    private int oreConcordate;
+    private Integer idPrenotazione;
+    private Integer idOfferta;
+    private Integer idRichiesta;
+    private Timestamp dataMatching;
+    private Integer oreConcordate;
     private StatoPrenotazione stato;
-    private LocalDate dataEsecuzione;
-    private Long idValutazioneRichiedente;
-    private Long idValutazioneOfferente;
+    private Date dataEsecuzione;
     private String noteFeedback;
 
     public enum StatoPrenotazione {

@@ -54,7 +54,6 @@ public class LoginController {
     @FXML
     public void initialize() {
         loginButton.setDisable(true);
-
         // listener per verificare che i campi non siano vuoti
         usernameField.textProperty().addListener((observable, oldValue, newValue) ->
                 checkFields());
@@ -79,7 +78,7 @@ public class LoginController {
             if (loginSuccessful) {
                 log.log(Level.INFO, "Login effettuato con successo");
                 sessionManager.setCurrentUser(utente);
-                sceneManager.switchScene(SceneManager.SceneType.DASHBOARD, "TimeBank - Dashboard");
+                sceneManager.switchScene(SceneManager.SceneType.DASHBOARD, "TimeBank - Dashboard", true);
             } else {
                 showError("Credenziali non valide",
                         "Username o password non corretti.");
@@ -107,7 +106,7 @@ public class LoginController {
 
     @FXML
     public void handleSignUp(){
-        sceneManager.switchScene(SceneManager.SceneType.SIGNUP, "TimeBank - Registrazione");
+        sceneManager.switchScene(SceneManager.SceneType.SIGNUP, "TimeBank - Registrazione", false);
     }
 
     @FXML

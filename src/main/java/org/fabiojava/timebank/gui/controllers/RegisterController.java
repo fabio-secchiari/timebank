@@ -151,7 +151,7 @@ public class RegisterController {
                 try {
                     Thread.sleep(2000);
                     resetScene(true);
-                    sceneManager.switchScene(SceneManager.SceneType.LOGIN, "TimeBank - Login");
+                    sceneManager.switchScene(SceneManager.SceneType.LOGIN, "TimeBank - Login", false);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
@@ -182,6 +182,6 @@ public class RegisterController {
 
     public void handleCancel(){
         resetScene(true);
-        sceneManager.switchScene(SceneManager.SceneType.LOGIN, "TimeBank - Login");
+        sceneManager.switchScene(SceneManager.SceneType.LOGIN, "TimeBank - Login", false);
     }
 }

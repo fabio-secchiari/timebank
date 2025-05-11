@@ -2,8 +2,13 @@ package org.fabiojava.timebank.infrastructure.adapters.repositories;
 
 import org.fabiojava.timebank.domain.model.Offerta;
 import org.fabiojava.timebank.domain.ports.database.DatabaseConnection;
+import org.fabiojava.timebank.domain.ports.database.InsertPort;
+import org.fabiojava.timebank.domain.ports.database.QueryPort;
 import org.fabiojava.timebank.domain.ports.repositories.OffertaRepository;
-import org.fabiojava.timebank.infrastructure.adapters.mapper.OffertaMapper;
+import org.fabiojava.timebank.infrastructure.adapters.database.specification.DeleteSpecification;
+import org.fabiojava.timebank.infrastructure.adapters.database.specification.InsertSpecification;
+import org.fabiojava.timebank.infrastructure.adapters.database.specification.QuerySpecification;
+import org.fabiojava.timebank.infrastructure.adapters.database.specification.UpdateSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -12,66 +17,70 @@ import java.util.Optional;
 
 @Repository
 public class SqlServerOffertaRepositoryImpl implements OffertaRepository {
-    private final DatabaseConnection databaseConnection;
+    private final QueryPort queryPort;
+    private final InsertPort insertPort;
 
     @Autowired
-    public SqlServerOffertaRepositoryImpl(DatabaseConnection dbConnection) {
-        this.databaseConnection = dbConnection;
+    public SqlServerOffertaRepositoryImpl(DatabaseConnection dbConnection, QueryPort queryPort, InsertPort insertPort) {
+        this.queryPort = queryPort;
+        this.insertPort = insertPort;
     }
 
     @Override
-    public void save(Offerta offerta) {
-        String sql = "INSERT INTO offerte (matricola_offerente, id_attivita, data_disponibilita_inizio, " +
-                "data_disponibilita_fine, ore_disponibili, stato, note, data_inserimento " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-        databaseConnection.executeUpdate(sql,
-                offerta.getMatricolaOfferente(),
-                offerta.getIdAttivita(),
-                offerta.getDataInizio(),
-                offerta.getDataFine(),
-                offerta.getOreDisponibili(),
-                offerta.getStato().name(),
-                offerta.getNote(),
-                offerta.getDataInserimento());
+    public Long save(Offerta offerta) {
+        InsertSpecification spec = new InsertSpecification();
+        spec.into("offerte")
+            .value("matricola_offerente", offerta.getMatricolaOfferente())
+                .value("id_attivita", offerta.getIdAttivita())
+                .value("data_disponibilita_inizio", offerta.getDataDisponibilitaInizio())
+                .value("data_disponibilita_fine", offerta.getDataDisponibilitaFine())
+                .value("ore_disponibili", offerta.getOreDisponibili())
+                .value("stato", offerta.getStato().name())
+                .value("note", offerta.getNote())
+                .value("data_inserimento", offerta.getDataInserimento());
+        return insertPort.execute(spec, Offerta.class).getGeneratedId("id_offerta");
     }
 
     @Override
-    public Optional<Offerta> findById(Long id) {
-        String sql = "SELECT * FROM offerte WHERE id_offerta = ?";
-        return databaseConnection.executeQuery(sql, OffertaMapper::toEntity, id)
-                .stream().findFirst();
+    public Optional<Offerta> findById(Integer id) {
+        QuerySpecification spec = new QuerySpecification();
+        spec.from("offerte")
+                .where("id_offerta", "=", id);
+        return queryPort.executeSingle(spec, Offerta.class);
     }
 
     @Override
     public List<Offerta> findByUtente(String matricola) {
-        String sql = "SELECT * FROM offerte WHERE matricola_offerente = ?";
-        return databaseConnection.executeQuery(sql, OffertaMapper::toEntity, matricola)
-                .stream().toList();
+        QuerySpecification spec = new QuerySpecification();
+        spec.from("offerte")
+                .where("matricola_offerente", "=", matricola);
+        return queryPort.execute(spec, Offerta.class);
     }
 
     @Override
     public List<Offerta> findAll() {
-        String sql = "SELECT * FROM offerte";
-        return databaseConnection.executeQuery(sql, OffertaMapper::toEntity)
-                .stream().toList();
+        QuerySpecification spec = new QuerySpecification();
+        spec.from("offerte");
+        return queryPort.execute(spec, Offerta.class);
     }
 
     @Override
-    public void delete(Long id) {
-        String sql = "DELETE FROM offerte WHERE id_offerta = ?";
-        databaseConnection.executeUpdate(sql, id);
+    public void delete(Integer id) {
+        DeleteSpecification spec = new DeleteSpecification();
+        spec.from("offerte")
+                .where("id_offerta", "=", id);
+        insertPort.delete(spec, Offerta.class);
     }
 
     @Override
     public void update(Offerta offerta) {
-        String sql = "UPDATE FROM offerte SET data_disponibilita_inizio = ?, data_disponibilita_fine = ?, " +
-                "ore_disponibili = ?, stato = ?, note = ? WHERE id_offerta = ?";
-        databaseConnection.executeUpdate(sql,
-                offerta.getDataInizio(),
-                offerta.getDataFine(),
-                offerta.getOreDisponibili(),
-                offerta.getStato().name(),
-                offerta.getNote(),
-                offerta.getId());
+        UpdateSpecification spec = new UpdateSpecification();
+        spec.set("data_disponibilita_inizio", offerta.getDataDisponibilitaInizio())
+                .set("data_disponibilita_fine", offerta.getDataDisponibilitaFine())
+                .set("ore_disponibili", offerta.getOreDisponibili())
+                .set("stato", offerta.getStato().name())
+                .set("note", offerta.getNote())
+            .where("id_offerta", "=", offerta.getIdOfferta());
+        insertPort.update(spec, Offerta.class);
     }
 }

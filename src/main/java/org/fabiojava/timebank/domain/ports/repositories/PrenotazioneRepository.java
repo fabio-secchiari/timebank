@@ -5,10 +5,10 @@ import org.fabiojava.timebank.domain.model.Prenotazione;
 import java.util.List;
 
 public interface PrenotazioneRepository {
-    void save(Prenotazione prenotazione);
-    Prenotazione findById(Long id);
+    Long save(Prenotazione prenotazione);
+    Prenotazione findById(Integer id);
     List<Prenotazione> findByUtente(String username);
     List<Prenotazione> findAll();
-    void delete(Long id);
+    void delete(Integer id);
     void update(Prenotazione prenotazione);
 }

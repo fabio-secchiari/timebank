@@ -1,5 +1,6 @@
 package org.fabiojava.timebank.gui.services;
 
+import lombok.Getter;
 import lombok.Setter;
 import org.fabiojava.timebank.domain.model.Utente;
 import org.springframework.context.annotation.Scope;
@@ -12,6 +13,7 @@ import java.util.Optional;
 @Scope("singleton")
 public class SessionManager {
     private Optional<Utente> currentUser = Optional.empty();
+    @Getter    private Object dataTransferObject = null;
 
     public void clearSession() {
         this.currentUser = Optional.empty();

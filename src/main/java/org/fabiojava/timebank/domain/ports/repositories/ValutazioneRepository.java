@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ValutazioneRepository {
-    void save(Valutazione valutazione);
-    Optional<Valutazione> findById(Long id);
+    Long save(Valutazione valutazione);
+    Optional<Valutazione> findById(Integer id);
     List<Valutazione> findByUtente(String username);
     List<Valutazione> findAll();
-    void delete(Long id);
+    void delete(Integer id);
     void update(Valutazione valutazione);
 }

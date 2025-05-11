@@ -7,11 +7,13 @@ import org.fabiojava.timebank.domain.ports.mapper.QueryMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
 import java.sql.*;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 
 @Component
 @Primary
@@ -36,21 +38,37 @@ public class SqlServerConnection implements DatabaseConnection {
     }
 
     @Override
-    public <T> Optional<T> executeQuery(String query, QueryMapper<T> mapper, Object... params)
+    public Map<String, Object> executeInsert(String query, Object... params)
             throws DatabaseException {
         try {
-            List<T> results = jdbcTemplate.query(query, (rs, rowNum) -> {
-                try {
-                    return mapper.map(rs);
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
+            KeyHolder keyHolder = new GeneratedKeyHolder();
+            jdbcTemplate.update(connection -> {
+                PreparedStatement ps = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+                for (int i = 0; i < params.length; i++) {
+                    ps.setObject(i + 1, params[i]);
                 }
-            }, params);
-            return results.isEmpty() ? Optional.empty() : Optional.of(results.getFirst());
+                return ps;
+            }, keyHolder);
+            return keyHolder.getKeys();
         } catch (Exception e) {
             throw new DatabaseException("Errore nell'esecuzione della query: " + query, e);
         }
+    }
 
+    @Override
+    public <T> List<T> executeQuery(String query, QueryMapper<T> mapper, Object... params)
+            throws DatabaseException {
+        try {
+            return jdbcTemplate.query(query, (rs, rowNum) -> {
+                try {
+                    return mapper.map(rs);
+                } catch (SQLException e) {
+                    throw DatabaseException.queryError(String.format("Errore nel mapping della riga %d", rowNum), e);
+                }
+            }, params);
+        } catch (Exception e) {
+            throw new DatabaseException("Errore nell'esecuzione della query: " + query, e);
+        }
     }
 
     @Override

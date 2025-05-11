@@ -11,16 +11,16 @@ public class RichiestaMapper {
 
     public static Richiesta toEntity(ResultSet resultSet) throws SQLException {
         return new Richiesta(
-                resultSet.getLong("id_richiesta"),
+                resultSet.getInt("id_richiesta"),
                 resultSet.getString("matricola_richiedente"),
-                resultSet.getLong("id_attivita"),
-                resultSet.getDate("data_richiesta_inizio").toLocalDate(),
-                resultSet.getDate("data_richiesta_fine").toLocalDate(),
+                resultSet.getInt("id_attivita"),
+                resultSet.getDate("data_richiesta_inizio"),
+                resultSet.getDate("data_richiesta_fine"),
                 resultSet.getInt("ore_richieste"),
                 Richiesta.StatoRichiesta.valueOf(resultSet.getString("stato")),
-                Richiesta.PrioritaRichiesta.valueOf(resultSet.getString("priorita")),
                 resultSet.getString("note"),
-                resultSet.getTimestamp("data_inserimento").toLocalDateTime()
+                resultSet.getTimestamp("data_inserimento"),
+                Richiesta.PrioritaRichiesta.valueOf(resultSet.getString("priorita"))
         );
     }
 }

@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.Optional;
 
 public interface RichiestaRepository {
-    void save(Richiesta richiesta);
-    Optional<Richiesta> findById(Long id);
+    Long save(Richiesta richiesta);
+    Optional<Richiesta> findById(Integer id);
     List<Richiesta> findByUtente(String username);
     List<Richiesta> findAll();
-    void delete(Long id);
+    void delete(Integer id);
     void update(Richiesta richiesta);
 }

@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.Optional;
 
 public interface OffertaRepository {
-    void save(Offerta offerta);
-    Optional<Offerta> findById(Long id);
+    Long save(Offerta offerta);
+    Optional<Offerta> findById(Integer id);
     List<Offerta> findByUtente(String username);
     List<Offerta> findAll();
-    void delete(Long id);
+    void delete(Integer id);
     void update(Offerta offerta);
 }

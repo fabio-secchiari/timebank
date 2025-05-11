@@ -2,7 +2,7 @@ package org.fabiojava.timebank.domain.model;
 
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 
 @Getter
 @Setter
@@ -18,10 +18,10 @@ public class Utente {
     private String email;
     private String indirizzo;
     private String telefono;
-    private LocalDateTime dataRegistrazione;
+    private Timestamp dataRegistrazione;
     private int oreTotali;
 
-    public Utente(String matricola, String username, String password, String nome, String cognome, String email, String indirizzo, String telefono, LocalDateTime dataRegistrazione, int oreTotali){
+    public Utente(String matricola, String username, String password, String nome, String cognome, String email, String indirizzo, String telefono, Timestamp dataRegistrazione, int oreTotali){
         this.matricola = matricola;
         this.username = username;
         this.password = password;

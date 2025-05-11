@@ -9,11 +9,11 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Attivita {
-    private Long id;
-    private String nome;
+    private Integer idAttivita;
+    private String nomeAttivita;
     private String descrizione;
-    private int durataMinOre;
-    private int durataMaxOre;
+    private int durataMinimaOre;
+    private int durataMassimaOre;
     private String categoria;
 
     public enum StatoAttivita {

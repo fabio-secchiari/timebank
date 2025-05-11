@@ -38,7 +38,7 @@ public class TimeBankApplication extends Application {
     public void start(Stage primaryStage) {
         try {
             sceneManager.setPrimaryStage(primaryStage);
-            sceneManager.switchScene(SceneManager.SceneType.LOGIN, "UNIMORE TimeBank Login");
+            sceneManager.switchScene(SceneManager.SceneType.LOGIN, "UNIMORE TimeBank Login", false);
         } catch (Exception e) {
             log.log(Level.SEVERE, "Errore durante l'avvio dell'applicazione", e);
         }

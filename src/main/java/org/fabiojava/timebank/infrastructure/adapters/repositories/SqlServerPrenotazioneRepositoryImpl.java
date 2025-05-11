@@ -10,12 +10,12 @@ import java.util.List;
 public class SqlServerPrenotazioneRepositoryImpl implements PrenotazioneRepository {
 
     @Override
-    public void save(Prenotazione prenotazione) {
-
+    public Long save(Prenotazione prenotazione) {
+        return null;
     }
 
     @Override
-    public Prenotazione findById(Long id) {
+    public Prenotazione findById(Integer id) {
         return null;
     }
 
@@ -30,7 +30,7 @@ public class SqlServerPrenotazioneRepositoryImpl implements PrenotazioneReposito
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(Integer id) {
 
     }
 

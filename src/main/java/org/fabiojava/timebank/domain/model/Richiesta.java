@@ -2,26 +2,32 @@ package org.fabiojava.timebank.domain.model;
 
 import lombok.*;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.sql.Date;
+import java.sql.Timestamp;
 
 @Getter
 @Setter
 @ToString
-@EqualsAndHashCode
 @NoArgsConstructor
-@AllArgsConstructor
-public class Richiesta {
-    private Long idRichiesta;
+public class Richiesta extends Inserimento{
+    private Integer idRichiesta;
+    private Date dataRichiestaInizio;
+    private Date dataRichiestaFine;
     private String matricolaRichiedente;
-    private Long idAttivita;
-    private LocalDate dataInizio;
-    private LocalDate dataFine;
     private int oreRichieste;
     private StatoRichiesta stato;
     private PrioritaRichiesta priorita;
-    private String note;
-    private LocalDateTime dataInserimento;
+
+    public Richiesta(Integer id, String matricolaRichiedente, Integer idAttivita, Date dataInizio, Date dataFine, int oreRichieste, StatoRichiesta stato, String note, Timestamp dataInserimento, PrioritaRichiesta priorita) {
+        super(idAttivita, note, dataInserimento);
+        this.matricolaRichiedente = matricolaRichiedente;
+        this.oreRichieste = oreRichieste;
+        this.stato = stato;
+        this.priorita = priorita;
+        this.dataRichiestaInizio = dataInizio;
+        this.dataRichiestaFine = dataFine;
+        this.idRichiesta = id;
+    }
 
     public enum StatoRichiesta {
         CANCELLATA,

@@ -2,7 +2,7 @@ package org.fabiojava.timebank.domain.model;
 
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.sql.Timestamp;
 
 @Getter
 @Setter
@@ -11,12 +11,12 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Valutazione {
-    private Long id;
+    private Integer id;
     private int punteggio;  // da 1 a 5 stelle
     private String commento;
-    private LocalDateTime dataValutazione;
+    private Timestamp dataValutazione;
     private TipoValutatore tipoValutatore;
-    private Long idPrenotazione;
+    private Integer idPrenotazione;
 
     public enum TipoValutatore {
         RICHIEDENTE,

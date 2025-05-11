@@ -76,7 +76,7 @@ public class SceneManager {
         }
     }
 
-    public void switchScene(SceneType sceneType, String title) {
+    public void switchScene(SceneType sceneType, String title, boolean fullScreen) {
         // faccio l'unload della scena perchè così la volta successiva venga richiamato tutto
         unloadScene(primaryStage.getScene() == null ? null : (SceneType) primaryStage.getScene().getUserData());
         Scene scene = scenes.get(sceneType);
@@ -96,12 +96,22 @@ public class SceneManager {
 
             Scene finalScene = scene;
             primaryStage.setOnShown(windowEvent -> {
+                if(fullScreen) primaryStage.sizeToScene();
                 double width = finalScene.getWidth();
                 double height = finalScene.getHeight();
                 Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
                 primaryStage.setX((screenBounds.getWidth() - width) / 2);
                 primaryStage.setY((screenBounds.getHeight() - height) / 2);
             });
+
+            if (fullScreen) {
+                Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
+                finalScene.getWindow().setWidth(screenBounds.getWidth() * 0.9);
+                finalScene.getWindow().setHeight(screenBounds.getHeight() * 0.9);
+                Stage stage = (Stage) finalScene.getWindow();
+                stage.setX((screenBounds.getWidth() - stage.getWidth()) / 2);
+                stage.setY((screenBounds.getHeight() - stage.getHeight()) / 2);
+            }
 
             primaryStage.show();
         } else {

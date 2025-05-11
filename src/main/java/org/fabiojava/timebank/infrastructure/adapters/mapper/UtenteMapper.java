@@ -19,7 +19,7 @@ public class UtenteMapper {
                 resultSet.getString("email"),
                 resultSet.getString("indirizzo"),
                 resultSet.getString("telefono"),
-                resultSet.getTimestamp("data_registrazione").toLocalDateTime(),
+                resultSet.getTimestamp("data_registrazione"),
                 resultSet.getInt("ore_totali")
         );
     }

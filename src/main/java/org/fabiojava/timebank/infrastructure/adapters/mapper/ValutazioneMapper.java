@@ -11,12 +11,12 @@ public class ValutazioneMapper {
 
     public static Valutazione toEntity(ResultSet resultSet) throws SQLException {
         return new Valutazione(
-                resultSet.getLong("id"),
+                resultSet.getInt("id"),
                 resultSet.getInt("punteggio"),
                 resultSet.getString("commento"),
-                resultSet.getTimestamp("data_valutazione").toLocalDateTime(),
+                resultSet.getTimestamp("data_valutazione"),
                 Valutazione.TipoValutatore.valueOf(resultSet.getString("tipo_valutatore")),
-                resultSet.getLong("id_prenotazione")
+                resultSet.getInt("id_prenotazione")
         );
     }
 }

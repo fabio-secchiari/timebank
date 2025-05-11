@@ -11,15 +11,15 @@ public class OffertaMapper {
 
     public static Offerta toEntity(ResultSet resultSet) throws SQLException {
         return new Offerta(
-                resultSet.getLong("id_offerta"),
+                resultSet.getInt("id_offerta"),
                 resultSet.getString("matricola_offerente"),
-                resultSet.getLong("id_attivita"),
-                resultSet.getDate("data_disponibilita_inizio").toLocalDate(),
-                resultSet.getDate("data_disponibilita_fine").toLocalDate(),
+                resultSet.getInt("id_attivita"),
+                resultSet.getDate("data_disponibilita_inizio"),
+                resultSet.getDate("data_disponibilita_fine"),
                 resultSet.getInt("ore_disponibili"),
                 Offerta.StatoOfferta.valueOf(resultSet.getString("stato")),
                 resultSet.getString("note"),
-                resultSet.getTimestamp("data_inserimento").toLocalDateTime()
+                resultSet.getTimestamp("data_inserimento")
         );
     }
 }
