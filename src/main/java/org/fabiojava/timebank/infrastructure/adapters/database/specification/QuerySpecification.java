@@ -12,10 +12,13 @@ import java.util.List;
 @Setter
 public class QuerySpecification {
     private List<SelectQuery> queries = new ArrayList<>();
-    private Integer limit;
+
     private List<OrderByClause> orderBy = new ArrayList<>();
+    private List<String> postUnionSelectFields = new ArrayList<>();
+    private List<WhereClause> postUnionWhereClauses = new ArrayList<>();
     private boolean isUnion = false;
     private Integer offset;
+    private Integer limit;
 
     public QuerySpecification() {
         queries.add(new SelectQuery());
@@ -23,10 +26,10 @@ public class QuerySpecification {
 
     @Getter
     public static class SelectQuery {
-        private List<String> selectFields = new ArrayList<>();
+        private final List<String> selectFields = new ArrayList<>();
         private String fromTable;
-        private List<JoinClause> joins = new ArrayList<>();
-        private List<WhereClause> whereClauses = new ArrayList<>();
+        private final List<JoinClause> joins = new ArrayList<>();
+        private final List<WhereClause> whereClauses = new ArrayList<>();
     }
 
     @Getter
@@ -62,6 +65,11 @@ public class QuerySpecification {
         return this;
     }
 
+    public QuerySpecification addSelectOnUnion(String... fields) {
+        this.postUnionSelectFields.addAll(Arrays.asList(fields));
+        return this;
+    }
+
     public QuerySpecification from(String table) {
         getCurrentQuery().fromTable = table;
         return this;
@@ -75,6 +83,11 @@ public class QuerySpecification {
 
     public QuerySpecification where(String field, String operator, Object value) {
         getCurrentQuery().whereClauses.add(new WhereClause(field, operator, value));
+        return this;
+    }
+
+    public QuerySpecification whereOnUnion(String field, String operator, Object value) {
+        this.postUnionWhereClauses.add(new WhereClause(field, operator, value));
         return this;
     }
 
@@ -93,6 +106,12 @@ public class QuerySpecification {
         this.limit = limit;
         return this;
     }
+
+    public QuerySpecification offset(int offset) {
+        this.offset = offset;
+        return this;
+    }
+
 
     private SelectQuery getCurrentQuery() {
         return queries.getLast();

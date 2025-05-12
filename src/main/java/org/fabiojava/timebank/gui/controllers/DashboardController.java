@@ -46,9 +46,7 @@ public class DashboardController {
     @FXML    private TableColumn<?, ?> recordTypeColumn;
 
     @FXML    private TableView<?> latestRecordsTable;
-    @FXML    private Button newOfferButton;
     @FXML    private ListView<String> userOffersList;
-    @FXML    private Button newRequestButton;
     @FXML    private ListView<String> userRequestsList;
 
     @Autowired
@@ -91,6 +89,11 @@ public class DashboardController {
     private void initHotInsertion() {
         List<RichiestaOffertaDTO> inserimentiRecenti = inserimentiService.trovaRichiesteOfferteRecenti(sessionManager.getCurrentUser().getMatricola());
         inserimentiRecenti.forEach(inserimento -> log.info("HOT" + inserimento.toString()));
+    }
+
+    @FXML
+    private void viewHotInsertion(){
+        sceneManager.switchScene(SceneManager.SceneType.INSERTION_LIST, "TimeBank - Inserimenti recenti", false);
     }
 
     private void initRichieste() {

@@ -20,6 +20,7 @@ module TimeBank {
     requires jakarta.annotation;
     requires jdk.jfr;
     requires spring.tx;
+    requires spring.data.commons;
 
 
     // Apri tutti i pacchetti necessari

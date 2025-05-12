@@ -40,21 +40,20 @@
             <VBox alignment="CENTER" spacing="2.0" VBox.vgrow="SOMETIMES">
                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Attività da completare:" underline="true">
                     <font>
-                        <Font size="15.0"/>
+                        <Font size="15.0" />
                     </font>
                 </Text>
-                <ListView fx:id="todoList" prefHeight="174.0" prefWidth="315.0" style="-fx-font-size: 12;"/>
+                <ListView fx:id="todoList" prefHeight="174.0" prefWidth="315.0" style="-fx-font-size: 12;" />
             </VBox>
         </VBox>
 
         <!-- Lista richieste utente -->
         <VBox alignment="CENTER" spacing="10" HBox.hgrow="ALWAYS">
             <HBox alignment="CENTER" prefHeight="18.0" prefWidth="247.0" spacing="20.0">
-                <Text style="-fx-font-size: 16;" text="Le tue richieste:" textAlignment="CENTER" underline="true"/>
-                <Button fx:id="newRequestButton" onAction="#nuovaRichiesta" prefHeight="13.0" prefWidth="25.0" text="+"
-                        textAlignment="CENTER">
+                <Text style="-fx-font-size: 16;" text="Le tue richieste:" textAlignment="CENTER" underline="true" />
+                <Button onAction="#nuovaRichiesta" prefHeight="13.0" prefWidth="25.0" text="+" textAlignment="CENTER">
                     <font>
-                        <Font name="System Bold" size="13.0"/>
+                        <Font name="System Bold" size="13.0" />
                     </font>
                 </Button>
             </HBox>
@@ -64,10 +63,10 @@
         <!-- Lista offerte utente -->
         <VBox alignment="CENTER" spacing="10" HBox.hgrow="ALWAYS">
             <HBox alignment="CENTER" spacing="20.0">
-                <Text style="-fx-font-size: 16;" text="Le tue offerte:" underline="true"/>
-                <Button fx:id="newOfferButton" onAction="#nuovaOfferta" prefWidth="25.0" text="+">
+                <Text style="-fx-font-size: 16;" text="Le tue offerte:" underline="true" />
+                <Button onAction="#nuovaOfferta" prefWidth="25.0" text="+">
                     <font>
-                        <Font name="System Bold" size="13.0"/>
+                        <Font name="System Bold" size="13.0" />
                     </font>
                 </Button>
             </HBox>
@@ -85,7 +84,10 @@
     <HBox spacing="20" VBox.vgrow="ALWAYS">
         <!-- Ultimi record inseriti -->
         <VBox alignment="CENTER" spacing="10" HBox.hgrow="ALWAYS">
-            <Text style="-fx-font-size: 16;" text="Ultimi annunci inseriti:" underline="true" />
+            <HBox alignment="CENTER" spacing="20.0">
+                <Text style="-fx-font-size: 16;" text="Ultimi annunci inseriti:" underline="true"/>
+                <Button mnemonicParsing="false" onAction="#viewHotInsertion" text="Visualizza tutti"/>
+            </HBox>
             <TableView fx:id="latestRecordsTable" VBox.vgrow="ALWAYS">
                 <columns>
                     <TableColumn fx:id="recordTypeColumn" text="Tipo" />
