@@ -19,17 +19,18 @@ import java.util.Random;
 
 @Controller
 public class RegisterController {
-    @Autowired
-    private EmailService emailService;
+    private final EmailService emailService;
+    private final UtenteService utenteService;
+    private final SceneManager sceneManager;
+    private final UtenteRepository utenteRepository;
 
     @Autowired
-    private UtenteService utenteService;
-
-    @Autowired
-    private SceneManager sceneManager;
-
-    @Autowired
-    private UtenteRepository utenteRepository;
+    public RegisterController(EmailService emailService, UtenteService utenteService, SceneManager sceneManager, UtenteRepository utenteRepository) {
+        this.emailService = emailService;
+        this.utenteService = utenteService;
+        this.sceneManager = sceneManager;
+        this.utenteRepository = utenteRepository;
+    }
 
     @FXML
     public Button registerButton;

@@ -1,7 +1,6 @@
 package org.fabiojava.timebank.infrastructure.adapters.repositories;
 
 import org.fabiojava.timebank.domain.model.Offerta;
-import org.fabiojava.timebank.domain.ports.database.DatabaseConnection;
 import org.fabiojava.timebank.domain.ports.database.InsertPort;
 import org.fabiojava.timebank.domain.ports.database.QueryPort;
 import org.fabiojava.timebank.domain.ports.repositories.OffertaRepository;
@@ -21,7 +20,7 @@ public class SqlServerOffertaRepositoryImpl implements OffertaRepository {
     private final InsertPort insertPort;
 
     @Autowired
-    public SqlServerOffertaRepositoryImpl(DatabaseConnection dbConnection, QueryPort queryPort, InsertPort insertPort) {
+    public SqlServerOffertaRepositoryImpl(QueryPort queryPort, InsertPort insertPort) {
         this.queryPort = queryPort;
         this.insertPort = insertPort;
     }

@@ -25,7 +25,6 @@ module TimeBank {
 
     // Apri tutti i pacchetti necessari
     opens org.fabiojava.timebank;
-    opens org.fabiojava.timebank.infrastructure.adapters.database;
     opens org.fabiojava.timebank.infrastructure.adapters.repositories;
     opens org.fabiojava.timebank.domain.services;
     opens org.fabiojava.timebank.domain.ports.database;
