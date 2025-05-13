@@ -30,7 +30,9 @@ public class SceneManager {
         SIGNUP("/org/fabiojava/timebank/fxml/register.fxml"),
         INSERTION("/org/fabiojava/timebank/fxml/offer-request.fxml"),
         ATTIVITA("/org/fabiojava/timebank/fxml/attivita.fxml"),
-        INSERTION_LIST("/org/fabiojava/timebank/fxml/all-insertion.fxml"),;
+        HOT_INSERTION_LIST("/org/fabiojava/timebank/fxml/hot-insertion.fxml"),
+        OWN_INSERTION_LIST("/org/fabiojava/timebank/fxml/own-insertion.fxml"),
+        INSERTION_DETAILS("/org/fabiojava/timebank/fxml/insertion-detail.fxml");
 
         private final String fxmlPath;
 

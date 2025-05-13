@@ -1,6 +1,7 @@
 package org.fabiojava.timebank.gui.controllers;
 
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -23,11 +24,11 @@ public class AllInsertionController {
     private final SessionManager sessionManager;
     private final SceneManager sceneManager;
 
-    @FXML   private TableColumn<RichiestaOffertaDTO, Integer> idColonna;
     @FXML   private TableColumn<RichiestaOffertaDTO, Date> dataColonna;
     @FXML   private TableColumn<RichiestaOffertaDTO, String> tipoColonna;
     @FXML   private TableColumn<RichiestaOffertaDTO, String> statoColonna;
-    @FXML   private TableColumn<RichiestaOffertaDTO, String> descrizioneColonna;
+    @FXML   private TableColumn<RichiestaOffertaDTO, String> attivitaColonna;
+    @FXML   private TableColumn<RichiestaOffertaDTO, String> noteColonna;
     @FXML   private TableColumn<RichiestaOffertaDTO, Void> azioneColonna;
     @FXML
     private TableView<RichiestaOffertaDTO> tabellaRichieste;
@@ -39,8 +40,6 @@ public class AllInsertionController {
     private DatePicker dataFineFiltro;
     @FXML
     private TextField cercaFiltro;
-    @FXML
-    private ComboBox<String> righePerPagina;
     @FXML
     private Label paginaCorrente;
     @FXML
@@ -58,7 +57,7 @@ public class AllInsertionController {
         sceneManager.switchScene(SceneManager.SceneType.LOGIN, "TimeBank - Login", false);
     }
 
-    @FXML private void handleChiudi() {
+    @FXML public static void handleChiudi() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Conferma");
         alert.setHeaderText(null);
@@ -70,16 +69,25 @@ public class AllInsertionController {
         });
     }
 
-    private class AzioneTableCell extends TableCell<RichiestaOffertaDTO, Void> {
-        private final Button visualizzaButton;
+    public void handleChiudi(ActionEvent actionEvent) {
+        handleChiudi();
+    }
 
-        public AzioneTableCell() {
-            visualizzaButton = new Button("Visualizza");
+    public static class AzioneTableCell extends TableCell<RichiestaOffertaDTO, Void> {
+        private final Button visualizzaButton;
+        private final SceneManager sceneManager;
+        private final SessionManager sessionManager;
+
+        public AzioneTableCell(String label, SceneManager sceneManager, SessionManager sessionManager) {
+            visualizzaButton = new Button(label);
+            this.sceneManager = sceneManager;
+            this.sessionManager = sessionManager;
             visualizzaButton.setOnAction(event -> {
                 if (getTableRow() != null) {
                     RichiestaOffertaDTO dto = getTableRow().getItem();
                     if (dto != null) {
-                        mostraDettagli(dto);
+                        sessionManager.setDataTransferObject(dto);
+                        sceneManager.switchScene(SceneManager.SceneType.INSERTION_DETAILS, "TimeBank - Dettagli inserimento", false);
                     }
                 }
             });
@@ -107,21 +115,17 @@ public class AllInsertionController {
     public void initialize() {
         statoFiltro.getItems().addAll("Tutti", "In Attesa", "Approvata", "Rifiutata");
         configuraTabellaColonne();
-        righePerPagina.valueProperty().addListener((obs, oldVal, newVal) -> {
-            paginaAttuale = 0;
-            caricaDati();
-        });
         caricaDati();
     }
 
     private void configuraTabellaColonne() {
         // Configura il rendering delle celle e la formattazione
-        idColonna.setCellValueFactory(new PropertyValueFactory<>("id"));
         dataColonna.setCellValueFactory(new PropertyValueFactory<>("dataInserimento"));
         tipoColonna.setCellValueFactory(new PropertyValueFactory<>("tipoInserimento"));
         statoColonna.setCellValueFactory(new PropertyValueFactory<>("stato"));
-        descrizioneColonna.setCellValueFactory(new PropertyValueFactory<>("note"));
-        azioneColonna.setCellFactory(col -> new AzioneTableCell());
+        attivitaColonna.setCellValueFactory(new PropertyValueFactory<>("nomeAttivita"));
+        noteColonna.setCellValueFactory(new PropertyValueFactory<>("note"));
+        azioneColonna.setCellFactory(col -> new AzioneTableCell("Visualizza", sceneManager, sessionManager));
     }
 
     @FXML
@@ -146,10 +150,10 @@ public class AllInsertionController {
                 .dataFine(dataFineFiltro.getValue() != null ? Date.valueOf(dataFineFiltro.getValue()) : null)
                 .testoCerca(cercaFiltro.getText())
                 .pagina(paginaAttuale)
-                .dimensionePagina(Integer.parseInt(righePerPagina.getValue()))
+                .dimensionePagina(10)
                 .build();
 
-        Page<RichiestaOffertaDTO> risultato = inserimentiService.cercaRichieste(criteria, sessionManager.getCurrentUser().getMatricola());
+        Page<RichiestaOffertaDTO> risultato = inserimentiService.filtraRichiesteOfferteRecenti(criteria, sessionManager.getCurrentUser().getMatricola());
 
         tabellaRichieste.setItems(FXCollections.observableList(risultato.getContent()));
         totalePagine = risultato.getTotalPages();
@@ -202,11 +206,5 @@ public class AllInsertionController {
             paginaAttuale = totalePagine - 1;
             caricaDati();
         }
-    }
-
-    private void mostraDettagli(RichiestaOffertaDTO richiestaOffertaDTO) {
-        // Implementa la logica per mostrare i dettagli
-        // Per esempio, aprire una nuova finestra di dialogo
-        //TODO
     }
 }

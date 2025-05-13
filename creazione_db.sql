@@ -1,204 +1,138 @@
--- Creazione della tabella UTENTI
-/*CREATE TABLE UTENTI (
-    matricola VARCHAR(10) NOT NULL,
-    username VARCHAR(50) NOT NULL,
-    password VARCHAR(255) NOT NULL,  -- Using VARCHAR(255) for hashed passwords
-    nome VARCHAR(50) NOT NULL,
-    cognome VARCHAR(50) NOT NULL,
-    email VARCHAR(100) NOT NULL,
-    indirizzo VARCHAR(200),
-    cod_dipartimento VARCHAR(10),
-    CONSTRAINT PK_UTENTI PRIMARY KEY (matricola),
-    CONSTRAINT AK_UTENTI_USERNAME UNIQUE (username),  -- Alternate Key per username
-    CONSTRAINT AK_UTENTI_EMAIL UNIQUE (email),        -- Alternate Key per email
-    CONSTRAINT AK_UTENTI_NOMINATIVO UNIQUE (nome, cognome, cod_dipartimento), -- AK per combinazione nome-cognome-dipartimento
-    /*CONSTRAINT FK_DIPARTIMENTO FOREIGN KEY (cod_dipartimento) 
-        REFERENCES DIPARTIMENTI(cod_dipartimento)*/
-);
+INSERT INTO attivita (nome_attivita, descrizione, durata_minima_ore, durata_massima_ore, categoria)
+VALUES
+-- Istruzione e Formazione
+('Ripetizioni Matematica', 'Lezioni private di matematica per studenti', 1, 4, 'Istruzione'),
+('Lezioni di Inglese', 'Conversazione e grammatica inglese', 1, 3, 'Istruzione'),
+('Supporto Informatico Base', 'Aiuto nell uso del computer e internet', 1, 2, 'Istruzione'),
+('Lezioni di Italiano', 'Grammatica e letteratura italiana', 1, 3, 'Istruzione'),
+('Lezioni di Musica', 'Lezioni base di strumenti musicali', 1, 2, 'Istruzione'),
+-- Assistenza Domestica
+('Pulizie Domestiche', 'Pulizia e riordino della casa', 2, 4, 'Assistenza Domestica'),
+('Preparazione Pasti', 'Cucina e preparazione pasti', 1, 3, 'Assistenza Domestica'),
+('Giardinaggio Base', 'Manutenzione base del giardino', 2, 4, 'Assistenza Domestica'),
+('Piccole Riparazioni', 'Riparazioni domestiche semplici', 1, 3, 'Assistenza Domestica'),
+('Organizzazione Casa', 'Aiuto nell organizzazione degli spazi', 2, 4, 'Assistenza Domestica'),
+-- Assistenza Personale
+('Accompagnamento Spesa', 'Supporto per la spesa settimanale', 1, 2, 'Assistenza Personale'),
+('Compagnia Anziani', 'Compagnia e supporto per anziani', 1, 4, 'Assistenza Personale'),
+('Dog Sitting', 'Custodia e passeggiata cani', 1, 2, 'Assistenza Personale'),
+('Cat Sitting', 'Custodia e cura gatti', 1, 2, 'Assistenza Personale'),
+('Accompagnamento Visite', 'Accompagnamento per visite mediche', 1, 3, 'Assistenza Personale'),
+-- Servizi Professionali
+('Consulenza Informatica', 'Supporto tecnico informatico avanzato', 1, 3, 'Servizi Professionali'),
+('Traduzioni', 'Traduzioni semplici di documenti', 1, 4, 'Servizi Professionali'),
+('Supporto Amministrativo', 'Aiuto con pratiche burocratiche', 1, 2, 'Servizi Professionali'),
+('Fotografia Base', 'Servizio fotografico semplice', 1, 3, 'Servizi Professionali'),
+('Grafica Base', 'Creazione semplici grafiche', 1, 3, 'Servizi Professionali'),
+-- Benessere e Salute
+('Yoga Base', 'Lezioni base di yoga', 1, 2, 'Benessere'),
+('Ginnastica Dolce', 'Esercizi di ginnastica leggera', 1, 2, 'Benessere'),
+('Meditazione', 'Introduzione alla meditazione', 1, 2, 'Benessere'),
+('Supporto Emotivo', 'Ascolto e supporto emotivo', 1, 2, 'Benessere'),
+('Passeggiate Assistite', 'Accompagnamento per passeggiate', 1, 2, 'Benessere'),
+-- Cultura e Tempo Libero
+('Club del Libro', 'Organizzazione gruppo lettura', 1, 2, 'Cultura'),
+('Visite Culturali', 'Accompagnamento musei e mostre', 2, 4, 'Cultura'),
+('Cineforum', 'Organizzazione visioni film', 2, 3, 'Cultura'),
+('Giochi da Tavolo', 'Organizzazione sessioni di gioco', 1, 3, 'Cultura'),
+('Laboratorio Creativo', N'Attività manuali creative', 2, 4, 'Cultura'),
+-- Tecnologia
+('Supporto Smartphone', 'Aiuto uso smartphone e app', 1, 2, 'Tecnologia'),
+('Social Media Base', 'Introduzione ai social media', 1, 2, 'Tecnologia'),
+('Email e Internet', 'Supporto uso email e navigazione', 1, 2, 'Tecnologia'),
+('Videochiamate', 'Supporto per videochiamate', 1, 2, 'Tecnologia'),
+('Sicurezza Online', 'Consigli per sicurezza internet', 1, 2, 'Tecnologia'),
+-- Bambini
+('Baby Sitting', 'Custodia bambini', 2, 4, 'Bambini'),
+('Aiuto Compiti', 'Supporto compiti scolastici', 1, 2, 'Bambini'),
+(N'Attività Ricreative', N'Giochi e attività per bambini', 2, 3, 'Bambini'),
+('Letture Animate', 'Lettura storie per bambini', 1, 2, 'Bambini'),
+('Arte per Bambini', 'Laboratorio artistico bambini', 1, 3, 'Bambini'),
+-- Sport
+('Sport Individuali', N'Supporto e allenamento per attività sportive individuali', 1, 3, 'Sport'),
+('Sport di Squadra', N'Partecipazione e organizzazione attività sportive di gruppo', 1, 3, 'Sport'),
+(N'Attività all Aperto', N'Accompagnamento per attività sportive all aria aperta', 1, 3, 'Sport'),
+('Fitness Base', 'Supporto per esercizi di base e mantenimento forma fisica', 1, 2, 'Sport'),
+('Sport Acquatici', N'Accompagnamento per attività in acqua e supporto base', 1, 2, 'Sport');
 
--- Creazione degli indici per migliorare le performance delle ricerche
-CREATE INDEX IDX_UTENTI_USERNAME ON UTENTI(username);
-CREATE INDEX IDX_UTENTI_EMAIL ON UTENTI(email);
-CREATE INDEX IDX_UTENTI_COGNOME ON UTENTI(cognome, nome);*/
 
--- Creazione della tabella DIPARTIMENTI
-/*CREATE TABLE DIPARTIMENTI (
-    cod_dipartimento VARCHAR(10) NOT NULL,
-    nome_dipartimento VARCHAR(100) NOT NULL,
-    descrizione VARCHAR(500),
-    sede VARCHAR(200) NOT NULL,
-    telefono VARCHAR(20),
-    email_dipartimento VARCHAR(100) NOT NULL,
-    direttore VARCHAR(100) NOT NULL,
-    CONSTRAINT PK_DIPARTIMENTI PRIMARY KEY (cod_dipartimento),
-    CONSTRAINT AK_DIPARTIMENTI_NOME UNIQUE (nome_dipartimento),
-    CONSTRAINT AK_DIPARTIMENTI_EMAIL UNIQUE (email_dipartimento),
-    CONSTRAINT CHK_EMAIL_FORMATO CHECK (email_dipartimento LIKE '%@%.%'),
-    CONSTRAINT CHK_CODICE_FORMATO CHECK (cod_dipartimento LIKE 'DIP%')
-);
 
--- Creazione degli indici per migliorare le performance delle ricerche
-CREATE INDEX IDX_DIPARTIMENTI_NOME ON DIPARTIMENTI(nome_dipartimento);
-CREATE INDEX IDX_DIPARTIMENTI_SEDE ON DIPARTIMENTI(sede);*/
+INSERT INTO utenti (matricola, username, password, nome, cognome, email, indirizzo, telefono, data_registrazione, ore_totali)
+VALUES
+    ('000001', 'mario.rossi', '', 'Mario', 'Rossi', 'mario.rossi@studenti.unimore.it', 'Via Roma 1, Modena', '3331234567', CURRENT_TIMESTAMP, 10),
+    ('000002', 'laura.bianchi', '', 'Laura', 'Bianchi', 'laura.bianchi@studenti.unimore.it', 'Via Emilia 25, Bologna', '3339876543', CURRENT_TIMESTAMP, 5),
+    ('000003', 'giuseppe.verdi', '', 'Giuseppe', 'Verdi', 'giuseppe.verdi@studenti.unimore.it', 'Corso Italia 15, Reggio Emilia', '3351122334', CURRENT_TIMESTAMP, 8),
+    ('000004', 'anna.neri', '', 'Anna', 'Neri', 'anna.neri@studenti.unimore.it', 'Via Garibaldi 7, Modena', '3387654321', CURRENT_TIMESTAMP, 3);
 
-/*-- Aggiunta check constraint per il formato email
-ALTER TABLE UTENTI
-ADD CONSTRAINT CHK_UTENTI_EMAIL_FORMATO 
-CHECK (email LIKE '%@%.%');
 
--- Aggiunta check constraint per la lunghezza minima username
-ALTER TABLE UTENTI
-ADD CONSTRAINT CHK_UTENTI_USERNAME_LENGTH 
-CHECK (LEN(username) >= 5);
 
--- Aggiunta check constraint per la lunghezza minima password
-ALTER TABLE UTENTI
-ADD CONSTRAINT CHK_UTENTI_PASSWORD_LENGTH 
-CHECK (LEN(password) >= 8);
+INSERT INTO offerte (matricola_offerente, id_attivita, data_disponibilita_inizio, data_disponibilita_fine, ore_disponibili, stato, note, data_inserimento)
+VALUES
+-- Offerte da 000001
+('000001', 3, '2025-04-01', '2025-05-31', 20, 'DISPONIBILE', 'Lezioni pomeridiane disponibili', CURRENT_TIMESTAMP),
+('000001', 43, '2025-04-01', '2025-06-30', 24, 'DISPONIBILE', 'Allenamenti personalizzati', CURRENT_TIMESTAMP),
+('000001', 5, '2025-04-15', '2025-05-15', 15, 'DISPONIBILE', 'Supporto informatico base', CURRENT_TIMESTAMP),
+('000001', 23, '2025-04-01', '2025-05-31', 24, 'DISPONIBILE', 'Sessioni yoga principianti', CURRENT_TIMESTAMP),
+('000001', 33, '2025-04-01', '2025-05-31', 25, 'DISPONIBILE', 'Assistenza dispositivi Apple', CURRENT_TIMESTAMP),
+('000001', 8, '2025-04-01', '2025-04-30', 16, 'DISPONIBILE', 'Pulizie domestiche', CURRENT_TIMESTAMP),
 
--- Aggiunta check constraint per il formato matricola (esempio: assumendo che inizi con 'MAT' seguito da numeri)
-ALTER TABLE UTENTI
-ADD CONSTRAINT CHK_UTENTI_MATRICOLA_FORMATO 
-CHECK (matricola LIKE 'MAT%' AND LEN(matricola) = 8);
+-- Offerte da 000002
+('000002', 44, '2025-04-15', '2025-07-15', 30, 'DISPONIBILE', 'Organizzazione sport di squadra', CURRENT_TIMESTAMP),
+('000002', 4, '2025-04-01', '2025-06-30', 30, 'DISPONIBILE', 'Conversazione inglese', CURRENT_TIMESTAMP),
+('000002', 29, '2025-04-15', '2025-06-15', 24, 'DISPONIBILE', 'Visite guidate musei', CURRENT_TIMESTAMP),
+('000002', 13, '2025-04-01', '2025-05-31', 20, 'DISPONIBILE', 'Accompagnamento con auto', CURRENT_TIMESTAMP),
+('000002', 38, '2025-04-01', '2025-07-31', 30, 'DISPONIBILE', 'Babysitting esperienza pluriennale', CURRENT_TIMESTAMP),
+('000002', 9, '2025-04-15', '2025-05-15', 12, 'DISPONIBILE', 'Cucina tradizionale', CURRENT_TIMESTAMP),
 
--- Aggiunta check constraint per assicurare che nome e cognome non contengano numeri
-ALTER TABLE UTENTI
-ADD CONSTRAINT CHK_UTENTI_NOME 
-CHECK (nome NOT LIKE '%[0-9]%');
+-- Offerte da 000003
+('000003', 45, '2025-04-01', '2025-05-31', 20, 'DISPONIBILE', 'Guide escursioni natura', CURRENT_TIMESTAMP),
+('000003', 19, '2025-04-15', '2025-05-15', 20, 'DISPONIBILE', 'Traduzioni italiano-inglese', CURRENT_TIMESTAMP),
+('000003', 24, '2025-04-15', '2025-06-15', 20, 'DISPONIBILE', 'Ginnastica dolce anziani', CURRENT_TIMESTAMP),
+('000003', 10, '2025-04-01', '2025-06-30', 24, 'DISPONIBILE', 'Giardinaggio e potature', CURRENT_TIMESTAMP),
+('000003', 34, '2025-04-15', '2025-06-15', 20, 'DISPONIBILE', 'Gestione social media', CURRENT_TIMESTAMP),
+('000003', 14, '2025-04-15', '2025-07-15', 30, 'DISPONIBILE', 'Assistenza anziani', CURRENT_TIMESTAMP),
 
-ALTER TABLE UTENTI
-ADD CONSTRAINT CHK_UTENTI_COGNOME 
-CHECK (cognome NOT LIKE '%[0-9]%');
+-- Offerte da 000004 e 330592
+('000004', 46, '2025-04-01', '2025-06-30', 25, 'DISPONIBILE', 'Personal training base', CURRENT_TIMESTAMP),
+('000004', 30, '2025-04-01', '2025-07-31', 20, 'DISPONIBILE', 'Cineforum e discussioni', CURRENT_TIMESTAMP),
+('000004', 15, '2025-04-01', '2025-04-30', 15, 'DISPONIBILE', 'Dog sitting con esperienza', CURRENT_TIMESTAMP),
+('330592', 47, '2025-04-15', '2025-07-15', 20, 'DISPONIBILE', 'Lezioni nuoto base', CURRENT_TIMESTAMP),
+('330592', 39, '2025-04-15', '2025-06-15', 25, 'DISPONIBILE', 'Aiuto compiti elementari', CURRENT_TIMESTAMP),
+('330592', 5, '2025-04-15', '2025-05-15', 15, 'DISPONIBILE', 'Supporto uso PC base', CURRENT_TIMESTAMP);
 
--- Aggiunta check constraint per assicurare che l'email sia del dominio unimore
-ALTER TABLE UTENTI
-ADD CONSTRAINT CHK_UTENTI_EMAIL_DOMAIN 
-CHECK (email LIKE '%@%unimore.it');*/
 
-/*-- Tabella delle categorie di attivit�
-CREATE TABLE CATEGORIE_ATTIVITA (
-    id_categoria INT IDENTITY(1,1) NOT NULL,
-    nome_categoria VARCHAR(50) NOT NULL,
-    descrizione VARCHAR(200),
-    CONSTRAINT PK_CATEGORIE PRIMARY KEY (id_categoria),
-    CONSTRAINT AK_CATEGORIA_NOME UNIQUE (nome_categoria)
-);
 
--- Tabella delle attivit� specifiche
-CREATE TABLE ATTIVITA (
-    id_attivita INT IDENTITY(1,1) NOT NULL,
-    nome_attivita VARCHAR(100) NOT NULL,
-    descrizione VARCHAR(500),
-    id_categoria INT NOT NULL,
-    durata_minima_ore INT NOT NULL,
-    durata_massima_ore INT,
-    CONSTRAINT PK_ATTIVITA PRIMARY KEY (id_attivita),
-    CONSTRAINT FK_ATTIVITA_CATEGORIA FOREIGN KEY (id_categoria) 
-        REFERENCES CATEGORIE_ATTIVITA(id_categoria),
-    CONSTRAINT AK_ATTIVITA_NOME UNIQUE (nome_attivita),
-    CONSTRAINT CHK_ATTIVITA_DURATA CHECK (durata_minima_ore > 0 
-        AND (durata_massima_ore IS NULL OR durata_massima_ore >= durata_minima_ore))
-);
 
--- Tabella delle offerte di disponibilit�
-CREATE TABLE OFFERTE (
-    id_offerta INT IDENTITY(1,1) NOT NULL,
-    matricola_offerente VARCHAR(10) NOT NULL,
-    id_attivita INT NOT NULL,
-    data_disponibilita_inizio DATE NOT NULL,
-    data_disponibilita_fine DATE,
-    ore_disponibili INT NOT NULL,
-    stato VARCHAR(20) NOT NULL DEFAULT 'DISPONIBILE',
-    note VARCHAR(500),
-    data_inserimento DATETIME DEFAULT GETDATE(),
-    CONSTRAINT PK_OFFERTE PRIMARY KEY (id_offerta),
-    CONSTRAINT FK_OFFERTE_UTENTE FOREIGN KEY (matricola_offerente) 
-        REFERENCES UTENTI(matricola),
-    CONSTRAINT FK_OFFERTE_ATTIVITA FOREIGN KEY (id_attivita) 
-        REFERENCES ATTIVITA(id_attivita),
-    CONSTRAINT CHK_OFFERTE_STATO CHECK (stato IN ('DISPONIBILE', 'PRENOTATA', 'COMPLETATA', 'CANCELLATA')),
-    CONSTRAINT CHK_OFFERTE_DATE CHECK (data_disponibilita_fine IS NULL 
-        OR data_disponibilita_fine >= data_disponibilita_inizio),
-    CONSTRAINT CHK_OFFERTE_ORE CHECK (ore_disponibili > 0)
-);
+INSERT INTO richieste (matricola_richiedente, id_attivita, data_richiesta_inizio, data_richiesta_fine, ore_richieste, stato, priorita, note, data_inserimento)
+VALUES
+-- Richieste da 000001
+('000001', 44, '2025-04-15', '2025-05-15', 12, 'APERTA', 'NORMALE', 'Cerco gruppo calcetto', CURRENT_TIMESTAMP),
+('000001', 4, '2025-04-01', '2025-04-30', 10, 'APERTA', 'ALTA', 'Preparazione colloquio lavoro inglese', CURRENT_TIMESTAMP),
+('000001', 13, '2025-04-10', '2025-05-10', 8, 'APERTA', 'NORMALE', 'Accompagnamento visite mediche', CURRENT_TIMESTAMP),
+('000001', 39, '2025-04-15', '2025-05-15', 10, 'APERTA', 'URGENTE', 'Aiuto compiti matematica figlio', CURRENT_TIMESTAMP),
+('000001', 9, '2025-04-01', '2025-04-30', 6, 'APERTA', 'BASSA', 'Imparare ricette base', CURRENT_TIMESTAMP),
+('000001', 33, '2025-04-05', '2025-04-30', 4, 'APERTA', 'NORMALE', 'Configurazione nuovo smartphone', CURRENT_TIMESTAMP),
 
--- Tabella delle richieste di aiuto
-CREATE TABLE RICHIESTE (
-    id_richiesta INT IDENTITY(1,1) NOT NULL,
-    matricola_richiedente VARCHAR(10) NOT NULL,
-    id_attivita INT NOT NULL,
-    data_richiesta_inizio DATE NOT NULL,
-    data_richiesta_fine DATE,
-    ore_richieste INT NOT NULL,
-    stato VARCHAR(20) NOT NULL DEFAULT 'APERTA',
-    priorita VARCHAR(10) NOT NULL DEFAULT 'NORMALE',
-    note VARCHAR(500),
-    data_inserimento DATETIME DEFAULT GETDATE(),
-    CONSTRAINT PK_RICHIESTE PRIMARY KEY (id_richiesta),
-    CONSTRAINT FK_RICHIESTE_UTENTE FOREIGN KEY (matricola_richiedente) 
-        REFERENCES UTENTI(matricola),
-    CONSTRAINT FK_RICHIESTE_ATTIVITA FOREIGN KEY (id_attivita) 
-        REFERENCES ATTIVITA(id_attivita),
-    CONSTRAINT CHK_RICHIESTE_STATO CHECK (stato IN ('APERTA', 'ASSEGNATA', 'COMPLETATA', 'CANCELLATA')),
-    CONSTRAINT CHK_RICHIESTE_PRIORITA CHECK (priorita IN ('BASSA', 'NORMALE', 'ALTA', 'URGENTE')),
-    CONSTRAINT CHK_RICHIESTE_DATE CHECK (data_richiesta_fine IS NULL 
-        OR data_richiesta_fine >= data_richiesta_inizio),
-    CONSTRAINT CHK_RICHIESTE_ORE CHECK (ore_richieste > 0)
-);
+-- Richieste da 000002
+('000002', 45, '2025-04-01', '2025-04-30', 6, 'APERTA', 'NORMALE', 'Escursioni weekend', CURRENT_TIMESTAMP),
+('000002', 18, '2025-04-05', '2025-04-30', 6, 'APERTA', 'ALTA', 'Riparazione PC urgente', CURRENT_TIMESTAMP),
+('000002', 23, '2025-04-01', '2025-05-31', 8, 'APERTA', 'BASSA', 'Lezioni yoga base', CURRENT_TIMESTAMP),
+('000002', 10, '2025-04-01', '2025-04-30', 4, 'APERTA', 'NORMALE', 'Sistemazione giardino', CURRENT_TIMESTAMP),
+('000002', 29, '2025-04-10', '2025-04-30', 6, 'APERTA', 'BASSA', 'Visite musei con guida', CURRENT_TIMESTAMP),
+('000002', 14, '2025-04-15', '2025-05-15', 20, 'APERTA', 'ALTA', 'Assistenza madre anziana', CURRENT_TIMESTAMP),
 
--- Tabella degli accoppiamenti (matching) tra offerte e richieste
-CREATE TABLE MATCHING (
-    id_matching INT IDENTITY(1,1) NOT NULL,
-    id_offerta INT NOT NULL,
-    id_richiesta INT NOT NULL,
-    data_matching DATETIME DEFAULT GETDATE(),
-    ore_concordate INT NOT NULL,
-    stato VARCHAR(20) NOT NULL DEFAULT 'PROGRAMMATO',
-    data_esecuzione DATE,
-    valutazione_richiedente INT,
-    valutazione_offerente INT,
-    note_feedback VARCHAR(500),
-    CONSTRAINT PK_MATCHING PRIMARY KEY (id_matching),
-    CONSTRAINT FK_MATCHING_OFFERTA FOREIGN KEY (id_offerta) 
-        REFERENCES OFFERTE(id_offerta),
-    CONSTRAINT FK_MATCHING_RICHIESTA FOREIGN KEY (id_richiesta) 
-        REFERENCES RICHIESTE(id_richiesta),
-    CONSTRAINT CHK_MATCHING_STATO CHECK (stato IN ('PROGRAMMATO', 'IN_CORSO', 'COMPLETATO', 'CANCELLATO')),
-    CONSTRAINT CHK_MATCHING_ORE CHECK (ore_concordate > 0),
-    CONSTRAINT CHK_MATCHING_VALUTAZIONE CHECK (
-        (valutazione_richiedente IS NULL OR valutazione_richiedente BETWEEN 1 AND 5) AND
-        (valutazione_offerente IS NULL OR valutazione_offerente BETWEEN 1 AND 5)
-    )
-);*/
+-- Richieste da 000003
+('000003', 46, '2025-04-10', '2025-05-10', 10, 'APERTA', 'NORMALE', 'Inizio programma fitness', CURRENT_TIMESTAMP),
+('000003', 30, '2025-04-15', '2025-05-15', 9, 'APERTA', 'BASSA', 'Partecipazione gruppo cineforum', CURRENT_TIMESTAMP),
+('000003', 15, '2025-04-01', '2025-04-15', 5, 'APERTA', 'ALTA', 'Dog sitting per weekend', CURRENT_TIMESTAMP),
+('000003', 38, '2025-04-10', '2025-05-10', 15, 'APERTA', 'URGENTE', 'Babysitter pomeridiana', CURRENT_TIMESTAMP),
+('000003', 5, '2025-04-01', '2025-04-15', 3, 'APERTA', 'NORMALE', 'Installazione nuovo PC', CURRENT_TIMESTAMP),
+('000003', 19, '2025-04-15', '2025-04-30', 10, 'APERTA', 'ALTA', 'Traduzione documenti urgenti', CURRENT_TIMESTAMP),
 
-/*
- CREATE TABLE valutazioni (
-    id BIGINT IDENTITY(1,1) PRIMARY KEY,
-    punteggio INT NOT NULL,
-    commento NVARCHAR(MAX),
-    data_valutazione DATETIME DEFAULT GETDATE(),
-    tipo_valutatore VARCHAR(20) NOT NULL,
-    id_prenotazione BIGINT NOT NULL,
-    CONSTRAINT check_punteggio CHECK (punteggio >= 1 AND punteggio <= 5),
-    CONSTRAINT check_tipo_valutatore CHECK (tipo_valutatore IN ('RICHIEDENTE', 'OFFERENTE'))
-);
- */
-
-/*
- -- Crea un nuovo login
-CREATE LOGIN user_tb
-WITH PASSWORD = 'q5L+[W9{03|v',
-DEFAULT_DATABASE = TimeBank,
-CHECK_EXPIRATION = OFF,
-CHECK_POLICY = ON;
-
--- Passa al database specifico
-USE TimeBank;
-
--- Crea l'utente nel database e associalo al login
-CREATE USER user_tb FOR LOGIN user_tb;
-
--- Assegna i permessi necessari
-EXEC sp_addrolemember 'db_datareader', 'user_tb';
-EXEC sp_addrolemember 'db_datawriter', 'user_tb';
- */
+-- Richieste da 000004 e 330592
+('000004', 47, '2025-04-15', '2025-05-15', 8, 'APERTA', 'NORMALE', 'Corso nuoto principianti', CURRENT_TIMESTAMP),
+('000004', 24, '2025-04-15', '2025-05-15', 6, 'APERTA', 'ALTA', 'Ginnastica riabilitativa post incidente', CURRENT_TIMESTAMP),
+('000004', 8, '2025-04-05', '2025-04-30', 12, 'APERTA', 'NORMALE', 'Pulizia casa completa', CURRENT_TIMESTAMP),
+('330592', 43, '2025-04-05', '2025-05-05', 8, 'APERTA', 'NORMALE', 'Cerco partner allenamento', CURRENT_TIMESTAMP),
+('330592', 34, '2025-04-15', '2025-05-15', 6, 'APERTA', 'BASSA', 'Aiuto gestione Instagram', CURRENT_TIMESTAMP),
+('330592', 7, '2025-04-10', '2025-05-10', 10, 'APERTA', 'ALTA', N'Ripetizioni matematica università', CURRENT_TIMESTAMP);

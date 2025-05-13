@@ -7,6 +7,8 @@ import java.util.List;
 public interface PrenotazioneRepository {
     Long save(Prenotazione prenotazione);
     Prenotazione findById(Integer id);
+    List<Prenotazione> findByIdRichiesta(Integer id);
+    List<Prenotazione> findByIdOfferta(Integer id);
     List<Prenotazione> findByUtente(String username);
     List<Prenotazione> findAll();
     void delete(Integer id);

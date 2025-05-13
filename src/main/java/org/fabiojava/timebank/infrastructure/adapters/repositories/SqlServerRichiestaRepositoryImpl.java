@@ -14,6 +14,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+import static org.fabiojava.timebank.gui.services.InserimentiServiceImpl.LIMIT_DEFAULT;
+
 @Repository
 public class SqlServerRichiestaRepositoryImpl implements RichiestaRepository {
     private final QueryPort queryPort;
@@ -51,9 +53,15 @@ public class SqlServerRichiestaRepositoryImpl implements RichiestaRepository {
 
     @Override
     public List<Richiesta> findByUtente(String matricola) {
+        return findByUtente(matricola, LIMIT_DEFAULT);
+    }
+
+    @Override
+    public List<Richiesta> findByUtente(String matricola, int limit) {
         QuerySpecification spec = new QuerySpecification();
         spec.from("richieste")
-            .where("matricola_richiedente", "=", matricola);
+                .where("matricola_richiedente", "=", matricola)
+                .limit(limit);
         return queryPort.execute(spec, Richiesta.class);
     }
 

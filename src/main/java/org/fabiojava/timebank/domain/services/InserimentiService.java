@@ -7,6 +7,9 @@ import org.springframework.data.domain.Page;
 import java.util.List;
 
 public interface InserimentiService {
-    public Page<RichiestaOffertaDTO> cercaRichieste(AllInsertionController.RichiestaCriteria criteria, String matricolaUtente);
-    public List<RichiestaOffertaDTO> trovaRichiesteOfferteRecenti(String matricolaUtente);
+    Page<RichiestaOffertaDTO> filtraRichiesteOfferteRecenti(AllInsertionController.RichiestaCriteria criteria, String matricolaUtente);
+    List<RichiestaOffertaDTO> trovaRichiesteOfferteRecenti(String matricolaUtente);
+    List<RichiestaOffertaDTO> trovaRichiesteOfferteRecenti(String matricolaUtente, int limit);
+    Page<RichiestaOffertaDTO> filtraOwnRichieste(AllInsertionController.RichiestaCriteria criteria, String matricolaUtente);
+    Page<RichiestaOffertaDTO> filtraOwnOfferte(AllInsertionController.RichiestaCriteria criteria, String matricolaUtente);
 }

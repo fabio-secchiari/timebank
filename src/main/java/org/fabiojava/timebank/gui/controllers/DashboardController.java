@@ -2,8 +2,11 @@ package org.fabiojava.timebank.gui.controllers;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
 import lombok.extern.java.Log;
 import org.fabiojava.timebank.domain.dto.RichiestaOffertaDTO;
 import org.fabiojava.timebank.domain.model.Inserimento;
@@ -16,6 +19,7 @@ import org.fabiojava.timebank.gui.services.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import java.sql.Date;
 import java.util.List;
 
 @Log
@@ -40,14 +44,18 @@ public class DashboardController {
     @FXML    private TableColumn<?, ?> ratingCommentColumn;
     @FXML    private TableColumn<?, ?> ratingDateColumn;
 
-    @FXML    private TableColumn<?, ?> recordDateColumn;
-    @FXML    private TableColumn<?, ?> recordUserColumn;
-    @FXML    private TableColumn<?, ?> recordTitleColumn;
-    @FXML    private TableColumn<?, ?> recordTypeColumn;
+    @FXML    private TableView<RichiestaOffertaDTO> hotRecordsTable;
+    @FXML    private TableColumn<RichiestaOffertaDTO, String> hotTipoColonna;
+    @FXML    private TableColumn<RichiestaOffertaDTO, String> hotAttivitaColonna;
+    @FXML    private TableColumn<RichiestaOffertaDTO, Date> hotDataInizioColonna;
+    @FXML    private TableColumn<RichiestaOffertaDTO, Date> hotDataFineColonna;
+    @FXML    private TableColumn<RichiestaOffertaDTO, Void> hotAzioneColonna;
 
-    @FXML    private TableView<?> latestRecordsTable;
-    @FXML    private ListView<String> userOffersList;
-    @FXML    private ListView<String> userRequestsList;
+    @FXML    private ListView<Inserimento> userOffersList;
+    @FXML    private ListView<Inserimento> userRequestsList;
+
+    @FXML    private Button allRequestButton;
+    @FXML    private Button allOfferButton;
 
     @Autowired
     public DashboardController(SceneManager sceneManager, OffertaRepository offertaRepository,
@@ -72,6 +80,7 @@ public class DashboardController {
 
     public void initialize() {
         log.info("DashboardController initialized");
+        configuraTabellaColonne();
         if(sessionManager.getCurrentUser() != null){
             creditBar.setProgress(map(0, 30, 0, 1, sessionManager.getCurrentUser().getOreTotali()));
             creditLabel.setText(String.format("(%d)", sessionManager.getCurrentUser().getOreTotali()));
@@ -82,44 +91,80 @@ public class DashboardController {
         }
     }
 
+    private void configuraTabellaColonne() {
+        hotTipoColonna.setCellValueFactory(new PropertyValueFactory<>("tipoInserimento"));
+        hotAttivitaColonna.setCellValueFactory(new PropertyValueFactory<>("nomeAttivita"));
+        hotDataInizioColonna.setCellValueFactory(new PropertyValueFactory<>("dataInizio"));
+        hotDataFineColonna.setCellValueFactory(new PropertyValueFactory<>("dataFine"));
+        hotAzioneColonna.setCellFactory(col -> new AllInsertionController.AzioneTableCell("Dettagli", sceneManager, sessionManager));
+        userRequestsList.setCellFactory(lv -> new AzioneListViewCell());
+        userOffersList.setCellFactory(lv -> new AzioneListViewCell());
+    }
+
     private void initValutazioni() {
 
     }
 
     private void initHotInsertion() {
         List<RichiestaOffertaDTO> inserimentiRecenti = inserimentiService.trovaRichiesteOfferteRecenti(sessionManager.getCurrentUser().getMatricola());
-        inserimentiRecenti.forEach(inserimento -> log.info("HOT" + inserimento.toString()));
+        hotRecordsTable.setItems(FXCollections.observableList(inserimentiRecenti));
     }
 
     @FXML
     private void viewHotInsertion(){
-        sceneManager.switchScene(SceneManager.SceneType.INSERTION_LIST, "TimeBank - Inserimenti recenti", false);
+        sceneManager.switchScene(SceneManager.SceneType.HOT_INSERTION_LIST, "TimeBank - Inserimenti recenti", false);
+    }
+
+    public class AzioneListViewCell extends ListCell<Inserimento> {
+        //private final Button prenotazioniButton = new Button("Prenotazioni");
+        private final HBox hbox = new HBox(10); // 10 è lo spacing tra gli elementi
+
+        public AzioneListViewCell() {
+            /*prenotazioniButton.setOnAction(event -> {
+                if(getItem() instanceof Richiesta richiesta) {
+                    mostraPrenotazioniRichiesta(richiesta);
+                }else if(getItem() instanceof Offerta offerta){
+                    mostraPrenotazioniOfferta(offerta);
+                }
+            });*/
+        }
+
+        @Override
+        protected void updateItem(Inserimento inserimento, boolean empty) {
+            super.updateItem(inserimento, empty);
+            if (empty || inserimento == null) {
+                setText(null);
+                setGraphic(null);
+            } else {
+                attivitaRepository.findById(inserimento.getIdAttivita()).ifPresent(attivita -> {
+                    String text = inserimento.getDataInserimento().toLocalDateTime()
+                            .format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")) +
+                            " - " + attivita.getNomeAttivita();
+                    if (inserimento instanceof Richiesta richiesta) {
+                        text += " [" + richiesta.getStato() + "]";
+                    } else if (inserimento instanceof Offerta offerta) {
+                        text += " [" + offerta.getStato() + "]";
+                    }
+                    Label label = new Label(text);
+                    hbox.getChildren().setAll(/*prenotazioniButton,*/ label);
+                    setGraphic(hbox);
+                });
+            }
+        }
     }
 
     private void initRichieste() {
         List<Richiesta> arrRichiesta = richiestaRepository.findByUtente(
                 sessionManager.getCurrentUser().getMatricola());
-        log.info(arrRichiesta.toString());
-        ObservableList<String> userRequestsList = FXCollections.observableArrayList();
-        for(Richiesta richiesta : arrRichiesta){
-            attivitaRepository.findById(richiesta.getIdAttivita()).ifPresent(attivita ->
-                    userRequestsList.add(richiesta.getDataInserimento().toLocalDateTime().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")) + " - " +
-                            attivita.getNomeAttivita()));
-        }
-        this.userRequestsList.setItems(userRequestsList);
+        ObservableList<Inserimento> items = FXCollections.observableArrayList(arrRichiesta);
+        this.userRequestsList.setItems(items);
     }
 
     private void initOfferte() {
         List<Offerta> arrOfferta = offertaRepository.findByUtente(
                 sessionManager.getCurrentUser().getMatricola());
-        log.info(arrOfferta.toString());
-        ObservableList<String> userOffersList = FXCollections.observableArrayList();
-        for(Offerta offerta : arrOfferta){
-            attivitaRepository.findById(offerta.getIdAttivita()).ifPresent(attivita ->
-                    userOffersList.add(offerta.getDataInserimento().toLocalDateTime().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")) + " - " +
-                            attivita.getNomeAttivita()));
-        }
-        this.userOffersList.setItems(userOffersList);
+        ObservableList<Inserimento> items = FXCollections.observableArrayList(arrOfferta);
+        this.userOffersList.setItems(items);
     }
 
     @FXML
@@ -152,5 +197,24 @@ public class DashboardController {
 
     public void handleExit() {
         System.exit(0);
+    }
+
+    private void showError(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Errore");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    @FXML private void viewOwnInsertion(ActionEvent event){
+        Button source = (Button) event.getSource();
+        if(source == allOfferButton) {
+            sessionManager.setDataTransferObject(Inserimento.TIPO_INSERIMENTO.OFFERTA);
+            sceneManager.switchScene(SceneManager.SceneType.OWN_INSERTION_LIST, "TimeBank - Le mie offerte", false);
+        } else {
+            sessionManager.setDataTransferObject(Inserimento.TIPO_INSERIMENTO.RICHIESTA);
+            sceneManager.switchScene(SceneManager.SceneType.OWN_INSERTION_LIST, "TimeBank - Le mie richieste", false);
+        }
     }
 }

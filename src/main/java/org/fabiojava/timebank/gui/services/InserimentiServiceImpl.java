@@ -17,20 +17,78 @@ import java.util.List;
 
 @Service
 public class InserimentiServiceImpl implements InserimentiService {
-    private static final int LIMIT_DEFAULT = 20;
+    public static final int LIMIT_DEFAULT = 12;
     private final QueryPort queryPort;
+
+    private enum QUERY_TYPE {
+        RICHIESTA, OFFERTA, ALL
+    }
 
     public InserimentiServiceImpl(QueryPort queryPort) {
         this.queryPort = queryPort;
     }
 
     public List<RichiestaOffertaDTO> trovaRichiesteOfferteRecenti(String matricolaUtente) {
-        QuerySpecification spec = buildBaseQuerySpecification(matricolaUtente);
+        return trovaRichiesteOfferteRecenti(matricolaUtente, LIMIT_DEFAULT);
+    }
+
+    public List<RichiestaOffertaDTO> trovaRichiesteOfferteRecenti(String matricolaUtente, int limit) {
+        QuerySpecification spec = buildBaseQuerySpecification(matricolaUtente, "!=", QUERY_TYPE.ALL);
         spec.orderBy("data_inserimento", false)
-                .limit(LIMIT_DEFAULT);
+                .limit(limit);
         return queryPort.execute(spec, RichiestaOffertaDTO.class);
     }
-    
+
+    @Override
+    public Page<RichiestaOffertaDTO> filtraOwnRichieste(AllInsertionController.RichiestaCriteria criteria, String matricolaUtente) {
+        QuerySpecification countSpec = new QuerySpecification();
+        countSpec.addSelect("COUNT(*) as total")
+                .from("richieste")
+                .where("matricola_richiedente", "=", matricolaUtente)
+                .where("stato", "=", Richiesta.StatoRichiesta.APERTA.name());
+        CountDTO totalElements = queryPort.executeSingle(countSpec, CountDTO.class)
+                .orElse(new CountDTO(0));
+
+        QuerySpecification spec = buildBaseQuerySpecification(matricolaUtente, "=", QUERY_TYPE.RICHIESTA);
+        addFilters(spec, criteria);
+        addPagination(spec, criteria);
+
+        List<RichiestaOffertaDTO> content = queryPort.execute(spec, RichiestaOffertaDTO.class);
+        return new PageImpl<>(
+                content,
+                PageRequest.of(criteria.getPagina(), criteria.getDimensionePagina()),
+                totalElements.getTotal()
+        );
+    }
+
+    @Override
+    public Page<RichiestaOffertaDTO> filtraOwnOfferte(AllInsertionController.RichiestaCriteria criteria, String matricolaUtente) {
+        QuerySpecification countSpec = new QuerySpecification();
+        countSpec.addSelect("COUNT(*) as total")
+                .from("offerte")
+                .where("matricola_offerente", "=", matricolaUtente)
+                .where("stato", "=", Offerta.StatoOfferta.DISPONIBILE.name());
+        CountDTO totalElements = queryPort.executeSingle(countSpec, CountDTO.class)
+                .orElse(new CountDTO(0));
+
+        QuerySpecification spec = buildBaseQuerySpecification(matricolaUtente, "=", QUERY_TYPE.OFFERTA);
+        addFilters(spec, criteria);
+        addPagination(spec, criteria);
+
+        List<RichiestaOffertaDTO> content = queryPort.execute(spec, RichiestaOffertaDTO.class);
+        return new PageImpl<>(
+                content,
+                PageRequest.of(criteria.getPagina(), criteria.getDimensionePagina()),
+                totalElements.getTotal()
+        );
+    }
+
+    private void addPagination(QuerySpecification spec, AllInsertionController.RichiestaCriteria criteria) {
+        spec.orderBy("data_inserimento", false)
+                .offset(criteria.getPagina() * criteria.getDimensionePagina())
+                .limit(criteria.getDimensionePagina());
+    }
+
     private void addFilters(QuerySpecification spec, AllInsertionController.RichiestaCriteria criteria) {
         if (spec.isUnion()) {
             // Applica i filtri sulla query unificata
@@ -64,18 +122,16 @@ public class InserimentiServiceImpl implements InserimentiService {
         }
     }
 
-    public Page<RichiestaOffertaDTO> cercaRichieste(AllInsertionController.RichiestaCriteria criteria, String matricolaUtente) {
-        QuerySpecification countSpec = buildBaseQuerySpecification(matricolaUtente);
+    public Page<RichiestaOffertaDTO> filtraRichiesteOfferteRecenti(AllInsertionController.RichiestaCriteria criteria, String matricolaUtente) {
+        QuerySpecification countSpec = buildBaseQuerySpecification(matricolaUtente, "!=", QUERY_TYPE.ALL);
         addFilters(countSpec, criteria);
         countSpec.addSelectOnUnion("COUNT(*) as total");
         CountDTO totalElements = queryPort.executeSingle(countSpec, CountDTO.class)
                 .orElse(new CountDTO(0));
 
-        QuerySpecification dataSpec = buildBaseQuerySpecification(matricolaUtente);
+        QuerySpecification dataSpec = buildBaseQuerySpecification(matricolaUtente, "!=", QUERY_TYPE.ALL);
         addFilters(dataSpec, criteria);
-        dataSpec.orderBy("data_inserimento", false)
-                .offset(criteria.getPagina() * criteria.getDimensionePagina())
-                .limit(criteria.getDimensionePagina());
+        addPagination(dataSpec, criteria);
 
         List<RichiestaOffertaDTO> content = queryPort.execute(dataSpec, RichiestaOffertaDTO.class);
 
@@ -87,9 +143,7 @@ public class InserimentiServiceImpl implements InserimentiService {
 
     }
 
-    private QuerySpecification buildBaseQuerySpecification(String matricolaUtente) {
-        QuerySpecification spec = new QuerySpecification();
-
+    private void buildBaseOffertaSpecification(QuerySpecification spec, String matricolaUtente, String matricolaOperator){
         spec.addSelect("'OFFERTA' as tipo_inserimento")
                 .addSelect("o.id_offerta as id")
                 .addSelect("o.data_inserimento")
@@ -103,14 +157,14 @@ public class InserimentiServiceImpl implements InserimentiService {
                 .addSelect("a.id_attivita")
                 .addSelect("a.nome_attivita")
                 .addSelect("a.categoria")
-            .from("offerte o")
+                .from("offerte o")
                 .join("attivita a", "o.id_attivita = a.id_attivita",
                         QuerySpecification.JoinClause.JoinType.INNER)
-            .where("o.matricola_offerente", "!=", matricolaUtente)
+                .where("o.matricola_offerente", matricolaOperator, matricolaUtente)
                 .where("o.stato", "=", Offerta.StatoOfferta.DISPONIBILE.name());
+    }
 
-        spec.union();
-
+    private void buildBaseRichiestaSpecification(QuerySpecification spec, String matricolaUtente, String matricolaOperator){
         spec.addSelect("'RICHIESTA' as tipo_inserimento")
                 .addSelect("r.id_richiesta as id")
                 .addSelect("r.data_inserimento")
@@ -124,12 +178,31 @@ public class InserimentiServiceImpl implements InserimentiService {
                 .addSelect("a.id_attivita")
                 .addSelect("a.nome_attivita")
                 .addSelect("a.categoria")
-            .from("richieste r")
+                .from("richieste r")
                 .join("attivita a", "r.id_attivita = a.id_attivita",
                         QuerySpecification.JoinClause.JoinType.INNER)
-            .where("r.matricola_richiedente", "!=", matricolaUtente)
+                .where("r.matricola_richiedente", matricolaOperator, matricolaUtente)
                 .where("r.stato", "=", Richiesta.StatoRichiesta.APERTA.name());
+    }
+
+    private QuerySpecification buildBaseQuerySpecification(String matricolaUtente, String matricolaOperator, QUERY_TYPE tipo) {
+        QuerySpecification spec = new QuerySpecification();
+
+        switch(tipo){
+            case OFFERTA:
+                buildBaseOffertaSpecification(spec, matricolaUtente, matricolaOperator);
+                break;
+            case RICHIESTA:
+                buildBaseRichiestaSpecification(spec, matricolaUtente, matricolaOperator);
+                break;
+            case ALL:
+                buildBaseOffertaSpecification(spec, matricolaUtente, matricolaOperator);
+                spec.union();
+                buildBaseRichiestaSpecification(spec, matricolaUtente, matricolaOperator);
+        }
 
         return spec;
     }
+
+
 }

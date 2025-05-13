@@ -20,6 +20,16 @@ public class SqlServerPrenotazioneRepositoryImpl implements PrenotazioneReposito
     }
 
     @Override
+    public List<Prenotazione> findByIdRichiesta(Integer id) {
+        return List.of();
+    }
+
+    @Override
+    public List<Prenotazione> findByIdOfferta(Integer id) {
+        return List.of();
+    }
+
+    @Override
     public List<Prenotazione> findByUtente(String username) {
         return null;
     }
