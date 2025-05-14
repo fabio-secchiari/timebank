@@ -78,7 +78,7 @@ public class LoginController {
             if (loginSuccessful) {
                 log.log(Level.INFO, "Login effettuato con successo");
                 sessionManager.setCurrentUser(utente);
-                sceneManager.switchScene(SceneManager.SceneType.DASHBOARD, "TimeBank - Dashboard", true);
+                sceneManager.switchScene(SceneManager.SceneType.DASHBOARD, "TimeBank - Dashboard", true, false);
             } else {
                 showError("Credenziali non valide",
                         "Username o password non corretti.");
@@ -106,7 +106,7 @@ public class LoginController {
 
     @FXML
     public void handleSignUp(){
-        sceneManager.switchScene(SceneManager.SceneType.SIGNUP, "TimeBank - Registrazione", false);
+        sceneManager.switchScene(SceneManager.SceneType.SIGNUP, "TimeBank - Registrazione", false, false);
     }
 
     @FXML

@@ -22,6 +22,8 @@ import org.springframework.stereotype.Controller;
 import java.sql.Date;
 import java.util.List;
 
+import static org.fabiojava.timebank.gui.services.SceneManager.SceneType.DASHBOARD;
+
 @Log
 @Controller
 public class DashboardController {
@@ -96,7 +98,7 @@ public class DashboardController {
         hotAttivitaColonna.setCellValueFactory(new PropertyValueFactory<>("nomeAttivita"));
         hotDataInizioColonna.setCellValueFactory(new PropertyValueFactory<>("dataInizio"));
         hotDataFineColonna.setCellValueFactory(new PropertyValueFactory<>("dataFine"));
-        hotAzioneColonna.setCellFactory(col -> new AllInsertionController.AzioneTableCell("Dettagli", sceneManager, sessionManager));
+        hotAzioneColonna.setCellFactory(col -> new AllInsertionController.AzioneTableCell("Dettagli", sceneManager, sessionManager, DASHBOARD));
         userRequestsList.setCellFactory(lv -> new AzioneListViewCell());
         userOffersList.setCellFactory(lv -> new AzioneListViewCell());
     }
@@ -112,7 +114,7 @@ public class DashboardController {
 
     @FXML
     private void viewHotInsertion(){
-        sceneManager.switchScene(SceneManager.SceneType.HOT_INSERTION_LIST, "TimeBank - Inserimenti recenti", false);
+        sceneManager.switchScene(SceneManager.SceneType.HOT_INSERTION_LIST, "TimeBank - Inserimenti recenti", false, false);
     }
 
     public class AzioneListViewCell extends ListCell<Inserimento> {
@@ -121,7 +123,7 @@ public class DashboardController {
 
         public AzioneListViewCell() {
             /*prenotazioniButton.setOnAction(event -> {
-                if(getItem() instanceof Richiesta richiesta) {
+                if(getItem() instanceof Richiesta richiesta){
                     mostraPrenotazioniRichiesta(richiesta);
                 }else if(getItem() instanceof Offerta offerta){
                     mostraPrenotazioniOfferta(offerta);
@@ -171,7 +173,7 @@ public class DashboardController {
     public void handleLogout() {
         log.info("Logout");
         sessionManager.clearSession();
-        sceneManager.switchScene(SceneManager.SceneType.LOGIN, "TimeBank - Login", false);
+        sceneManager.navigateLoginPage();
     }
 
     @FXML private void nuovaRichiesta(){
@@ -192,7 +194,7 @@ public class DashboardController {
 
     private void nuovoInserimento(Inserimento.TIPO_INSERIMENTO tipoInserimento) {
         sessionManager.setDataTransferObject(tipoInserimento);
-        sceneManager.switchScene(SceneManager.SceneType.INSERTION, "TimeBank - Inserimento", false);
+        sceneManager.switchScene(SceneManager.SceneType.INSERTION, "TimeBank - Inserimento", false, false);
     }
 
     public void handleExit() {
@@ -211,10 +213,10 @@ public class DashboardController {
         Button source = (Button) event.getSource();
         if(source == allOfferButton) {
             sessionManager.setDataTransferObject(Inserimento.TIPO_INSERIMENTO.OFFERTA);
-            sceneManager.switchScene(SceneManager.SceneType.OWN_INSERTION_LIST, "TimeBank - Le mie offerte", false);
+            sceneManager.switchScene(SceneManager.SceneType.OWN_INSERTION_LIST, "TimeBank - Le mie offerte", false, false);
         } else {
             sessionManager.setDataTransferObject(Inserimento.TIPO_INSERIMENTO.RICHIESTA);
-            sceneManager.switchScene(SceneManager.SceneType.OWN_INSERTION_LIST, "TimeBank - Le mie richieste", false);
+            sceneManager.switchScene(SceneManager.SceneType.OWN_INSERTION_LIST, "TimeBank - Le mie richieste", false, false);
         }
     }
 }

@@ -4,15 +4,16 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.java.Log;
 import org.fabiojava.timebank.domain.dto.CategoriaDTO;
-import org.fabiojava.timebank.domain.model.Attivita;
-import org.fabiojava.timebank.domain.model.Inserimento;
-import org.fabiojava.timebank.domain.model.Offerta;
-import org.fabiojava.timebank.domain.model.Richiesta;
+import org.fabiojava.timebank.domain.dto.RichiestaOffertaDTO;
+import org.fabiojava.timebank.domain.model.*;
 import org.fabiojava.timebank.domain.ports.repositories.AttivitaRepository;
 import org.fabiojava.timebank.domain.ports.repositories.OffertaRepository;
+import org.fabiojava.timebank.domain.ports.repositories.PrenotazioneRepository;
 import org.fabiojava.timebank.domain.ports.repositories.RichiestaRepository;
+import org.fabiojava.timebank.domain.services.PrenotazioniService;
 import org.fabiojava.timebank.domain.services.UtenteService;
 import org.fabiojava.timebank.gui.services.SceneManager;
 import org.fabiojava.timebank.gui.services.SessionManager;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Controller;
 import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -35,6 +37,9 @@ public class OfferRequestController {
     private final OffertaRepository offertaRepository;
     private final AttivitaRepository attivitaRepository;
     private final UtenteService utenteService;
+    private final PrenotazioneRepository prenotazioneRepository;
+
+    private RichiestaOffertaDTO richiestaOffertaDTO;
 
     @FXML   private RadioButton offerRadio;
     @FXML   private RadioButton requestRadio;
@@ -50,6 +55,7 @@ public class OfferRequestController {
     @FXML   private DatePicker startDateField;
     @FXML   private Label errorMessage;
 
+    @Setter
     @Getter
     private static class AttivitaItem {
         private String nome;
@@ -64,13 +70,14 @@ public class OfferRequestController {
     }
 
     @Autowired
-    public OfferRequestController(SceneManager sceneManager, SessionManager sessionManager, RichiestaRepository richiestaRepository, OffertaRepository offertaRepository, AttivitaRepository attivitaRepository, UtenteService utenteService) {
+    public OfferRequestController(SceneManager sceneManager, SessionManager sessionManager, RichiestaRepository richiestaRepository, OffertaRepository offertaRepository, AttivitaRepository attivitaRepository, UtenteService utenteService, PrenotazioneRepository prenotazioneRepository) {
         this.sceneManager = sceneManager;
         this.sessionManager = sessionManager;
         this.richiestaRepository = richiestaRepository;
         this.offertaRepository = offertaRepository;
         this.attivitaRepository = attivitaRepository;
         this.utenteService = utenteService;
+        this.prenotazioneRepository = prenotazioneRepository;
     }
 
     public void initialize() {
@@ -84,7 +91,6 @@ public class OfferRequestController {
                 insertType.selectToggle(offerRadio);
             }
         }
-        sessionManager.setDataTransferObject(null);
 
         attivitaField.setButtonCell(createComboBoxCell());
         attivitaField.setCellFactory(listView -> createComboBoxCell());
@@ -106,6 +112,55 @@ public class OfferRequestController {
             }
         });
 
+        if(sessionManager.getDataTransferObject() instanceof HashMap<?, ?> map){
+            for (Object key : map.keySet()) {
+                Object value = map.get(key);
+                if(key instanceof Richiesta richiesta){
+                    if(value instanceof RichiestaOffertaDTO dto){
+                        this.richiestaOffertaDTO = dto;
+                        populateFields(true, richiesta);
+                    }
+                }else if(key instanceof Offerta offerta){
+                    if(value instanceof RichiestaOffertaDTO dto){
+                        this.richiestaOffertaDTO = dto;
+                        populateFields(true, offerta);
+                    }
+                }
+            }
+        }
+        sessionManager.setDataTransferObject(null);
+
+    }
+
+    private void populateFields(boolean disabled, Inserimento inserimento) {
+        if(richiestaOffertaDTO != null) {
+            for(AttivitaItem item : attivitaField.getItems()){
+                if(item.getNome().equals("   - " + richiestaOffertaDTO.getNomeAttivita())
+                    && item.getCategoria().equals(richiestaOffertaDTO.getCategoria())){
+                    attivitaField.getSelectionModel().select(item);
+                    break;
+                }
+            }
+            if (Objects.equals(richiestaOffertaDTO.getTipoInserimento(), Inserimento.TIPO_INSERIMENTO.RICHIESTA.name())) {
+                // sto inserendo un'offerta
+                insertType.selectToggle(offerRadio);
+                Offerta offerta = (Offerta) inserimento;
+                startDateField.setValue(offerta.getDataDisponibilitaInizio().toLocalDate());
+                endDateField.setValue(offerta.getDataDisponibilitaFine().toLocalDate());
+                hoursField.setText(String.valueOf(offerta.getOreDisponibili()));
+            } else {
+                // sto inserendo una richiesta
+                insertType.selectToggle(requestRadio);
+                Richiesta richiesta = (Richiesta) inserimento;
+                startDateField.setValue(richiesta.getDataRichiestaInizio().toLocalDate());
+                endDateField.setValue(richiesta.getDataRichiestaFine().toLocalDate());
+                hoursField.setText(String.valueOf(richiesta.getOreRichieste()));
+            }
+            offerRadio.setDisable(disabled);
+            requestRadio.setDisable(disabled);
+            newAttivitaButton.setDisable(disabled);
+            attivitaField.setDisable(disabled);
+        }
     }
 
     private ListCell<AttivitaItem> createComboBoxCell() {
@@ -131,7 +186,7 @@ public class OfferRequestController {
     private String getSelectedAttivita() {
         AttivitaItem selected = attivitaField.getValue();
         if (selected != null && !selected.isCategoria()) {
-            return selected.getNome().substring(4);
+            return selected.getNome().substring(5);
         }
         return null;
     }
@@ -146,41 +201,64 @@ public class OfferRequestController {
             }
         }
         Optional<Attivita> attivita = attivitaRepository.findByNome(getSelectedAttivita());
-        if(attivita.isEmpty()) {showError("Attività non trovata"); return; }
+        if(attivita.isEmpty()) { showError("Attività non trovata"); return; }
         if(insertType.getSelectedToggle() == offerRadio){
             if(areDataInvalid()) { showError("Uno o più campi errati"); return; }
-            offertaRepository.save(
-                    new Offerta(
-                        null,
-                        sessionManager.getCurrentUser().getMatricola(),
-                        attivita.get().getIdAttivita(),
-                        Date.valueOf(startDateField.getValue()),
-                        Date.valueOf(endDateField.getValue()),
-                        Integer.parseInt(hoursField.getText()),
-                        Offerta.StatoOfferta.DISPONIBILE,
-                        noteField.getText(),
-                        Timestamp.valueOf(LocalDateTime.now())
-                    )
+            Offerta offerta = offerta = new Offerta(
+                    null,
+                    sessionManager.getCurrentUser().getMatricola(),
+                    attivita.get().getIdAttivita(),
+                    Date.valueOf(startDateField.getValue()),
+                    Date.valueOf(endDateField.getValue()),
+                    Integer.parseInt(hoursField.getText()),
+                    Offerta.StatoOfferta.DISPONIBILE,
+                    noteField.getText(),
+                    Timestamp.valueOf(LocalDateTime.now())
             );
-        }else{
+            Long id_offerta = offertaRepository.save(offerta);
+            offerta.setIdOfferta(id_offerta);
+            prenotazioneRepository.save(
+                new Prenotazione(
+                    null,
+                    offerta.getIdOfferta(),
+                    richiestaOffertaDTO.getId(),
+                    Timestamp.valueOf(LocalDateTime.now()),
+                    offerta.getOreDisponibili(),
+                    Prenotazione.StatoPrenotazione.IN_CORSO,
+                    null,
+                    offerta.getNote()
+                )
+            );
+        } else {
             if(areDataInvalid()) { showError("Uno o più campi errati"); return; }
             // determino in base alla data di scadenza la priorità
             //TODO priorità richiesta
             Richiesta.PrioritaRichiesta priority = Richiesta.PrioritaRichiesta.NORMALE;
             if(endDateField.getValue().isBefore(java.time.LocalDate.now().plusDays(10))) priority = Richiesta.PrioritaRichiesta.URGENTE;
-            
-            richiestaRepository.save(
-                    new Richiesta(
-                        null,
-                        sessionManager.getCurrentUser().getMatricola(),
-                        attivita.get().getIdAttivita(),
-                        Date.valueOf(startDateField.getValue()),
-                        Date.valueOf(endDateField.getValue()),
-                        Integer.parseInt(hoursField.getText()),
-                        Richiesta.StatoRichiesta.APERTA,
-                        noteField.getText(),
-                        Timestamp.valueOf(LocalDateTime.now()),
-                        priority
+            Richiesta richiesta = new Richiesta(
+                    null,
+                    sessionManager.getCurrentUser().getMatricola(),
+                    attivita.get().getIdAttivita(),
+                    Date.valueOf(startDateField.getValue()),
+                    Date.valueOf(endDateField.getValue()),
+                    Integer.parseInt(hoursField.getText()),
+                    Richiesta.StatoRichiesta.APERTA,
+                    noteField.getText(),
+                    Timestamp.valueOf(LocalDateTime.now()),
+                    priority
+            );
+            Integer id_richiesta = richiestaRepository.save(richiesta);
+            richiesta.setIdRichiesta(id_richiesta);
+            prenotazioneRepository.save(
+                    new Prenotazione(
+                            null,
+                            richiesta.getIdRichiesta(),
+                            richiestaOffertaDTO.getId(),
+                            Timestamp.valueOf(LocalDateTime.now()),
+                            richiesta.getOreRichieste(),
+                            Prenotazione.StatoPrenotazione.IN_CORSO,
+                            null,
+                            richiesta.getNote()
                     )
             );
         }
@@ -190,7 +268,7 @@ public class OfferRequestController {
         }else{
             utenteService.sottraiOreUtente(sessionManager.getCurrentUser().getMatricola(), 1);
         }
-        sceneManager.switchScene(SceneManager.SceneType.DASHBOARD, "TimeBank - Dashboard", true);
+        sceneManager.navigateLastScene();
     }
 
     private boolean areDataInvalid() {
@@ -215,7 +293,7 @@ public class OfferRequestController {
     }
 
     public void addAttivita() {
-        sceneManager.switchScene(SceneManager.SceneType.ATTIVITA, "TimeBank - Nuova attività", false);
+        sceneManager.switchScene(SceneManager.SceneType.ATTIVITA, "TimeBank - Nuova attività", false, false);
     }
 
     @FXML private void onCancelHandle() {
@@ -226,14 +304,14 @@ public class OfferRequestController {
         alert.setHeaderText(null);
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK){
-            sceneManager.switchScene(SceneManager.SceneType.DASHBOARD, "TimeBank - Dashboard", true);
+            sceneManager.navigateLastScene();
         }
     }
 
     @FXML private void onLogOutHandle() {
         log.info("Logout");
         sessionManager.clearSession();
-        sceneManager.switchScene(SceneManager.SceneType.LOGIN, "TimeBank - Login", false);
+        sceneManager.navigateLoginPage();
     }
 
     @FXML private void onExitHandle() {

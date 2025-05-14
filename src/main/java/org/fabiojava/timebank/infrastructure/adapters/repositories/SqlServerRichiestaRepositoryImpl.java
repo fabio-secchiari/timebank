@@ -40,7 +40,7 @@ public class SqlServerRichiestaRepositoryImpl implements RichiestaRepository {
                 .value("priorita", richiesta.getPriorita().name())
                 .value("note", richiesta.getNote())
                 .value("data_inserimento", richiesta.getDataInserimento());
-        return insertPort.execute(spec, Richiesta.class).getGeneratedId("id_richiesta");
+        return insertPort.execute(spec, Richiesta.class).getGeneratedId("GENERATED_KEYS");
     }
 
     @Override
@@ -83,13 +83,15 @@ public class SqlServerRichiestaRepositoryImpl implements RichiestaRepository {
     @Override
     public void update(Richiesta richiesta) {
         UpdateSpecification spec = new UpdateSpecification();
-        spec.set("data_richiesta_inizio", richiesta.getDataRichiestaInizio())
-                .set("data_richiesta_fine", richiesta.getDataRichiestaFine())
-                .set("ore_richieste", richiesta.getOreRichieste())
-                .set("stato", richiesta.getStato().name())
-                .set("priorita", richiesta.getPriorita().name())
-                .set("note", richiesta.getNote())
-            .where("id_richiesta", "=", richiesta.getIdRichiesta());
+        if(richiesta.isEmpty()) return;
+        spec.table("richieste");
+        if(richiesta.getDataRichiestaInizio() != null) spec.set("data_richiesta_inizio", richiesta.getDataRichiestaInizio());
+        if(richiesta.getDataRichiestaFine() != null) spec.set("data_richiesta_fine", richiesta.getDataRichiestaFine());
+        if(richiesta.getOreRichieste() != -1) spec.set("ore_richieste", richiesta.getOreRichieste());
+        if(richiesta.getStato() != null) spec.set("stato", richiesta.getStato().name());
+        if(richiesta.getPriorita() != null) spec.set("priorita", richiesta.getPriorita().name());
+        if(richiesta.getNote() != null) spec.set("note", richiesta.getNote());
+        spec.where("id_richiesta", "=", richiesta.getIdRichiesta());
         insertPort.update(spec, Richiesta.class);
     }
 }

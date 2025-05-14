@@ -24,6 +24,52 @@ public class QuerySpecification {
         queries.add(new SelectQuery());
     }
 
+    public QuerySpecification(QuerySpecification src) {
+        this.queries = new ArrayList<>();
+        for (SelectQuery query : src.queries) {
+            SelectQuery newQuery = new SelectQuery();
+            newQuery.selectFields.addAll(query.selectFields);
+            newQuery.fromTable = query.fromTable;
+            // Deep copy dei joins
+            for (JoinClause join : query.joins) {
+                newQuery.joins.add(new JoinClause(
+                        join.getTable(),
+                        join.getCondition(),
+                        join.getType(),
+                        new ArrayList<>(join.getParameters())
+                ));
+            }
+            // Deep copy delle where clauses
+            for (WhereClause where : query.whereClauses) {
+                newQuery.whereClauses.add(new WhereClause(
+                        where.getField(),
+                        where.getOperator(),
+                        where.getValue()
+                ));
+            }
+            this.queries.add(newQuery);
+        }
+        this.orderBy = new ArrayList<>();
+        for (OrderByClause order : src.orderBy) {
+            this.orderBy.add(new OrderByClause(
+                    order.getField(),
+                    order.isAscending()
+            ));
+        }
+        this.postUnionSelectFields = new ArrayList<>(src.postUnionSelectFields);
+        this.postUnionWhereClauses = new ArrayList<>();
+        for (WhereClause where : src.postUnionWhereClauses) {
+            this.postUnionWhereClauses.add(new WhereClause(
+                    where.getField(),
+                    where.getOperator(),
+                    where.getValue()
+            ));
+        }
+        this.isUnion = src.isUnion;
+        this.offset = src.offset;
+        this.limit = src.limit;
+    }
+
     @Getter
     public static class SelectQuery {
         private final List<String> selectFields = new ArrayList<>();

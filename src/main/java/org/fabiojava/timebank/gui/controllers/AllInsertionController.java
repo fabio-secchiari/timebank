@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 
 import java.sql.Date;
+import java.util.HashMap;
 
 @Log
 @Controller
@@ -49,12 +50,12 @@ public class AllInsertionController {
     private int totalePagine = 0;
 
     @FXML private void handleIndietro() {
-        sceneManager.switchScene(SceneManager.SceneType.DASHBOARD, "TimeBank - Dashboard", true);
+        sceneManager.navigateLastScene();
     }
 
     @FXML private void handleLogOut() {
         sessionManager.setCurrentUser(java.util.Optional.empty());
-        sceneManager.switchScene(SceneManager.SceneType.LOGIN, "TimeBank - Login", false);
+        sceneManager.navigateLoginPage();
     }
 
     @FXML public static void handleChiudi() {
@@ -78,7 +79,7 @@ public class AllInsertionController {
         private final SceneManager sceneManager;
         private final SessionManager sessionManager;
 
-        public AzioneTableCell(String label, SceneManager sceneManager, SessionManager sessionManager) {
+        public AzioneTableCell(String label, SceneManager sceneManager, SessionManager sessionManager, SceneManager.SceneType sceneType) {
             visualizzaButton = new Button(label);
             this.sceneManager = sceneManager;
             this.sessionManager = sessionManager;
@@ -87,7 +88,7 @@ public class AllInsertionController {
                     RichiestaOffertaDTO dto = getTableRow().getItem();
                     if (dto != null) {
                         sessionManager.setDataTransferObject(dto);
-                        sceneManager.switchScene(SceneManager.SceneType.INSERTION_DETAILS, "TimeBank - Dettagli inserimento", false);
+                        sceneManager.switchScene(SceneManager.SceneType.INSERTION_DETAILS, "TimeBank - Dettagli inserimento", false, false);
                     }
                 }
             });
@@ -125,7 +126,7 @@ public class AllInsertionController {
         statoColonna.setCellValueFactory(new PropertyValueFactory<>("stato"));
         attivitaColonna.setCellValueFactory(new PropertyValueFactory<>("nomeAttivita"));
         noteColonna.setCellValueFactory(new PropertyValueFactory<>("note"));
-        azioneColonna.setCellFactory(col -> new AzioneTableCell("Visualizza", sceneManager, sessionManager));
+        azioneColonna.setCellFactory(col -> new AzioneTableCell("Visualizza", sceneManager, sessionManager, SceneManager.SceneType.OWN_INSERTION_LIST));
     }
 
     @FXML

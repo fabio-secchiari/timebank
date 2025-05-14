@@ -8,7 +8,6 @@ import java.sql.Timestamp;
 @Getter
 @Setter
 @ToString
-@NoArgsConstructor
 public class Richiesta extends Inserimento{
     private Integer idRichiesta;
     private Date dataRichiestaInizio;
@@ -17,6 +16,20 @@ public class Richiesta extends Inserimento{
     private int oreRichieste;
     private StatoRichiesta stato;
     private PrioritaRichiesta priorita;
+
+    public Richiesta(){
+        idRichiesta = null;
+        dataRichiestaInizio = null;
+        dataRichiestaFine = null;
+        matricolaRichiedente = null;
+        oreRichieste = -1;
+        stato = null;
+        priorita = null;
+    }
+
+    public boolean isEmpty(){
+        return idRichiesta == null && dataRichiestaInizio == null && dataRichiestaFine == null && matricolaRichiedente == null && oreRichieste == -1 && stato == null && priorita == null;
+    }
 
     public Richiesta(Integer id, String matricolaRichiedente, Integer idAttivita, Date dataInizio, Date dataFine, int oreRichieste, StatoRichiesta stato, String note, Timestamp dataInserimento, PrioritaRichiesta priorita) {
         super(idAttivita, note, dataInserimento);

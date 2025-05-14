@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 
 import java.sql.Date;
+import java.util.HashMap;
 
 import static org.fabiojava.timebank.gui.controllers.AllInsertionController.handleChiudi;
 
@@ -52,12 +53,12 @@ public class OwnInsertionController {
     }
 
     @FXML private void handleBack() {
-        sceneManager.switchScene(SceneManager.SceneType.DASHBOARD, "TimeBank - Dashboard", true);
+        sceneManager.navigateLastScene();
     }
 
     @FXML private void handleLogOut() {
         sessionManager.setCurrentUser(java.util.Optional.empty());
-        sceneManager.switchScene(SceneManager.SceneType.LOGIN, "TimeBank - Login", false);
+        sceneManager.navigateLoginPage();
     }
 
     @FXML private void handleClose() {
@@ -121,12 +122,12 @@ public class OwnInsertionController {
 
     private void mostraDettagli(RichiestaOffertaDTO dto) {
         sessionManager.setDataTransferObject(dto);
-        sceneManager.switchScene(SceneManager.SceneType.INSERTION_DETAILS, "TimeBank - Dettagli inserimento", false);
+        sceneManager.switchScene(SceneManager.SceneType.INSERTION_DETAILS, "TimeBank - Dettagli inserimento", false, false);
     }
 
     private void mostraPrenotazioni(RichiestaOffertaDTO dto) {
         sessionManager.setDataTransferObject(dto);
-        //sceneManager.switchScene();
+        sceneManager.switchScene(SceneManager.SceneType.PRENOTAZIONI_LIST, "TimeBank - Prenotazioni", false, false);
     }
 
     @FXML private void primaPagina() {

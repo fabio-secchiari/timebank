@@ -39,7 +39,7 @@ public class SqlServerOffertaRepositoryImpl implements OffertaRepository {
                 .value("stato", offerta.getStato().name())
                 .value("note", offerta.getNote())
                 .value("data_inserimento", offerta.getDataInserimento());
-        return insertPort.execute(spec, Offerta.class).getGeneratedId("id_offerta");
+        return insertPort.execute(spec, Offerta.class).getGeneratedId("GENERATED_KEYS");
     }
 
     @Override
@@ -87,6 +87,7 @@ public class SqlServerOffertaRepositoryImpl implements OffertaRepository {
                 .set("ore_disponibili", offerta.getOreDisponibili())
                 .set("stato", offerta.getStato().name())
                 .set("note", offerta.getNote())
+            .table("offerte")
             .where("id_offerta", "=", offerta.getIdOfferta());
         insertPort.update(spec, Offerta.class);
     }

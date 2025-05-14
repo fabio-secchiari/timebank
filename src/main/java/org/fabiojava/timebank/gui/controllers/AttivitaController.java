@@ -53,7 +53,7 @@ public class AttivitaController {
 
         log.info("Attività salvata correttamente");
         sessionManager.setDataTransferObject(attivita);
-        sceneManager.switchScene(SceneManager.SceneType.INSERTION, "TimeBank - Inserimento", false);
+        sceneManager.navigateLastScene();
     }
 
     private boolean areDataInvalid() {
@@ -102,14 +102,14 @@ public class AttivitaController {
         alert.setContentText(null);
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK){
-            sceneManager.switchScene(SceneManager.SceneType.INSERTION, "TimeBank - Inserimento", false);
+            sceneManager.navigateLastScene();
         }
     }
 
     @FXML private void onLogOutHandle() {
         log.info("Logout");
         sessionManager.clearSession();
-        sceneManager.switchScene(SceneManager.SceneType.LOGIN, "TimeBank - Login", false);
+        sceneManager.navigateLoginPage();
     }
 
     @FXML private void onExitHandle() {
