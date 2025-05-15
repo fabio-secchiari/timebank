@@ -3,8 +3,14 @@ package org.fabiojava.timebank.gui.services;
 import org.fabiojava.timebank.domain.dto.CountDTO;
 import org.fabiojava.timebank.domain.dto.PrenotazioneDTO;
 import org.fabiojava.timebank.domain.model.Inserimento;
+import org.fabiojava.timebank.domain.model.Offerta;
 import org.fabiojava.timebank.domain.model.Prenotazione;
+import org.fabiojava.timebank.domain.model.Richiesta;
+import org.fabiojava.timebank.domain.ports.database.InsertPort;
 import org.fabiojava.timebank.domain.ports.database.QueryPort;
+import org.fabiojava.timebank.domain.ports.repositories.OffertaRepository;
+import org.fabiojava.timebank.domain.ports.repositories.PrenotazioneRepository;
+import org.fabiojava.timebank.domain.ports.repositories.RichiestaRepository;
 import org.fabiojava.timebank.domain.services.PrenotazioniService;
 import org.fabiojava.timebank.gui.controllers.AllInsertionController;
 import org.fabiojava.timebank.infrastructure.adapters.database.specification.QuerySpecification;
@@ -20,10 +26,18 @@ import java.util.List;
 @Service
 public class PrenotazioniServiceImpl implements PrenotazioniService {
     private final QueryPort queryPort;
+    private final InsertPort insertPort;
+    private final RichiestaRepository richiestaRepository;
+    private final OffertaRepository offertaRepository;
+    private final PrenotazioneRepository prenotazioniRepository;
 
     @Autowired
-    public PrenotazioniServiceImpl(QueryPort queryPort) {
+    public PrenotazioniServiceImpl(QueryPort queryPort, InsertPort insertPort, RichiestaRepository richiestaRepository, OffertaRepository offertaRepository, PrenotazioneRepository prenotazioniRepository) {
         this.queryPort = queryPort;
+        this.insertPort = insertPort;
+        this.richiestaRepository = richiestaRepository;
+        this.offertaRepository = offertaRepository;
+        this.prenotazioniRepository = prenotazioniRepository;
     }
 
     @Override
@@ -64,8 +78,22 @@ public class PrenotazioniServiceImpl implements PrenotazioniService {
     @Override
     public void aggiornaPrenotazione(PrenotazioneDTO prenotazioneDTO) {
         UpdateSpecification spec = new UpdateSpecification();
-        spec.set("stato", prenotazioneDTO.getStato())
+        spec.set("stato", prenotazioneDTO.getStato().name())
                 .table("prenotazioni")
             .where("id_prenotazione", "=", prenotazioneDTO.getIdPrenotazione());
+        insertPort.update(spec, Prenotazione.class);
+        Richiesta richiesta = new Richiesta();
+        richiesta.setIdRichiesta(prenotazioneDTO.getIdRichiesta());
+        Offerta offerta = new Offerta();
+        offerta.setIdOfferta(prenotazioneDTO.getIdOfferta());
+        if(prenotazioneDTO.getStato() == Prenotazione.StatoPrenotazione.PROGRAMMATO){
+            offerta.setStato(Offerta.StatoOfferta.PRENOTATA);
+            richiesta.setStato(Richiesta.StatoRichiesta.ASSEGNATA);
+            richiestaRepository.update(richiesta);
+            offertaRepository.update(offerta);
+        } else if(prenotazioneDTO.getStato() == Prenotazione.StatoPrenotazione.CANCELLATO){
+            prenotazioniRepository.delete(prenotazioneDTO.getIdPrenotazione());
+            // TODO SEGNALA ALL'UTENTE CHE E' STATA RIFIUTATA
+        }
     }
 }

@@ -82,13 +82,14 @@ public class SqlServerOffertaRepositoryImpl implements OffertaRepository {
     @Override
     public void update(Offerta offerta) {
         UpdateSpecification spec = new UpdateSpecification();
-        spec.set("data_disponibilita_inizio", offerta.getDataDisponibilitaInizio())
-                .set("data_disponibilita_fine", offerta.getDataDisponibilitaFine())
-                .set("ore_disponibili", offerta.getOreDisponibili())
-                .set("stato", offerta.getStato().name())
-                .set("note", offerta.getNote())
-            .table("offerte")
-            .where("id_offerta", "=", offerta.getIdOfferta());
+        if(offerta.isEmpty()) return;
+        spec.table("offerte");
+        if(offerta.getDataDisponibilitaInizio() != null) spec.set("data_disponibilita_inizio", offerta.getDataDisponibilitaInizio());
+        if(offerta.getDataDisponibilitaFine() != null) spec.set("data_disponibilita_fine", offerta.getDataDisponibilitaFine());
+        if(offerta.getOreDisponibili() != -1) spec.set("ore_disponibili", offerta.getOreDisponibili());
+        if(offerta.getStato() != null) spec.set("stato", offerta.getStato().name());
+        if(offerta.getNote() != null) spec.set("note", offerta.getNote());
+        spec.where("id_offerta", "=", offerta.getIdOfferta());
         insertPort.update(spec, Offerta.class);
     }
 }

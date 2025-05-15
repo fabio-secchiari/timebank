@@ -1,7 +1,6 @@
 package org.fabiojava.timebank.gui.controllers;
 
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
@@ -12,7 +11,6 @@ import org.fabiojava.timebank.domain.dto.PrenotazioneDTO;
 import org.fabiojava.timebank.domain.dto.RichiestaOffertaDTO;
 import org.fabiojava.timebank.domain.model.Inserimento;
 import org.fabiojava.timebank.domain.model.Prenotazione;
-import org.fabiojava.timebank.domain.ports.repositories.PrenotazioneRepository;
 import org.fabiojava.timebank.domain.services.PrenotazioniService;
 import org.fabiojava.timebank.gui.services.SceneManager;
 import org.fabiojava.timebank.gui.services.SessionManager;
@@ -26,7 +24,6 @@ import java.sql.Date;
 public class PrenotazioneController {
     private final SceneManager sceneManager;
     private final SessionManager sessionManager;
-    private final PrenotazioneRepository prenotazioneRepository;
     private final PrenotazioniService prenotazioniService;
 
     private RichiestaOffertaDTO richiestaOffertaDTO;
@@ -61,17 +58,16 @@ public class PrenotazioneController {
     }
 
     @Autowired
-    public PrenotazioneController(SceneManager sceneManager, SessionManager sessionManager, PrenotazioneRepository prenotazioneRepository, PrenotazioniService prenotazioniService) {
+    public PrenotazioneController(SceneManager sceneManager, SessionManager sessionManager, PrenotazioniService prenotazioniService) {
         this.sceneManager = sceneManager;
         this.sessionManager = sessionManager;
-        this.prenotazioneRepository = prenotazioneRepository;
         this.prenotazioniService = prenotazioniService;
     }
 
     private void configuraTabellaColonne() {
         dataPrenotazioneColonna.setCellValueFactory(new PropertyValueFactory<>("dataMatching"));
         utenteColonna.setCellValueFactory(new PropertyValueFactory<>("matricola"));
-        noteColonna.setCellValueFactory(new PropertyValueFactory<>("note"));
+        noteColonna.setCellValueFactory(new PropertyValueFactory<>("noteFeedback"));
         oreColonna.setCellValueFactory(new PropertyValueFactory<>("oreConcordate"));
 
         azioniColonna.setCellFactory(col -> new TableCell<>() {
