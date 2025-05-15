@@ -9,11 +9,11 @@ import java.util.List;
 
 public interface PrenotazioneRepository {
     Long save(Prenotazione prenotazione);
-    Prenotazione findById(Integer id);
-    List<Prenotazione> findByIdRichiesta(Integer id);
-    List<Prenotazione> findByIdOfferta(Integer id);
+    Prenotazione findById(Long id);
+    List<Prenotazione> findByIdRichiesta(Long id);
+    List<Prenotazione> findByIdOfferta(Long id);
     List<Prenotazione> findByUtente(String matricola, Inserimento.TIPO_INSERIMENTO tipoInserimento);
     List<Prenotazione> findAll();
-    void delete(Integer id);
+    void delete(Long id);
     void update(Prenotazione prenotazione);
 }

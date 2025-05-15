@@ -27,7 +27,7 @@ public class PrenotazioniServiceImpl implements PrenotazioniService {
     }
 
     @Override
-    public Page<PrenotazioneDTO> filterByInserimento(Integer id, AllInsertionController.RichiestaCriteria criteria,
+    public Page<PrenotazioneDTO> filterByInserimento(Long id, AllInsertionController.RichiestaCriteria criteria,
                                                      Inserimento.TIPO_INSERIMENTO tipoInserimento) {
         QuerySpecification baseSpec = new QuerySpecification();
         baseSpec.from("prenotazioni p");

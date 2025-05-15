@@ -41,7 +41,7 @@ public class SqlServerPrenotazioneRepositoryImpl implements PrenotazioneReposito
     }
 
     @Override
-    public Prenotazione findById(Integer id) {
+    public Prenotazione findById(Long id) {
         QuerySpecification spec = new QuerySpecification();
         spec.from("prenotazioni")
                 .where("id_prenotazione", "=", id);
@@ -49,7 +49,7 @@ public class SqlServerPrenotazioneRepositoryImpl implements PrenotazioneReposito
     }
 
     @Override
-    public List<Prenotazione> findByIdRichiesta(Integer id) {
+    public List<Prenotazione> findByIdRichiesta(Long id) {
         QuerySpecification spec = new QuerySpecification();
         spec.from("prenotazioni")
                 .where("id_richiesta", "=", id);
@@ -57,7 +57,7 @@ public class SqlServerPrenotazioneRepositoryImpl implements PrenotazioneReposito
     }
 
     @Override
-    public List<Prenotazione> findByIdOfferta(Integer id) {
+    public List<Prenotazione> findByIdOfferta(Long id) {
         QuerySpecification spec = new QuerySpecification();
         spec.from("prenotazioni")
                 .where("id_offerta", "=", id);
@@ -87,7 +87,7 @@ public class SqlServerPrenotazioneRepositoryImpl implements PrenotazioneReposito
     }
 
     @Override
-    public void delete(Integer id) {
+    public void delete(Long id) {
         DeleteSpecification spec = new DeleteSpecification();
         spec.from("prenotazioni")
                 .where("id_prenotazione", "=", id);

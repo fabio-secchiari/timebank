@@ -14,7 +14,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 public class RichiestaOffertaDTO {
     private String tipoInserimento;
-    private Integer id;
+    private Long id;
     private Timestamp dataInserimento;
     private Date dataInizio;
     private Date dataFine;
@@ -22,7 +22,7 @@ public class RichiestaOffertaDTO {
     private String stato;
     private Integer oreDisponibili;
     private String note;
-    private Integer idAttivita;
+    private Long idAttivita;
     private String nomeAttivita;
     private String categoria;
 

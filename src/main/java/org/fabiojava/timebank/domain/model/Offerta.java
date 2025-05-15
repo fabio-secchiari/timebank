@@ -10,14 +10,14 @@ import java.sql.Timestamp;
 @ToString
 @NoArgsConstructor
 public class Offerta extends Inserimento{
-    private Integer idOfferta;
+    private Long idOfferta;
     private Date dataDisponibilitaInizio;
     private Date dataDisponibilitaFine;
     private String matricolaOfferente;
     private int oreDisponibili;
     private StatoOfferta stato;
 
-    public Offerta(Integer id, String matricolaOfferente, Integer idAttivita, Date dataInizio, Date dataFine, int oreDisponibili, StatoOfferta stato, String note, Timestamp dataInserimento) {
+    public Offerta(Long id, String matricolaOfferente, Long idAttivita, Date dataInizio, Date dataFine, int oreDisponibili, StatoOfferta stato, String note, Timestamp dataInserimento) {
         super(idAttivita, note, dataInserimento);
         this.matricolaOfferente = matricolaOfferente;
         this.oreDisponibili = oreDisponibili;

@@ -11,7 +11,7 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Inserimento {
-    private Integer idAttivita;
+    private Long idAttivita;
     private String note;
     private Timestamp dataInserimento;
 

@@ -7,10 +7,10 @@ import java.util.Optional;
 
 public interface OffertaRepository {
     Long save(Offerta offerta);
-    Optional<Offerta> findById(Integer id);
+    Optional<Offerta> findById(Long id);
     List<Offerta> findByUtente(String username);
     List<Offerta> findByUtente(String username, int limit);
     List<Offerta> findAll();
-    void delete(Integer id);
+    void delete(Long id);
     void update(Offerta offerta);
 }

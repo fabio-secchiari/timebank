@@ -43,7 +43,7 @@ public class SqlServerOffertaRepositoryImpl implements OffertaRepository {
     }
 
     @Override
-    public Optional<Offerta> findById(Integer id) {
+    public Optional<Offerta> findById(Long id) {
         QuerySpecification spec = new QuerySpecification();
         spec.from("offerte")
                 .where("id_offerta", "=", id);
@@ -72,7 +72,7 @@ public class SqlServerOffertaRepositoryImpl implements OffertaRepository {
     }
 
     @Override
-    public void delete(Integer id) {
+    public void delete(Long id) {
         DeleteSpecification spec = new DeleteSpecification();
         spec.from("offerte")
                 .where("id_offerta", "=", id);

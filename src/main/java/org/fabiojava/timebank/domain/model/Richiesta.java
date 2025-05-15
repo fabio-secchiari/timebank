@@ -9,7 +9,7 @@ import java.sql.Timestamp;
 @Setter
 @ToString
 public class Richiesta extends Inserimento{
-    private Integer idRichiesta;
+    private Long idRichiesta;
     private Date dataRichiestaInizio;
     private Date dataRichiestaFine;
     private String matricolaRichiedente;
@@ -31,7 +31,7 @@ public class Richiesta extends Inserimento{
         return idRichiesta == null && dataRichiestaInizio == null && dataRichiestaFine == null && matricolaRichiedente == null && oreRichieste == -1 && stato == null && priorita == null;
     }
 
-    public Richiesta(Integer id, String matricolaRichiedente, Integer idAttivita, Date dataInizio, Date dataFine, int oreRichieste, StatoRichiesta stato, String note, Timestamp dataInserimento, PrioritaRichiesta priorita) {
+    public Richiesta(Long id, String matricolaRichiedente, Long idAttivita, Date dataInizio, Date dataFine, int oreRichieste, StatoRichiesta stato, String note, Timestamp dataInserimento, PrioritaRichiesta priorita) {
         super(idAttivita, note, dataInserimento);
         this.matricolaRichiedente = matricolaRichiedente;
         this.oreRichieste = oreRichieste;

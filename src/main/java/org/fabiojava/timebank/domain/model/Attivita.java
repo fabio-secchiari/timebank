@@ -9,7 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Attivita {
-    private Integer idAttivita;
+    private Long idAttivita;
     private String nomeAttivita;
     private String descrizione;
     private int durataMinimaOre;

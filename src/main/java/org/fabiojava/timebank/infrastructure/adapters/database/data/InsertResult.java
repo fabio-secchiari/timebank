@@ -21,6 +21,10 @@ public class InsertResult {
     }
 
     public Long getGeneratedId(String id) {
-        return getGeneratedKey(id, Long.class);
+        if( generatedKeys.containsKey(id) && generatedKeys.get(id) instanceof Long idLong){
+            return idLong;
+        }
+        return null;
+        //return getGeneratedKey(id, Long.class);
     }
 }

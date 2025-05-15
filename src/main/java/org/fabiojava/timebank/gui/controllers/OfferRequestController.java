@@ -247,7 +247,7 @@ public class OfferRequestController {
                     Timestamp.valueOf(LocalDateTime.now()),
                     priority
             );
-            Integer id_richiesta = richiestaRepository.save(richiesta);
+            Long id_richiesta = richiestaRepository.save(richiesta);
             richiesta.setIdRichiesta(id_richiesta);
             prenotazioneRepository.save(
                     new Prenotazione(

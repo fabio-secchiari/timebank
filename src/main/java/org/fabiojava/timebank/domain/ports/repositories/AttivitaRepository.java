@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface AttivitaRepository {
     Long save(Attivita attivita);
-    Optional<Attivita> findById(Integer id);
+    Optional<Attivita> findById(Long id);
     Optional<Attivita> findByNome(String nome);
     List<Attivita> findAll();
     List<CategoriaDTO> findAllCategorie();

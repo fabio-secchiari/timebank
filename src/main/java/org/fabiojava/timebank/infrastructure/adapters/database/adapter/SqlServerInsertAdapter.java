@@ -17,6 +17,8 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.HashMap;
@@ -50,7 +52,9 @@ public class SqlServerInsertAdapter implements InsertPort {
 
         Map<String, Object> generatedKeys = new HashMap<>();
         if (keyHolder.getKeys() != null) {
-            generatedKeys.putAll(keyHolder.getKeys());
+            keyHolder.getKeys().forEach((key, value) -> {
+                generatedKeys.put(key, value instanceof BigDecimal ? ((BigDecimal) value).toBigInteger().longValue() : value);
+            });
         }
 
         return new InsertResult(generatedKeys, affectedRows);

@@ -7,10 +7,10 @@ import java.util.Optional;
 
 public interface RichiestaRepository {
     Long save(Richiesta richiesta);
-    Optional<Richiesta> findById(Integer id);
+    Optional<Richiesta> findById(Long id);
     List<Richiesta> findByUtente(String username);
     List<Richiesta> findByUtente(String username, int limit);
     List<Richiesta> findAll();
-    void delete(Integer id);
+    void delete(Long id);
     void update(Richiesta richiesta);
 }

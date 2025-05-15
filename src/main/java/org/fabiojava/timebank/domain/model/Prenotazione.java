@@ -12,9 +12,9 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Prenotazione {
-    private Integer idPrenotazione;
-    private Integer idOfferta;
-    private Integer idRichiesta;
+    private Long idPrenotazione;
+    private Long idOfferta;
+    private Long idRichiesta;
     private Timestamp dataMatching;
     private Integer oreConcordate;
     private StatoPrenotazione stato;

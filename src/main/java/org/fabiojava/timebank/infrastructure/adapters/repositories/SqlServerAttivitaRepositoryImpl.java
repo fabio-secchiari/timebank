@@ -41,7 +41,7 @@ public class SqlServerAttivitaRepositoryImpl implements AttivitaRepository {
     }
 
     @Override
-    public Optional<Attivita> findById(Integer id) {
+    public Optional<Attivita> findById(Long id) {
         QuerySpecification spec = new QuerySpecification();
         spec.from("attivita")
             .where("id_attivita", "=", id);

@@ -38,10 +38,10 @@ public class SqlServerValutazioneRepositoryImpl implements ValutazioneRepository
     }
 
     @Override
-    public Optional<Valutazione> findById(Integer id) {
+    public Optional<Valutazione> findById(Long id) {
         QuerySpecification spec = new QuerySpecification();
         spec.from("valutazioni")
-                .where("id", "=", id);
+                .where("id_valutazione", "=", id);
         return queryPort.executeSingle(spec, Valutazione.class);
     }
 
@@ -65,10 +65,10 @@ public class SqlServerValutazioneRepositoryImpl implements ValutazioneRepository
     }
 
     @Override
-    public void delete(Integer id) {
+    public void delete(Long id) {
         DeleteSpecification spec = new DeleteSpecification();
         spec.from("valutazioni")
-                .where("id", "=", id);
+                .where("id_valutazione", "=", id);
         insertPort.delete(spec, Valutazione.class);
     }
 
@@ -79,7 +79,7 @@ public class SqlServerValutazioneRepositoryImpl implements ValutazioneRepository
         spec.set("punteggio", valutazione.getPunteggio())
                 .set("commento", valutazione.getCommento())
                 .set("data_valutazione", valutazione.getDataValutazione())
-            .where("id", "=", valutazione.getId());
+            .where("id_valutazione", "=", valutazione.getIdValutazione());
         insertPort.update(spec, Valutazione.class);
     }
 }

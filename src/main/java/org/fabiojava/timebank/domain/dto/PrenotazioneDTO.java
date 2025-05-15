@@ -14,9 +14,9 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PrenotazioneDTO {
-    private Integer idPrenotazione;
-    private Integer idOfferta;
-    private Integer idRichiesta;
+    private Long idPrenotazione;
+    private Long idOfferta;
+    private Long idRichiesta;
     private Timestamp dataMatching;
     private Integer oreConcordate;
     private Prenotazione.StatoPrenotazione stato;

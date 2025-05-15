@@ -44,7 +44,7 @@ public class SqlServerRichiestaRepositoryImpl implements RichiestaRepository {
     }
 
     @Override
-    public Optional<Richiesta> findById(Integer id) {
+    public Optional<Richiesta> findById(Long id) {
         QuerySpecification spec = new QuerySpecification();
         spec.from("richieste")
                 .where("id_richiesta", "=", id);
@@ -73,7 +73,7 @@ public class SqlServerRichiestaRepositoryImpl implements RichiestaRepository {
     }
 
     @Override
-    public void delete(Integer id) {
+    public void delete(Long id) {
         DeleteSpecification spec = new DeleteSpecification();
         spec.from("richieste")
             .where("id_richiesta", "=", id);

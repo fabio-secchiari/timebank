@@ -11,7 +11,7 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Valutazione {
-    private Integer id;
+    private Long idValutazione;
     private int punteggio;  // da 1 a 5 stelle
     private String commento;
     private Timestamp dataValutazione;
