@@ -43,7 +43,13 @@
                         <Font size="15.0" />
                     </font>
                 </Text>
-                <ListView fx:id="todoList" prefHeight="174.0" prefWidth="315.0" style="-fx-font-size: 12;" />
+            <TableView fx:id="toDoListTable" prefHeight="200.0" prefWidth="200.0">
+              <columns>
+                <TableColumn fx:id="toDoListDateByColonna" prefWidth="75.0" text="Data" />
+                <TableColumn fx:id="toDoListAttivitaColonna" prefWidth="172.66666412353516" text="Attivita" />
+                  <TableColumn fx:id="toDoListAzioniColonna" prefWidth="140.0" text="Azioni" />
+              </columns>
+            </TableView>
             </VBox>
         </VBox>
 

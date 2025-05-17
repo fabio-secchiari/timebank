@@ -1,5 +1,6 @@
 package org.fabiojava.timebank.infrastructure.adapters.repositories;
 
+import org.fabiojava.timebank.domain.model.Inserimento;
 import org.fabiojava.timebank.domain.ports.database.InsertPort;
 import org.fabiojava.timebank.domain.ports.database.QueryPort;
 import org.fabiojava.timebank.domain.ports.repositories.UtenteRepository;
@@ -55,6 +56,21 @@ public class SqlServerUtenteRepositoryImpl implements UtenteRepository {
         QuerySpecification spec = new QuerySpecification();
         spec.from("utenti")
                 .where("username", "=", username);
+        return queryPort.executeSingle(spec, Utente.class);
+    }
+
+    @Override
+    public Optional<Utente> findByIdInserimento(Long id_inserimento, Inserimento.TIPO_INSERIMENTO tipoInserimento){
+        QuerySpecification spec = new QuerySpecification();
+        spec.addSelect("u.*");
+        if(tipoInserimento == Inserimento.TIPO_INSERIMENTO.RICHIESTA)
+            spec.from("richieste r")
+                    .join("utenti u", "u.matricola = r.matricola_richiedente", QuerySpecification.JoinClause.JoinType.INNER)
+                .where("id_richiesta", "=", id_inserimento);
+        else
+            spec.from("offerte o")
+                    .join("utenti u", "u.matricola = o.matricola_offerente", QuerySpecification.JoinClause.JoinType.INNER)
+                .where("id_offerta", "=", id_inserimento);
         return queryPort.executeSingle(spec, Utente.class);
     }
 

@@ -17000,6 +17000,7 @@ int</ExtendedProperties>
       <DataRetentionPeriod>-1</DataRetentionPeriod>
       <ModifiedTimestamp>2025-05-12.00:51:00.097</ModifiedTimestamp>
       <ObjectId>1333579789</ObjectId>
+      <Outdated>1</Outdated>
       <LedgerViewId>0</LedgerViewId>
       <LobDataSpaceId>0</LobDataSpaceId>
     </table>

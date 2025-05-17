@@ -137,7 +137,7 @@
                         <id>default-cli</id>
                         <configuration>
                             <mainClass>
-                                org.fabiojava.timebank.timebank/org.fabiojava.timebank.HelloApplication
+                                org.fabiojava.timebank.timebank/org.fabiojava.timebank.TimeBankApplication
                             </mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>

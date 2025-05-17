@@ -22,6 +22,4 @@ public class PrenotazioneDTO {
     private Prenotazione.StatoPrenotazione stato;
     private Date dataEsecuzione;
     private String noteFeedback;
-    private String matricola;
-    private String email;
 }

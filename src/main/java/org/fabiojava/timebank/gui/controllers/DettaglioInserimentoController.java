@@ -149,6 +149,8 @@ public class DettaglioInserimentoController {
         } else {
             offertaRepository.update(richiestaOffertaDTO.toOfferta());
         }
+        errorMessage.setVisible(true);
+        errorMessage.setText("Inserimento modificato con successo");
         log.info("Inserimento modificato con successo");
     }
 

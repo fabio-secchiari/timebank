@@ -1,5 +1,6 @@
 package org.fabiojava.timebank.gui.services;
 
+import org.fabiojava.timebank.domain.model.Inserimento;
 import org.fabiojava.timebank.domain.model.Utente;
 import org.fabiojava.timebank.domain.ports.repositories.UtenteRepository;
 import org.fabiojava.timebank.domain.services.UtenteService;
@@ -86,5 +87,15 @@ public class UtenteServiceImpl implements UtenteService {
         if (esisteMatricola(matricola)) {
             utenteRepository.delete(matricola);
         }
+    }
+
+    @Override
+    public Optional<Utente> findByIdRichiesta(Long id_richiesta) {
+        return utenteRepository.findByIdInserimento(id_richiesta, Inserimento.TIPO_INSERIMENTO.RICHIESTA);
+    }
+
+    @Override
+    public Optional<Utente> findByIdOfferta(Long id_offerta) {
+        return utenteRepository.findByIdInserimento(id_offerta, Inserimento.TIPO_INSERIMENTO.OFFERTA);
     }
 }

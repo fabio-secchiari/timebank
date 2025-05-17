@@ -1,5 +1,6 @@
 package org.fabiojava.timebank.domain.ports.repositories;
 
+import org.fabiojava.timebank.domain.model.Inserimento;
 import org.fabiojava.timebank.domain.model.Utente;
 
 import java.util.List;
@@ -12,4 +13,5 @@ public interface UtenteRepository {
     List<Utente> findAll();
     void update(Utente utente);
     void delete(String matricola);
+    Optional<Utente> findByIdInserimento(Long id_inserimento, Inserimento.TIPO_INSERIMENTO tipoInserimento);
 }

@@ -7,10 +7,13 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import org.fabiojava.timebank.domain.dto.MatchingInfoDTO;
 import org.fabiojava.timebank.domain.dto.PrenotazioneDTO;
 import org.fabiojava.timebank.domain.dto.RichiestaOffertaDTO;
 import org.fabiojava.timebank.domain.model.Inserimento;
+import org.fabiojava.timebank.domain.model.Offerta;
 import org.fabiojava.timebank.domain.model.Prenotazione;
+import org.fabiojava.timebank.domain.model.Richiesta;
 import org.fabiojava.timebank.domain.services.PrenotazioniService;
 import org.fabiojava.timebank.gui.services.SceneManager;
 import org.fabiojava.timebank.gui.services.SessionManager;
@@ -19,6 +22,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 
 import java.sql.Date;
+import java.util.Optional;
 
 @Controller
 public class PrenotazioneController {
@@ -30,7 +34,6 @@ public class PrenotazioneController {
     private int paginaAttuale = 0;
     private int totalePagine = 0;
 
-    @FXML    private Button indietroButton;
     @FXML    private Label attivitaLabel;
     @FXML    private Label tipoLabel;
     @FXML    private Label statoLabel;
@@ -66,9 +69,33 @@ public class PrenotazioneController {
 
     private void configuraTabellaColonne() {
         dataPrenotazioneColonna.setCellValueFactory(new PropertyValueFactory<>("dataMatching"));
-        utenteColonna.setCellValueFactory(new PropertyValueFactory<>("matricola"));
         noteColonna.setCellValueFactory(new PropertyValueFactory<>("noteFeedback"));
         oreColonna.setCellValueFactory(new PropertyValueFactory<>("oreConcordate"));
+
+        utenteColonna.setCellFactory(col -> new TableCell<>() {
+            @Override
+            protected void updateItem(String item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setText(null);
+                } else {
+                    PrenotazioneDTO prenotazioneDTO = getTableView().getItems().get(getIndex());
+                    Optional<MatchingInfoDTO> matchingInfo = prenotazioniService.getMatchingInfoById(prenotazioneDTO.getIdPrenotazione());
+                    if (matchingInfo.isPresent()) {
+                        String matricolaCorrente = sessionManager.getCurrentUser().getMatricola();
+                        String matricolaDaMostrare;
+
+                        if (matricolaCorrente.equals(matchingInfo.get().getMatricolaOfferente()))
+                            matricolaDaMostrare = matchingInfo.get().getMatricolaRichiedente();
+                        else matricolaDaMostrare = matchingInfo.get().getMatricolaOfferente();
+                        setText(matricolaDaMostrare);
+                    } else {
+                        setText("N/D");
+                    }
+                }
+            }
+
+        });
 
         azioniColonna.setCellFactory(col -> new TableCell<>() {
             private final Button btnAccetta = new Button("✔");
@@ -76,6 +103,9 @@ public class PrenotazioneController {
             private final HBox hbox = new HBox(5, btnAccetta, btnRifiuta);
 
             {
+                if(richiestaOffertaDTO.getStato().equals(Richiesta.StatoRichiesta.ASSEGNATA.name())
+                    || richiestaOffertaDTO.getStato().equals(Offerta.StatoOfferta.PRENOTATA.name()))
+                    btnAccetta.setDisable(true);
                 btnAccetta.setOnAction(event -> {
                     PrenotazioneDTO dto = getTableRow().getItem();
                     if (dto != null) {
@@ -103,9 +133,41 @@ public class PrenotazioneController {
 
                         dialog.showAndWait().ifPresent(response -> {
                             if (response == ButtonType.OK) {
-                                dto.setDataEsecuzione(Date.valueOf(datePicker.getValue()));
-                                dto.setNoteFeedback(noteArea.getText());
-                                accettaPrenotazione(dto);
+                                Optional<MatchingInfoDTO> matchingInfoDTO = prenotazioniService.getMatchingInfoById(dto.getIdPrenotazione());
+                                if (matchingInfoDTO.isEmpty()) return;
+                                MatchingInfoDTO info = matchingInfoDTO.get();
+                                if(sessionManager.getCurrentUser().getMatricola().equals(info.getMatricolaOfferente())){
+                                    // io ho fatto l'offerta e sto guardando le richieste prenotate
+                                    prenotazioniService.getMatchingOffertaById(dto.getIdOfferta()).ifPresent(offerta -> {
+                                        if(datePicker.getValue().isBefore(offerta.getDataDisponibilitaInizio().toLocalDate())
+                                                || datePicker.getValue().isAfter(offerta.getDataDisponibilitaFine().toLocalDate())){
+                                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                                            alert.setTitle("Errore nella prenotazione");
+                                            alert.setHeaderText("La data di esecuzione non è nel range dell'offerta");
+                                            alert.setContentText(null);
+                                            alert.show();
+                                        } else {
+                                            dto.setDataEsecuzione(Date.valueOf(datePicker.getValue()));
+                                            if(!noteArea.getText().isEmpty()) dto.setNoteFeedback(noteArea.getText());
+                                            accettaPrenotazione(dto);
+                                        }
+                                    });
+                                }else if(sessionManager.getCurrentUser().getMatricola().equals(info.getMatricolaRichiedente())){
+                                    prenotazioniService.getMatchingRichiestaById(dto.getIdRichiesta()).ifPresent(richiesta -> {
+                                        if(datePicker.getValue().isBefore(richiesta.getDataRichiestaInizio().toLocalDate())
+                                                || datePicker.getValue().isAfter(richiesta.getDataRichiestaFine().toLocalDate())){
+                                            Alert alert = new Alert(Alert.AlertType.ERROR);
+                                            alert.setTitle("Errore nella prenotazione");
+                                            alert.setHeaderText("La data di esecuzione non è nel range della richiesta");
+                                            alert.setContentText(null);
+                                            alert.show();
+                                        } else {
+                                            dto.setDataEsecuzione(Date.valueOf(datePicker.getValue()));
+                                            if(!noteArea.getText().isEmpty()) dto.setNoteFeedback(noteArea.getText());
+                                            accettaPrenotazione(dto);
+                                        }
+                                    });
+                                }
                             }
                         });
                     }

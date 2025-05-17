@@ -16,7 +16,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 
 import java.sql.Date;
-import java.util.HashMap;
 
 @Log
 @Controller
@@ -76,13 +75,9 @@ public class AllInsertionController {
 
     public static class AzioneTableCell extends TableCell<RichiestaOffertaDTO, Void> {
         private final Button visualizzaButton;
-        private final SceneManager sceneManager;
-        private final SessionManager sessionManager;
 
-        public AzioneTableCell(String label, SceneManager sceneManager, SessionManager sessionManager, SceneManager.SceneType sceneType) {
+        public AzioneTableCell(String label, SceneManager sceneManager, SessionManager sessionManager) {
             visualizzaButton = new Button(label);
-            this.sceneManager = sceneManager;
-            this.sessionManager = sessionManager;
             visualizzaButton.setOnAction(event -> {
                 if (getTableRow() != null) {
                     RichiestaOffertaDTO dto = getTableRow().getItem();
@@ -126,7 +121,7 @@ public class AllInsertionController {
         statoColonna.setCellValueFactory(new PropertyValueFactory<>("stato"));
         attivitaColonna.setCellValueFactory(new PropertyValueFactory<>("nomeAttivita"));
         noteColonna.setCellValueFactory(new PropertyValueFactory<>("note"));
-        azioneColonna.setCellFactory(col -> new AzioneTableCell("Visualizza", sceneManager, sessionManager, SceneManager.SceneType.OWN_INSERTION_LIST));
+        azioneColonna.setCellFactory(col -> new AzioneTableCell("Visualizza", sceneManager, sessionManager));
     }
 
     @FXML

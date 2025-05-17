@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<DialogPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.fabiojava.timebank.gui.controllers.dialogs.UtenteDetailsDialogController">
+    <buttonTypes>
+        <ButtonType fx:constant="CLOSE"/>
+    </buttonTypes>
+
+    <content>
+        <VBox spacing="10">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <!-- Informazioni Utente -->
+            <GridPane hgap="15" vgap="10">
+                <!-- Prima colonna -->
+                <Label text="Nome e Cognome:"
+                       styleClass="label-bold"
+                       GridPane.columnIndex="0"
+                       GridPane.rowIndex="0" />
+                <Label fx:id="nomeCompletoLabel"
+                       GridPane.columnIndex="1"
+                       GridPane.rowIndex="0" />
+
+                <Label text="Matricola:"
+                       styleClass="label-bold"
+                       GridPane.columnIndex="0"
+                       GridPane.rowIndex="1" />
+                <Label fx:id="matricolaLabel"
+                       GridPane.columnIndex="1"
+                       GridPane.rowIndex="1" />
+
+                <Label text="Crediti disponibili:"
+                       GridPane.columnIndex="0"
+                       GridPane.rowIndex="2"
+                       styleClass="label-bold"/>
+                <Label fx:id="creditiLabel"
+                       GridPane.columnIndex="1"
+                       GridPane.rowIndex="2"
+                       styleClass="crediti-label"/>
+
+                <!-- Seconda colonna -->
+                <Label text="Email:"
+                       styleClass="label-bold"
+                       GridPane.columnIndex="2"
+                       GridPane.rowIndex="0" />
+                <Label fx:id="emailLabel"
+                       GridPane.columnIndex="3"
+                       GridPane.rowIndex="0" />
+
+                <Label text="Telefono:"
+                       styleClass="label-bold"
+                       GridPane.columnIndex="2"
+                       GridPane.rowIndex="1" />
+                <Label fx:id="telefonoLabel"
+                       GridPane.columnIndex="3"
+                       GridPane.rowIndex="1" />
+                <Label text="Valutazione media:"
+                       GridPane.columnIndex="2"
+                       GridPane.rowIndex="2"
+                       styleClass="label-bold"/>
+                <HBox fx:id="starContainer" spacing="2"
+                      GridPane.columnIndex="3"
+                      GridPane.rowIndex="2"
+                      alignment="CENTER">
+                    <!-- Le stelle verranno aggiunte dinamicamente -->
+                </HBox>
+            </GridPane>
+
+            <!-- Separatore -->
+            <Separator/>
+
+            <!-- Tabella Valutazioni -->
+            <Label text="Storico Valutazioni" styleClass="section-header"/>
+            <TableView fx:id="valutazioniTable" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="dataColumn" text="Data"/>
+                    <TableColumn fx:id="punteggioColumn" text="Valutazione"/>
+                    <TableColumn fx:id="commentoColumn" text="Commento"/>
+                    <TableColumn fx:id="tipoValutatoreColumn" text="Ruolo"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </content>
+</DialogPane>

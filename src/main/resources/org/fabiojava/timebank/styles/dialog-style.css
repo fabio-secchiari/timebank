@@ -1,0 +1,35 @@
+.dialog-pane {
+    -fx-background-color: #f4f4f4;
+}
+
+.label-bold {
+    -fx-font-weight: bold;
+}
+
+.crediti-label {
+    -fx-font-size: 16px;
+    -fx-text-fill: #2196F3;
+}
+
+.section-header {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-padding: 10 0 5 0;
+}
+
+.table-view {
+    -fx-min-height: 200px;
+    -fx-pref-height: 300px;
+}
+
+#starContainer {
+    -fx-padding: 5;
+}
+
+.star-filled {
+    -fx-fill: #FFD700;
+}
+
+.star-empty {
+    -fx-fill: #D3D3D3;
+}

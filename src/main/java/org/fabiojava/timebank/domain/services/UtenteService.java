@@ -14,4 +14,6 @@ public interface UtenteService {
     void sottraiOreUtente(String matricola, int ore);
     void aggiornaUtente(Utente utente);
     void eliminaUtente(String matricola);
+    Optional<Utente> findByIdRichiesta(Long id_richiesta);
+    Optional<Utente> findByIdOfferta(Long id_offerta);
 }

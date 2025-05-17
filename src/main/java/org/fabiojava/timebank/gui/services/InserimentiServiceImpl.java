@@ -24,6 +24,10 @@ public class InserimentiServiceImpl implements InserimentiService {
         RICHIESTA, OFFERTA, ALL
     }
 
+    private enum INSERIMENTO_STATUS {
+        ASSEGNATO, DISPONIBILE, ALL
+    }
+
     public InserimentiServiceImpl(QueryPort queryPort) {
         this.queryPort = queryPort;
     }
@@ -33,7 +37,7 @@ public class InserimentiServiceImpl implements InserimentiService {
     }
 
     public List<RichiestaOffertaDTO> trovaRichiesteOfferteRecenti(String matricolaUtente, int limit) {
-        QuerySpecification spec = buildBaseQuerySpecification(matricolaUtente, "!=", QUERY_TYPE.ALL);
+        QuerySpecification spec = buildBaseQuerySpecification(matricolaUtente, "!=", QUERY_TYPE.ALL, INSERIMENTO_STATUS.DISPONIBILE);
         spec.orderBy("data_inserimento", false)
                 .limit(limit);
         return queryPort.execute(spec, RichiestaOffertaDTO.class);
@@ -44,12 +48,12 @@ public class InserimentiServiceImpl implements InserimentiService {
         QuerySpecification countSpec = new QuerySpecification();
         countSpec.addSelect("COUNT(*) as total")
                 .from("richieste")
-                .where("matricola_richiedente", "=", matricolaUtente)
-                .where("stato", "=", Richiesta.StatoRichiesta.APERTA.name());
+                .where("matricola_richiedente", "=", matricolaUtente);
+                if(criteria.getStato() != null) countSpec.where("stato", "=", criteria.getStato());
         CountDTO totalElements = queryPort.executeSingle(countSpec, CountDTO.class)
                 .orElse(new CountDTO(0));
 
-        QuerySpecification spec = buildBaseQuerySpecification(matricolaUtente, "=", QUERY_TYPE.RICHIESTA);
+        QuerySpecification spec = buildBaseQuerySpecification(matricolaUtente, "=", QUERY_TYPE.RICHIESTA, INSERIMENTO_STATUS.ALL);
         addFilters(spec, criteria);
         addPagination(spec, criteria);
 
@@ -66,12 +70,12 @@ public class InserimentiServiceImpl implements InserimentiService {
         QuerySpecification countSpec = new QuerySpecification();
         countSpec.addSelect("COUNT(*) as total")
                 .from("offerte")
-                .where("matricola_offerente", "=", matricolaUtente)
-                .where("stato", "=", Offerta.StatoOfferta.DISPONIBILE.name());
+                .where("matricola_offerente", "=", matricolaUtente);
+                if(criteria.getStato() != null) countSpec.where("stato", "=", criteria.getStato());
         CountDTO totalElements = queryPort.executeSingle(countSpec, CountDTO.class)
                 .orElse(new CountDTO(0));
 
-        QuerySpecification spec = buildBaseQuerySpecification(matricolaUtente, "=", QUERY_TYPE.OFFERTA);
+        QuerySpecification spec = buildBaseQuerySpecification(matricolaUtente, "=", QUERY_TYPE.OFFERTA, INSERIMENTO_STATUS.ALL);
         addFilters(spec, criteria);
         addPagination(spec, criteria);
 
@@ -123,13 +127,13 @@ public class InserimentiServiceImpl implements InserimentiService {
     }
 
     public Page<RichiestaOffertaDTO> filtraRichiesteOfferteRecenti(AllInsertionController.RichiestaCriteria criteria, String matricolaUtente) {
-        QuerySpecification countSpec = buildBaseQuerySpecification(matricolaUtente, "!=", QUERY_TYPE.ALL);
+        QuerySpecification countSpec = buildBaseQuerySpecification(matricolaUtente, "!=", QUERY_TYPE.ALL, INSERIMENTO_STATUS.ALL);
         addFilters(countSpec, criteria);
         countSpec.addSelectOnUnion("COUNT(*) as total");
         CountDTO totalElements = queryPort.executeSingle(countSpec, CountDTO.class)
                 .orElse(new CountDTO(0));
 
-        QuerySpecification dataSpec = buildBaseQuerySpecification(matricolaUtente, "!=", QUERY_TYPE.ALL);
+        QuerySpecification dataSpec = buildBaseQuerySpecification(matricolaUtente, "!=", QUERY_TYPE.ALL, INSERIMENTO_STATUS.ALL);
         addFilters(dataSpec, criteria);
         addPagination(dataSpec, criteria);
 
@@ -143,7 +147,7 @@ public class InserimentiServiceImpl implements InserimentiService {
 
     }
 
-    private void buildBaseOffertaSpecification(QuerySpecification spec, String matricolaUtente, String matricolaOperator){
+    private void buildBaseOffertaSpecification(QuerySpecification spec, String matricolaUtente, String matricolaOperator, Offerta.StatoOfferta statoOfferta){
         spec.addSelect("'OFFERTA' as tipo_inserimento")
                 .addSelect("o.id_offerta as id")
                 .addSelect("o.data_inserimento")
@@ -158,13 +162,12 @@ public class InserimentiServiceImpl implements InserimentiService {
                 .addSelect("a.nome_attivita")
                 .addSelect("a.categoria")
                 .from("offerte o")
-                .join("attivita a", "o.id_attivita = a.id_attivita",
-                        QuerySpecification.JoinClause.JoinType.INNER)
-                .where("o.matricola_offerente", matricolaOperator, matricolaUtente)
-                .where("o.stato", "=", Offerta.StatoOfferta.DISPONIBILE.name());
+                .join("attivita a", "o.id_attivita = a.id_attivita", QuerySpecification.JoinClause.JoinType.INNER)
+                .where("o.matricola_offerente", matricolaOperator, matricolaUtente);
+                if(statoOfferta != null) spec.where("o.stato", "=", statoOfferta.name());
     }
 
-    private void buildBaseRichiestaSpecification(QuerySpecification spec, String matricolaUtente, String matricolaOperator){
+    private void buildBaseRichiestaSpecification(QuerySpecification spec, String matricolaUtente, String matricolaOperator, Richiesta.StatoRichiesta statoRichiesta){
         spec.addSelect("'RICHIESTA' as tipo_inserimento")
                 .addSelect("r.id_richiesta as id")
                 .addSelect("r.data_inserimento")
@@ -181,24 +184,33 @@ public class InserimentiServiceImpl implements InserimentiService {
                 .from("richieste r")
                 .join("attivita a", "r.id_attivita = a.id_attivita",
                         QuerySpecification.JoinClause.JoinType.INNER)
-                .where("r.matricola_richiedente", matricolaOperator, matricolaUtente)
-                .where("r.stato", "=", Richiesta.StatoRichiesta.APERTA.name());
+                .where("r.matricola_richiedente", matricolaOperator, matricolaUtente);
+                if(statoRichiesta != null) spec.where("r.stato", "=", statoRichiesta.name());
     }
 
-    private QuerySpecification buildBaseQuerySpecification(String matricolaUtente, String matricolaOperator, QUERY_TYPE tipo) {
+    private QuerySpecification buildBaseQuerySpecification(String matricolaUtente, String matricolaOperator, QUERY_TYPE tipo, INSERIMENTO_STATUS status) {
         QuerySpecification spec = new QuerySpecification();
+        Offerta.StatoOfferta statoOfferta = null;
+        Richiesta.StatoRichiesta statoRichiesta = null;
+        if(status == INSERIMENTO_STATUS.ASSEGNATO) {
+            statoOfferta = Offerta.StatoOfferta.PRENOTATA;
+            statoRichiesta = Richiesta.StatoRichiesta.ASSEGNATA;
+        } else if(status == INSERIMENTO_STATUS.DISPONIBILE) {
+            statoOfferta = Offerta.StatoOfferta.DISPONIBILE;
+            statoRichiesta = Richiesta.StatoRichiesta.APERTA;
+        }
 
         switch(tipo){
             case OFFERTA:
-                buildBaseOffertaSpecification(spec, matricolaUtente, matricolaOperator);
+                buildBaseOffertaSpecification(spec, matricolaUtente, matricolaOperator, statoOfferta);
                 break;
             case RICHIESTA:
-                buildBaseRichiestaSpecification(spec, matricolaUtente, matricolaOperator);
+                buildBaseRichiestaSpecification(spec, matricolaUtente, matricolaOperator, statoRichiesta);
                 break;
             case ALL:
-                buildBaseOffertaSpecification(spec, matricolaUtente, matricolaOperator);
+                buildBaseOffertaSpecification(spec, matricolaUtente, matricolaOperator, statoOfferta);
                 spec.union();
-                buildBaseRichiestaSpecification(spec, matricolaUtente, matricolaOperator);
+                buildBaseRichiestaSpecification(spec, matricolaUtente, matricolaOperator, statoRichiesta);
         }
 
         return spec;

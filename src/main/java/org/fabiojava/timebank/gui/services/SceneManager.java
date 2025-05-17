@@ -23,7 +23,6 @@ import java.util.*;
 @Scope("singleton")
 @Log
 public class SceneManager {
-
     private final ResourceLoader resourceLoader;
 
     @Getter
@@ -49,7 +48,7 @@ public class SceneManager {
     @Getter
     @Setter
     @AllArgsConstructor
-    public class SceneElements {
+    public static class SceneElements {
         private SceneType sceneType;
         private String title;
         private boolean fullScreen;
