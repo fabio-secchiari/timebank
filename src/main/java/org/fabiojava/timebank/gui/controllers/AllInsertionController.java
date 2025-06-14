@@ -9,6 +9,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.extern.java.Log;
 import org.fabiojava.timebank.domain.dto.RichiestaOffertaDTO;
+import org.fabiojava.timebank.domain.model.Offerta;
+import org.fabiojava.timebank.domain.model.Richiesta;
 import org.fabiojava.timebank.domain.services.InserimentiService;
 import org.fabiojava.timebank.gui.services.SceneManager;
 import org.fabiojava.timebank.gui.services.SessionManager;
@@ -16,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 
 import java.sql.Date;
+import java.util.Arrays;
 
 @Log
 @Controller
@@ -24,6 +27,7 @@ public class AllInsertionController {
     private final SessionManager sessionManager;
     private final SceneManager sceneManager;
 
+    @FXML   private ComboBox<?> tipoFiltro;
     @FXML   private TableColumn<RichiestaOffertaDTO, Date> dataColonna;
     @FXML   private TableColumn<RichiestaOffertaDTO, String> tipoColonna;
     @FXML   private TableColumn<RichiestaOffertaDTO, String> statoColonna;
@@ -109,7 +113,8 @@ public class AllInsertionController {
 
     @FXML
     public void initialize() {
-        statoFiltro.getItems().addAll("Tutti", "In Attesa", "Approvata", "Rifiutata");
+        statoFiltro.getItems().addAll(Arrays.stream(Offerta.StatoOfferta.values()).map(Offerta.StatoOfferta::name).toArray(String[]::new));
+        statoFiltro.getItems().add(Richiesta.StatoRichiesta.APERTA.name());
         configuraTabellaColonne();
         caricaDati();
     }
@@ -157,8 +162,8 @@ public class AllInsertionController {
     }
 
     private void aggiornaPaginazione(long totaleElementi) {
-        paginaCorrente.setText(String.format("Pagina %d di %d", paginaAttuale + 1, totalePagine));
-        totaleRecord.setText(String.format("Totale: %d record", totaleElementi));
+        paginaCorrente.setText("Pagina " + (paginaAttuale + 1) + " di " + totalePagine);
+        totaleRecord.setText("Totale: " + totaleElementi + " record");
     }
 
     @Data

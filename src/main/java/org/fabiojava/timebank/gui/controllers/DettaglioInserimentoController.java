@@ -60,6 +60,10 @@ public class DettaglioInserimentoController {
             dataFine.getEditor().setEditable(false);
             btnPrenotazioni.setText("Prenota");
         }
+        if(richiestaOffertaDTO.getStato().equals(Offerta.StatoOfferta.PRENOTATA.name()) ||
+            richiestaOffertaDTO.getStato().equals(Richiesta.StatoRichiesta.ASSEGNATA.name())){
+            btnPrenotazioni.setDisable(true);
+        }
     }
 
     private void populateFields() {
@@ -137,7 +141,7 @@ public class DettaglioInserimentoController {
         richiestaOffertaDTO.setDataInizio(Date.valueOf(dataInizio.getValue()));
         richiestaOffertaDTO.setDataFine(Date.valueOf(dataFine.getValue()));
         try {
-            richiestaOffertaDTO.setOreDisponibili(Integer.parseInt(oreDisponibili.getText()));
+            richiestaOffertaDTO.setOreDisponibili(Integer.valueOf(oreDisponibili.getText()));
         } catch (NumberFormatException e) {
             errorMessage.setVisible(true);
             errorMessage.setText("Ore disponibili non valido");

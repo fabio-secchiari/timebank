@@ -44,5 +44,6 @@ public class Offerta extends Inserimento{
         COMPLETATA,
         PRENOTATA,
         DISPONIBILE,
+        SCADUTA
     }
 }

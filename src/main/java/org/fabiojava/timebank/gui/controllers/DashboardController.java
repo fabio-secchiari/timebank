@@ -100,7 +100,7 @@ public class DashboardController {
         configuraTabellaColonne();
         if(sessionManager.getCurrentUser() != null){
             creditBar.setProgress(map(0, 30, 0, 1, sessionManager.getCurrentUser().getOreTotali()));
-            creditLabel.setText(String.format("(%d)", sessionManager.getCurrentUser().getOreTotali()));
+            creditLabel.setText("(" + sessionManager.getCurrentUser().getOreTotali() + ")");
             initRichieste();
             initOfferte();
             initHotInsertion();
@@ -173,7 +173,7 @@ public class DashboardController {
     }
 
     private void initValutazioni() {
-
+        List<Valutazione> valutazioni = valutazioneRepository.findByUtente(sessionManager.getCurrentUser().getMatricola());
     }
 
     private void initHotInsertion() {
@@ -245,14 +245,13 @@ public class DashboardController {
                 setGraphic(null);
             } else {
                 attivitaRepository.findById(inserimento.getIdAttivita()).ifPresent(attivita -> {
-                    String text = inserimento.getDataInserimento().toLocalDateTime()
-                            .format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")) +
-                            " - " + attivita.getNomeAttivita();
+                    String text = "";
                     if (inserimento instanceof Richiesta richiesta) {
-                        text += " [" + richiesta.getStato() + "]";
+                        text += " [" + richiesta.getStato() + "] ";
                     } else if (inserimento instanceof Offerta offerta) {
-                        text += " [" + offerta.getStato() + "]";
+                        text += " [" + offerta.getStato() + "] ";
                     }
+                    text += attivita.getNomeAttivita();
                     Label label = new Label(text);
                     hbox.getChildren().setAll(/*prenotazioniButton,*/ label);
                     setGraphic(hbox);

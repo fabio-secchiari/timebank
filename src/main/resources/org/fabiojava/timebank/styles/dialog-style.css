@@ -33,3 +33,41 @@
 .star-empty {
     -fx-fill: #D3D3D3;
 }
+
+.rating-star {
+    -fx-font-size: 24px;
+    -fx-cursor: hand;
+    -fx-text-fill: #ffd700;
+}
+
+.rating-star:hover {
+    -fx-effect: dropshadow(three-pass-box, rgba(255,215,0,0.6), 10, 0, 0, 0);
+}
+
+.star-hover {
+    -fx-text-fill: #ffd700;
+}
+
+.rating-control {
+    -fx-alignment: center-left;
+}
+
+.label-bold {
+    -fx-font-weight: bold;
+}
+
+.info-label {
+    -fx-text-fill: #2196F3;
+}
+
+.dialog-pane {
+    -fx-background-color: white;
+}
+
+.dialog-pane .combo-box {
+    -fx-pref-width: 100px;
+}
+
+.dialog-pane .text-area {
+    -fx-pref-width: 300px;
+}

@@ -20,7 +20,7 @@ public class SqlServerDeleteBuilder {
     private static Object[] extractParams(DeleteSpecification spec) {
         List<Object> params = new ArrayList<>();
         spec.getWhereClauses().stream()
-                .map(QuerySpecification.WhereClause::getValue)
+                .map(QuerySpecification.WhereClause::value)
                 .forEach(params::add);
         return params.toArray();
     }

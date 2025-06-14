@@ -16,7 +16,7 @@ public class Valutazione {
     private String commento;
     private Timestamp dataValutazione;
     private TipoValutatore tipoValutatore;
-    private Integer idPrenotazione;
+    private Long idPrenotazione;
 
     public enum TipoValutatore {
         RICHIEDENTE,

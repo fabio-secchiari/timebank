@@ -20,6 +20,7 @@ public class Attivita {
         DISPONIBILE,
         ASSEGNATA,
         COMPLETATA,
-        CANCELLATA
+        CANCELLATA,
+        SCADUTA
     }
 }

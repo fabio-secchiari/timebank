@@ -1,6 +1,5 @@
 package org.fabiojava.timebank.infrastructure.adapters.database.specification;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -33,18 +32,18 @@ public class QuerySpecification {
             // Deep copy dei joins
             for (JoinClause join : query.joins) {
                 newQuery.joins.add(new JoinClause(
-                        join.getTable(),
-                        join.getCondition(),
-                        join.getType(),
-                        new ArrayList<>(join.getParameters())
+                        join.table(),
+                        join.condition(),
+                        join.type(),
+                        new ArrayList<>(join.parameters())
                 ));
             }
             // Deep copy delle where clauses
             for (WhereClause where : query.whereClauses) {
                 newQuery.whereClauses.add(new WhereClause(
-                        where.getField(),
-                        where.getOperator(),
-                        where.getValue()
+                        where.field(),
+                        where.operator(),
+                        where.value()
                 ));
             }
             this.queries.add(newQuery);
@@ -52,17 +51,17 @@ public class QuerySpecification {
         this.orderBy = new ArrayList<>();
         for (OrderByClause order : src.orderBy) {
             this.orderBy.add(new OrderByClause(
-                    order.getField(),
-                    order.isAscending()
+                    order.field(),
+                    order.ascending()
             ));
         }
         this.postUnionSelectFields = new ArrayList<>(src.postUnionSelectFields);
         this.postUnionWhereClauses = new ArrayList<>();
         for (WhereClause where : src.postUnionWhereClauses) {
             this.postUnionWhereClauses.add(new WhereClause(
-                    where.getField(),
-                    where.getOperator(),
-                    where.getValue()
+                    where.field(),
+                    where.operator(),
+                    where.value()
             ));
         }
         this.isUnion = src.isUnion;
@@ -78,33 +77,12 @@ public class QuerySpecification {
         private final List<WhereClause> whereClauses = new ArrayList<>();
     }
 
-    @Getter
-    @AllArgsConstructor
-    public static class JoinClause {
-        private final String table;
-        private final String condition;
-        private final JoinType type;
-        private final List<Object> parameters;
-
-        public enum JoinType {
+    public record JoinClause(String table, String condition, QuerySpecification.JoinClause.JoinType type,
+                             List<Object> parameters) {public enum JoinType {
             INNER, LEFT, RIGHT
-        }
-    }
-
-    @Getter
-    @AllArgsConstructor
-    public static class WhereClause {
-        private final String field;
-        private final String operator;
-        private final Object value;
-    }
-
-    @Getter
-    @AllArgsConstructor
-    public static class OrderByClause {
-        private final String field;
-        private final boolean ascending;
-    }
+        }}
+    public record WhereClause(String field, String operator, Object value) {}
+    public record OrderByClause(String field, boolean ascending) {}
 
     public QuerySpecification addSelect(String... fields) {
         getCurrentQuery().selectFields.addAll(Arrays.asList(fields));

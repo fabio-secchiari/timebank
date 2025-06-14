@@ -12,4 +12,12 @@ public interface InserimentiService {
     List<RichiestaOffertaDTO> trovaRichiesteOfferteRecenti(String matricolaUtente, int limit);
     Page<RichiestaOffertaDTO> filtraOwnRichieste(AllInsertionController.RichiestaCriteria criteria, String matricolaUtente);
     Page<RichiestaOffertaDTO> filtraOwnOfferte(AllInsertionController.RichiestaCriteria criteria, String matricolaUtente);
+
+    enum QUERY_TYPE {
+        RICHIESTA, OFFERTA, ALL
+    }
+
+    enum INSERIMENTO_STATUS {
+        ASSEGNATO, DISPONIBILE, ALL
+    }
 }

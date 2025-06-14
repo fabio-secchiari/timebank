@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import org.fabiojava.timebank.gui.components.RatingControl?>
+
+<DialogPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="org.fabiojava.timebank.gui.controllers.dialogs.ValutazioneDialogController"
+            prefWidth="400.0">
+
+    <headerText>
+        Inserisci la tua valutazione
+    </headerText>
+
+    <content>
+        <VBox spacing="15">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <!-- Valutazione a stelle -->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Valutazione:" styleClass="label-bold"/>
+                <RatingControl fx:id="ratingControl"/>
+            </HBox>
+
+            <!-- Area commenti -->
+            <VBox spacing="5">
+                <Label text="Commento:" styleClass="label-bold"/>
+                <TextArea fx:id="commentoTextArea"
+                          prefRowCount="3"
+                          wrapText="true"
+                          promptText="Inserisci un commento (opzionale)"/>
+            </VBox>
+
+            <!-- Info utente da valutare -->
+            <VBox spacing="5">
+                <Label text="Stai valutando:" styleClass="label-bold"/>
+                <Label fx:id="utenteLabel" styleClass="info-label"/>
+            </VBox>
+        </VBox>
+    </content>
+
+    <ButtonType fx:constant="OK"/>
+    <ButtonType fx:constant="CANCEL"/>
+</DialogPane>

@@ -85,9 +85,9 @@
          <RowConstraints />
       </rowConstraints>
     </GridPane>
-
-    <!-- Area messaggi di errore -->
-    <Label fx:id="errorMessage" textFill="RED" visible="false" />
+    <HBox alignment="CENTER"><!-- Area messaggi di errore -->
+        <Label fx:id="errorMessage" textFill="RED" visible="false"/>
+    </HBox>
 
     <!-- Pulsanti di azione -->
     <HBox alignment="CENTER" spacing="10">

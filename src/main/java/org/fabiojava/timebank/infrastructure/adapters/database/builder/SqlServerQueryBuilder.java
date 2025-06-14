@@ -21,7 +21,7 @@ public class SqlServerQueryBuilder {
             queryStrings.add(sql.toString());
         }
 
-        spec.getPostUnionWhereClauses().forEach(w -> allParams.add(w.getValue()));
+        spec.getPostUnionWhereClauses().forEach(w -> allParams.add(w.value()));
 
         String finalQuery = buildFinalQuery(spec, queryStrings);
         return new QueryData(finalQuery, allParams.toArray());
@@ -42,9 +42,9 @@ public class SqlServerQueryBuilder {
 
     private static void buildJoinClauses(QuerySpecification.SelectQuery query, StringBuilder sql) {
         for (QuerySpecification.JoinClause join : query.getJoins()) {
-            sql.append(" ").append(join.getType().name())
-                    .append(" JOIN ").append(join.getTable())
-                    .append(" ON ").append(join.getCondition());
+            sql.append(" ").append(join.type().name())
+                    .append(" JOIN ").append(join.table())
+                    .append(" ON ").append(join.condition());
         }
     }
 
@@ -53,8 +53,8 @@ public class SqlServerQueryBuilder {
             sql.append(" WHERE ");
             List<String> conditions = query.getWhereClauses().stream()
                     .map(w -> {
-                        params.add(w.getValue());
-                        return w.getField() + " " + w.getOperator() + " ?";
+                        params.add(w.value());
+                        return w.field() + " " + w.operator() + " ?";
                     })
                     .collect(Collectors.toList());
             sql.append(String.join(" AND ", conditions));
@@ -65,7 +65,7 @@ public class SqlServerQueryBuilder {
         if (!whereClauses.isEmpty()) {
             sql.append(" WHERE ");
             List<String> conditions = whereClauses.stream()
-                    .map(w -> w.getField() + " " + w.getOperator() + " ?")
+                    .map(w -> w.field() + " " + w.operator() + " ?")
                     .collect(Collectors.toList());
             sql.append(String.join(" AND ", conditions));
         }
@@ -74,7 +74,7 @@ public class SqlServerQueryBuilder {
     private static String buildOrderByClause(QuerySpecification spec) {
         if (spec.getOrderBy() != null && !spec.getOrderBy().isEmpty()) {
             return " ORDER BY " + spec.getOrderBy().stream()
-                    .map(o -> o.getField() + (o.isAscending() ? " ASC" : " DESC"))
+                    .map(o -> o.field() + (o.ascending() ? " ASC" : " DESC"))
                     .collect(Collectors.joining(", "));
         }
         return "";
@@ -98,7 +98,7 @@ public class SqlServerQueryBuilder {
                 if (!spec.getPostUnionWhereClauses().isEmpty()) {
                     StringBuilder whereClause = new StringBuilder(" WHERE ");
                     List<String> conditions = spec.getPostUnionWhereClauses().stream()
-                            .map(w -> w.getField() + " " + w.getOperator() + " ?")
+                            .map(w -> w.field() + " " + w.operator() + " ?")
                             .collect(Collectors.toList());
                     whereClause.append(String.join(" AND ", conditions));
                     combinedQuery += whereClause;

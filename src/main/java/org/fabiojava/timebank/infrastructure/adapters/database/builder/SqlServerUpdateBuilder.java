@@ -22,7 +22,7 @@ public class SqlServerUpdateBuilder {
         buildWhereClause(sql, spec.getWhereClauses());
 
         List<Object> params = new ArrayList<>(spec.getValues().values());
-        spec.getWhereClauses().forEach(where -> params.add(where.getValue()));
+        spec.getWhereClauses().forEach(where -> params.add(where.value()));
 
         return new QueryData(sql.toString(), params.toArray());
     }

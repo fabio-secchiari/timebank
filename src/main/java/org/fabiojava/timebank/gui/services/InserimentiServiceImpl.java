@@ -20,14 +20,6 @@ public class InserimentiServiceImpl implements InserimentiService {
     public static final int LIMIT_DEFAULT = 12;
     private final QueryPort queryPort;
 
-    private enum QUERY_TYPE {
-        RICHIESTA, OFFERTA, ALL
-    }
-
-    private enum INSERIMENTO_STATUS {
-        ASSEGNATO, DISPONIBILE, ALL
-    }
-
     public InserimentiServiceImpl(QueryPort queryPort) {
         this.queryPort = queryPort;
     }
@@ -93,7 +85,7 @@ public class InserimentiServiceImpl implements InserimentiService {
                 .limit(criteria.getDimensionePagina());
     }
 
-    private void addFilters(QuerySpecification spec, AllInsertionController.RichiestaCriteria criteria) {
+    private static void addFilters(QuerySpecification spec, AllInsertionController.RichiestaCriteria criteria) {
         if (spec.isUnion()) {
             // Applica i filtri sulla query unificata
             if (criteria.getStato() != null) {
@@ -106,7 +98,7 @@ public class InserimentiServiceImpl implements InserimentiService {
                 spec.whereOnUnion("data_fine", "<=", criteria.getDataFine());
             }
             if (criteria.getTestoCerca() != null && !criteria.getTestoCerca().isEmpty()) {
-                spec.whereOnUnion("note", "LIKE", "%" + criteria.getTestoCerca() + "%");
+                spec.whereOnUnion("nome_attivita", "LIKE", "%" + criteria.getTestoCerca() + "%");
             }
         } else {
             for(QuerySpecification.SelectQuery query : spec.getQueries()){
@@ -120,7 +112,7 @@ public class InserimentiServiceImpl implements InserimentiService {
                     query.getWhereClauses().add(new QuerySpecification.WhereClause("data_fine", "<=", criteria.getDataFine()));
                 }
                 if (criteria.getTestoCerca() != null && !criteria.getTestoCerca().isEmpty()) {
-                    query.getWhereClauses().add(new QuerySpecification.WhereClause("note", "LIKE", "%" + criteria.getTestoCerca() + "%"));
+                    query.getWhereClauses().add(new QuerySpecification.WhereClause("nome_attivita", "LIKE", "%" + criteria.getTestoCerca() + "%"));
                 }
             }
         }

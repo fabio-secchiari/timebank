@@ -21,6 +21,7 @@ module TimeBank {
     requires jdk.jfr;
     requires spring.tx;
     requires spring.data.commons;
+    requires java.desktop;
 
     // Apri tutti i pacchetti necessari
     opens org.fabiojava.timebank;
@@ -37,4 +38,5 @@ module TimeBank {
     opens org.fabiojava.timebank.domain.ports.repositories;
     opens org.fabiojava.timebank.infrastructure.adapters.database.adapter;
     opens org.fabiojava.timebank.infrastructure.adapters.database.specification;
+    opens org.fabiojava.timebank.gui.components;
 }
