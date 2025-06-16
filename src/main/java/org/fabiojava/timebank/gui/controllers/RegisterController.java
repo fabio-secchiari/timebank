@@ -10,7 +10,7 @@ import org.fabiojava.timebank.domain.model.Utente;
 import org.fabiojava.timebank.domain.ports.repositories.UtenteRepository;
 import org.fabiojava.timebank.domain.services.EmailService;
 import org.fabiojava.timebank.domain.services.UtenteService;
-import org.fabiojava.timebank.gui.services.SceneManager;
+import org.fabiojava.timebank.gui.utils.SceneManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 

@@ -5,8 +5,8 @@ import javafx.scene.control.*;
 import lombok.extern.java.Log;
 import org.fabiojava.timebank.domain.model.Utente;
 import org.fabiojava.timebank.domain.services.UtenteService;
-import org.fabiojava.timebank.gui.services.SceneManager;
-import org.fabiojava.timebank.gui.services.SessionManager;
+import org.fabiojava.timebank.gui.utils.SceneManager;
+import org.fabiojava.timebank.gui.utils.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -25,12 +25,6 @@ public class LoginController {
 
     @FXML
     private Button loginButton;
-
-    @FXML
-    private Button exitButton;
-
-    @FXML
-    private Button registerButton;
 
     @FXML
     private Button helpButton;
@@ -78,7 +72,7 @@ public class LoginController {
             if (loginSuccessful) {
                 log.log(Level.INFO, "Login effettuato con successo");
                 sessionManager.setCurrentUser(utente);
-                sceneManager.switchScene(SceneManager.SceneType.DASHBOARD, "TimeBank - Dashboard", true, false);
+                sceneManager.switchContent(SceneManager.SceneType.DASHBOARD, "TimeBank - Dashboard");
             } else {
                 showError("Credenziali non valide",
                         "Username o password non corretti.");
@@ -106,7 +100,7 @@ public class LoginController {
 
     @FXML
     public void handleSignUp(){
-        sceneManager.switchScene(SceneManager.SceneType.SIGNUP, "TimeBank - Registrazione", false, false);
+        sceneManager.switchContent(SceneManager.SceneType.SIGNUP, "TimeBank - Registrazione");
     }
 
     @FXML

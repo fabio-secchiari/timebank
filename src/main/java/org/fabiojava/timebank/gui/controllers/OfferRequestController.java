@@ -13,10 +13,9 @@ import org.fabiojava.timebank.domain.ports.repositories.AttivitaRepository;
 import org.fabiojava.timebank.domain.ports.repositories.OffertaRepository;
 import org.fabiojava.timebank.domain.ports.repositories.PrenotazioneRepository;
 import org.fabiojava.timebank.domain.ports.repositories.RichiestaRepository;
-import org.fabiojava.timebank.domain.services.PrenotazioniService;
 import org.fabiojava.timebank.domain.services.UtenteService;
-import org.fabiojava.timebank.gui.services.SceneManager;
-import org.fabiojava.timebank.gui.services.SessionManager;
+import org.fabiojava.timebank.gui.utils.SceneManager;
+import org.fabiojava.timebank.gui.utils.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -44,7 +43,6 @@ public class OfferRequestController {
     @FXML   private RadioButton offerRadio;
     @FXML   private RadioButton requestRadio;
     @FXML   private ToggleGroup insertType;
-    @FXML   private Button submitButton;
 
     @FXML   private TextField hoursField;
     @FXML   private TextArea noteField;
@@ -130,6 +128,8 @@ public class OfferRequestController {
         }
         sessionManager.setDataTransferObject(null);
 
+        startDateField.setShowWeekNumbers(false);
+        endDateField.setShowWeekNumbers(false);
     }
 
     private void populateFields(boolean disabled, Inserimento inserimento) {
@@ -293,7 +293,7 @@ public class OfferRequestController {
     }
 
     public void addAttivita() {
-        sceneManager.switchScene(SceneManager.SceneType.ATTIVITA, "TimeBank - Nuova attività", false, false);
+        sceneManager.switchContent(SceneManager.SceneType.ATTIVITA, "TimeBank - Nuova attività");
     }
 
     @FXML private void onCancelHandle() {

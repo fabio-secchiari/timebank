@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Dialog;
@@ -18,12 +19,11 @@ import org.fabiojava.timebank.domain.dto.PrenotazioneDTO;
 import org.fabiojava.timebank.domain.dto.RichiestaOffertaDTO;
 import org.fabiojava.timebank.domain.model.*;
 import org.fabiojava.timebank.domain.ports.repositories.ValutazioneRepository;
-import org.fabiojava.timebank.domain.services.InserimentiService;
 import org.fabiojava.timebank.domain.services.PrenotazioniService;
 import org.fabiojava.timebank.domain.services.UtenteService;
 import org.fabiojava.timebank.gui.controllers.dialogs.ValutazioneDialogController;
-import org.fabiojava.timebank.gui.services.SceneManager;
-import org.fabiojava.timebank.gui.services.SessionManager;
+import org.fabiojava.timebank.gui.utils.SceneManager;
+import org.fabiojava.timebank.gui.utils.SessionManager;
 import org.fabiojava.timebank.gui.utils.SpringFXMLLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -44,7 +44,6 @@ public class PrenotazioneController {
     private final PrenotazioniService prenotazioniService;
     private final SpringFXMLLoader fxmlLoader;
     private final ValutazioneRepository valutazioneRepository;
-    private final InserimentiService inserimentiService;
     private final UtenteService utenteService;
 
     private RichiestaOffertaDTO richiestaOffertaDTO;
@@ -62,9 +61,6 @@ public class PrenotazioneController {
     @FXML    private TableColumn<PrenotazioneDTO, Integer> oreColonna;
     @FXML    private TableColumn<PrenotazioneDTO, Void> azioniColonna;
 
-    @FXML    private Button completaButton;
-    @FXML    private Button valutaButton;
-
     @FXML    private Label paginaCorrente;
     @FXML    private Label totaleRecord;
 
@@ -76,18 +72,19 @@ public class PrenotazioneController {
             statoLabel.setText(richiestaOffertaDTO.getStato());
             sessionManager.setDataTransferObject(null);
         }
+        sceneManager.registerNavigationCallback(SceneManager.SceneType.PRENOTAZIONI_LIST,
+                () -> sessionManager.setDataTransferObject(Inserimento.TIPO_INSERIMENTO.valueOf(richiestaOffertaDTO.getTipoInserimento())));
         configuraTabellaColonne();
         caricaDati();
     }
 
     @Autowired
-    public PrenotazioneController(SceneManager sceneManager, SessionManager sessionManager, PrenotazioniService prenotazioniService, SpringFXMLLoader fxmlLoader, ValutazioneRepository valutazioneRepository, InserimentiService inserimentiService, UtenteService utenteService) {
+    public PrenotazioneController(SceneManager sceneManager, SessionManager sessionManager, PrenotazioniService prenotazioniService, SpringFXMLLoader fxmlLoader, ValutazioneRepository valutazioneRepository, UtenteService utenteService) {
         this.sceneManager = sceneManager;
         this.sessionManager = sessionManager;
         this.prenotazioniService = prenotazioniService;
         this.fxmlLoader = fxmlLoader;
         this.valutazioneRepository = valutazioneRepository;
-        this.inserimentiService = inserimentiService;
         this.utenteService = utenteService;
     }
 
@@ -118,7 +115,6 @@ public class PrenotazioneController {
                     }
                 }
             }
-
         });
 
         azioniColonna.setCellFactory(col -> new TableCell<>() {
@@ -143,6 +139,7 @@ public class PrenotazioneController {
                             dialogPane.getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 
                             DatePicker datePicker = new DatePicker();
+                            datePicker.setShowWeekNumbers(false);
                             TextArea noteArea = new TextArea();
                             noteArea.setPromptText("Note (opzionale)");
 
@@ -218,6 +215,7 @@ public class PrenotazioneController {
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
+                hbox.setAlignment(Pos.CENTER);
                 setGraphic(empty ? null : hbox);
                 if(!empty){
                     PrenotazioneDTO dto = getTableRow().getItem();
@@ -251,7 +249,7 @@ public class PrenotazioneController {
     private void caricaDati() {
         AllInsertionController.RichiestaCriteria criteria = AllInsertionController.RichiestaCriteria.builder()
                 .pagina(paginaAttuale)
-                .dimensionePagina(10)
+                .dimensionePagina(14)
                 .build();
         Page<PrenotazioneDTO> record = prenotazioniService.filterByInserimento(richiestaOffertaDTO.getId(), criteria,
                 Inserimento.TIPO_INSERIMENTO.valueOf(richiestaOffertaDTO.getTipoInserimento()));
@@ -276,7 +274,6 @@ public class PrenotazioneController {
 
             ValutazioneDialogController controller = loader.getController();
             controller.setDialog(dialog);
-            String matricolaValutatore = sessionManager.getCurrentUser().getMatricola();
             String matricolaValutato = "";
             String nomeCompletoValutato = "";
             Valutazione.TipoValutatore tipoValutatore;
@@ -323,11 +320,6 @@ public class PrenotazioneController {
     private void completaAttivita(PrenotazioneDTO prenotazione) {
         prenotazione.setStato(Prenotazione.StatoPrenotazione.COMPLETATO);
         prenotazioniService.aggiornaPrenotazione(prenotazione);
-    }
-
-    @FXML private void handleIndietro() {
-        sessionManager.setDataTransferObject(Inserimento.TIPO_INSERIMENTO.valueOf(richiestaOffertaDTO.getTipoInserimento()));
-        sceneManager.navigateLastScene();
     }
 
     @FXML private void primaPagina() {

@@ -1,5 +1,6 @@
 package org.fabiojava.timebank.gui.components;
 
+import javafx.geometry.Pos;
 import javafx.scene.layout.HBox;
 import lombok.Getter;
 
@@ -9,6 +10,7 @@ public class RatingControl extends HBox {
     private int rating;
 
     public RatingControl() {
+        super.setAlignment(Pos.CENTER);
         stars = new RatingStar[5];
         getStyleClass().add("rating-control");
         setSpacing(5);

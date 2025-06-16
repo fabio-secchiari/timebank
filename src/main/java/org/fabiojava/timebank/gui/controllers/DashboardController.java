@@ -5,6 +5,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
@@ -18,8 +19,8 @@ import org.fabiojava.timebank.domain.services.PrenotazioniService;
 import org.fabiojava.timebank.domain.services.UtenteService;
 import org.fabiojava.timebank.gui.components.RatingControl;
 import org.fabiojava.timebank.gui.controllers.dialogs.UtenteDetailsDialogController;
-import org.fabiojava.timebank.gui.services.SceneManager;
-import org.fabiojava.timebank.gui.services.SessionManager;
+import org.fabiojava.timebank.gui.utils.SceneManager;
+import org.fabiojava.timebank.gui.utils.SessionManager;
 import org.fabiojava.timebank.gui.utils.SpringFXMLLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -200,7 +201,7 @@ public class DashboardController {
                                 richiestaOffertaDTO.setNomeAttivita(attivita.get().getNomeAttivita());
                                 richiestaOffertaDTO.setCategoria(attivita.get().getCategoria());
                                 sessionManager.setDataTransferObject(richiestaOffertaDTO);
-                                sceneManager.switchScene(SceneManager.SceneType.INSERTION_DETAILS, "TimeBank - Dettagli richiesta", false, false);
+                                sceneManager.switchContent(SceneManager.SceneType.INSERTION_DETAILS, "TimeBank - Dettagli richiesta");
                             }
                         }
                     }
@@ -214,6 +215,7 @@ public class DashboardController {
             if (empty) {
                 setGraphic(null);
             } else {
+                hbox.setAlignment(Pos.CENTER);
                 setGraphic(hbox);
             }
         }
@@ -236,7 +238,7 @@ public class DashboardController {
 
     @FXML
     private void viewHotInsertion(){
-        sceneManager.switchScene(SceneManager.SceneType.HOT_INSERTION_LIST, "TimeBank - Inserimenti recenti", false, false);
+        sceneManager.switchContent(SceneManager.SceneType.HOT_INSERTION_LIST, "TimeBank - Inserimenti recenti");
     }
 
     private void mostraDettagliUtente(Utente utente) {
@@ -299,6 +301,7 @@ public class DashboardController {
                     }
                     text += attivita.getNomeAttivita();
                     Label label = new Label(text);
+                    hbox.setAlignment(Pos.CENTER);
                     hbox.getChildren().setAll(/*prenotazioniButton,*/ label);
                     setGraphic(hbox);
                 });
@@ -320,13 +323,6 @@ public class DashboardController {
         this.userOffersList.setItems(items);
     }
 
-    @FXML
-    public void handleLogout() {
-        log.info("Logout");
-        sessionManager.clearSession();
-        sceneManager.navigateLoginPage();
-    }
-
     @FXML private void nuovaRichiesta(){
         if (sessionManager.getCurrentUser().getOreTotali() < 3) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -345,29 +341,17 @@ public class DashboardController {
 
     private void nuovoInserimento(Inserimento.TIPO_INSERIMENTO tipoInserimento) {
         sessionManager.setDataTransferObject(tipoInserimento);
-        sceneManager.switchScene(SceneManager.SceneType.INSERTION, "TimeBank - Inserimento", false, false);
-    }
-
-    public void handleExit() {
-        System.exit(0);
-    }
-
-    private void showError(String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Errore");
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
+        sceneManager.switchContent(SceneManager.SceneType.INSERTION, "TimeBank - Inserimento");
     }
 
     @FXML private void viewOwnInsertion(ActionEvent event){
         Button source = (Button) event.getSource();
         if(source == allOfferButton) {
             sessionManager.setDataTransferObject(Inserimento.TIPO_INSERIMENTO.OFFERTA);
-            sceneManager.switchScene(SceneManager.SceneType.OWN_INSERTION_LIST, "TimeBank - Le mie offerte", false, false);
+            sceneManager.switchContent(SceneManager.SceneType.OWN_INSERTION_LIST, "TimeBank - Le mie offerte");
         } else {
             sessionManager.setDataTransferObject(Inserimento.TIPO_INSERIMENTO.RICHIESTA);
-            sceneManager.switchScene(SceneManager.SceneType.OWN_INSERTION_LIST, "TimeBank - Le mie richieste", false, false);
+            sceneManager.switchContent(SceneManager.SceneType.OWN_INSERTION_LIST, "TimeBank - Le mie richieste");
         }
     }
 }

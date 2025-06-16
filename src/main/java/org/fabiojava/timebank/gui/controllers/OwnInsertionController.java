@@ -2,6 +2,7 @@ package org.fabiojava.timebank.gui.controllers;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
@@ -9,16 +10,12 @@ import lombok.extern.java.Log;
 import org.fabiojava.timebank.domain.dto.RichiestaOffertaDTO;
 import org.fabiojava.timebank.domain.model.Inserimento;
 import org.fabiojava.timebank.domain.services.InserimentiService;
-import org.fabiojava.timebank.gui.services.SceneManager;
-import org.fabiojava.timebank.gui.services.SessionManager;
+import org.fabiojava.timebank.gui.utils.SceneManager;
+import org.fabiojava.timebank.gui.utils.SessionManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
-
 import java.sql.Date;
-import java.util.HashMap;
-
-import static org.fabiojava.timebank.gui.controllers.AllInsertionController.handleChiudi;
 
 @Log
 @Controller
@@ -52,19 +49,6 @@ public class OwnInsertionController {
         caricaDati();
     }
 
-    @FXML private void handleBack() {
-        sceneManager.navigateLastScene();
-    }
-
-    @FXML private void handleLogOut() {
-        sessionManager.setCurrentUser(java.util.Optional.empty());
-        sceneManager.navigateLoginPage();
-    }
-
-    @FXML private void handleClose() {
-        handleChiudi();
-    }
-
     private void configuraTabellaColonne() {
         dataInizioColonna.setCellValueFactory(new PropertyValueFactory<>("dataInizio"));
         dataFineColonna.setCellValueFactory(new PropertyValueFactory<>("dataFine"));
@@ -94,6 +78,7 @@ public class OwnInsertionController {
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
+                hbox.setAlignment(Pos.CENTER);
                 setGraphic(empty ? null : hbox);
             }
         });
@@ -102,7 +87,7 @@ public class OwnInsertionController {
     private void caricaDati() {
         AllInsertionController.RichiestaCriteria criteria = AllInsertionController.RichiestaCriteria.builder()
                 .pagina(paginaAttuale)
-                .dimensionePagina(10)
+                .dimensionePagina(14)
                 .build();
         if(sessionManager.getDataTransferObject() instanceof Inserimento.TIPO_INSERIMENTO tipo
                 && sessionManager.getCurrentUser() != null) {
@@ -122,12 +107,12 @@ public class OwnInsertionController {
 
     private void mostraDettagli(RichiestaOffertaDTO dto) {
         sessionManager.setDataTransferObject(dto);
-        sceneManager.switchScene(SceneManager.SceneType.INSERTION_DETAILS, "TimeBank - Dettagli inserimento", false, false);
+        sceneManager.switchContent(SceneManager.SceneType.INSERTION_DETAILS, "TimeBank - Dettagli inserimento");
     }
 
     private void mostraPrenotazioni(RichiestaOffertaDTO dto) {
         sessionManager.setDataTransferObject(dto);
-        sceneManager.switchScene(SceneManager.SceneType.PRENOTAZIONI_LIST, "TimeBank - Prenotazioni", false, false);
+        sceneManager.switchContent(SceneManager.SceneType.PRENOTAZIONI_LIST, "TimeBank - Prenotazioni");
     }
 
     @FXML private void primaPagina() {

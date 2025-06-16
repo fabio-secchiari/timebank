@@ -1,4 +1,4 @@
-package org.fabiojava.timebank.gui.services;
+package org.fabiojava.timebank.gui.utils;
 
 import lombok.Getter;
 import lombok.Setter;

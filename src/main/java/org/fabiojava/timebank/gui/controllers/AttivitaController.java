@@ -6,8 +6,8 @@ import lombok.extern.java.Log;
 import org.fabiojava.timebank.domain.dto.CategoriaDTO;
 import org.fabiojava.timebank.domain.model.Attivita;
 import org.fabiojava.timebank.domain.ports.repositories.AttivitaRepository;
-import org.fabiojava.timebank.gui.services.SceneManager;
-import org.fabiojava.timebank.gui.services.SessionManager;
+import org.fabiojava.timebank.gui.utils.SceneManager;
+import org.fabiojava.timebank.gui.utils.SessionManager;
 import org.springframework.stereotype.Controller;
 
 import java.util.Optional;
@@ -104,15 +104,5 @@ public class AttivitaController {
         if (result.isPresent() && result.get() == ButtonType.OK){
             sceneManager.navigateLastScene();
         }
-    }
-
-    @FXML private void onLogOutHandle() {
-        log.info("Logout");
-        sessionManager.clearSession();
-        sceneManager.navigateLoginPage();
-    }
-
-    @FXML private void onExitHandle() {
-        System.exit(0);
     }
 }
