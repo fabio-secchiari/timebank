@@ -4,7 +4,7 @@ import com.ulisesbocchio.jasyptspringboot.annotation.EnableEncryptableProperties
 import javafx.application.Application;
 import javafx.stage.Stage;
 import lombok.extern.java.Log;
-import org.fabiojava.timebank.gui.services.SceneManager;
+import org.fabiojava.timebank.gui.utils.SceneManager;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -38,7 +38,8 @@ public class TimeBankApplication extends Application {
     public void start(Stage primaryStage) {
         try {
             sceneManager.setPrimaryStage(primaryStage);
-            sceneManager.navigateLoginPage();
+            sceneManager.initMainScene();
+            sceneManager.switchContent(SceneManager.SceneType.LOGIN);
         } catch (Exception e) {
             log.log(Level.SEVERE, "Errore durante l'avvio dell'applicazione", e);
         }

@@ -1,7 +1,6 @@
 package org.fabiojava.timebank.gui.controllers;
 
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -12,8 +11,8 @@ import org.fabiojava.timebank.domain.dto.RichiestaOffertaDTO;
 import org.fabiojava.timebank.domain.model.Offerta;
 import org.fabiojava.timebank.domain.model.Richiesta;
 import org.fabiojava.timebank.domain.services.InserimentiService;
-import org.fabiojava.timebank.gui.services.SceneManager;
-import org.fabiojava.timebank.gui.services.SessionManager;
+import org.fabiojava.timebank.gui.utils.SceneManager;
+import org.fabiojava.timebank.gui.utils.SessionManager;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 
@@ -52,31 +51,6 @@ public class AllInsertionController {
     private int paginaAttuale = 0;
     private int totalePagine = 0;
 
-    @FXML private void handleIndietro() {
-        sceneManager.navigateLastScene();
-    }
-
-    @FXML private void handleLogOut() {
-        sessionManager.setCurrentUser(java.util.Optional.empty());
-        sceneManager.navigateLoginPage();
-    }
-
-    @FXML public static void handleChiudi() {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Conferma");
-        alert.setHeaderText(null);
-        alert.setContentText("Sei sicuro di voler chiudere TimeBank?");
-        alert.showAndWait().ifPresent(response -> {
-            if (response == ButtonType.OK) {
-                System.exit(0);
-            }
-        });
-    }
-
-    public void handleChiudi(ActionEvent actionEvent) {
-        handleChiudi();
-    }
-
     public static class AzioneTableCell extends TableCell<RichiestaOffertaDTO, Void> {
         private final Button visualizzaButton;
 
@@ -87,7 +61,7 @@ public class AllInsertionController {
                     RichiestaOffertaDTO dto = getTableRow().getItem();
                     if (dto != null) {
                         sessionManager.setDataTransferObject(dto);
-                        sceneManager.switchScene(SceneManager.SceneType.INSERTION_DETAILS, "TimeBank - Dettagli inserimento", false, false);
+                        sceneManager.switchContent(SceneManager.SceneType.INSERTION_DETAILS, "TimeBank - Dettagli inserimento");
                     }
                 }
             });
@@ -117,6 +91,8 @@ public class AllInsertionController {
         statoFiltro.getItems().add(Richiesta.StatoRichiesta.APERTA.name());
         configuraTabellaColonne();
         caricaDati();
+        dataInizioFiltro.setShowWeekNumbers(false);
+        dataFineFiltro.setShowWeekNumbers(false);
     }
 
     private void configuraTabellaColonne() {
@@ -151,7 +127,7 @@ public class AllInsertionController {
                 .dataFine(dataFineFiltro.getValue() != null ? Date.valueOf(dataFineFiltro.getValue()) : null)
                 .testoCerca(cercaFiltro.getText())
                 .pagina(paginaAttuale)
-                .dimensionePagina(10)
+                .dimensionePagina(14)
                 .build();
 
         Page<RichiestaOffertaDTO> risultato = inserimentiService.filtraRichiesteOfferteRecenti(criteria, sessionManager.getCurrentUser().getMatricola());

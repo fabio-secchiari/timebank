@@ -9,8 +9,8 @@ import org.fabiojava.timebank.domain.model.Offerta;
 import org.fabiojava.timebank.domain.model.Richiesta;
 import org.fabiojava.timebank.domain.ports.repositories.OffertaRepository;
 import org.fabiojava.timebank.domain.ports.repositories.RichiestaRepository;
-import org.fabiojava.timebank.gui.services.SceneManager;
-import org.fabiojava.timebank.gui.services.SessionManager;
+import org.fabiojava.timebank.gui.utils.SceneManager;
+import org.fabiojava.timebank.gui.utils.SessionManager;
 import org.springframework.stereotype.Controller;
 
 import java.sql.Date;
@@ -50,6 +50,8 @@ public class DettaglioInserimentoController {
             this.richiestaOffertaDTO = dto;
             sessionManager.setDataTransferObject(null);
         }
+        sceneManager.registerNavigationCallback(SceneManager.SceneType.INSERTION_DETAILS,
+                () -> sessionManager.setDataTransferObject(Inserimento.TIPO_INSERIMENTO.valueOf(richiestaOffertaDTO.getTipoInserimento())));
         populateFields();
         if(!Objects.equals(richiestaOffertaDTO.getMatricolaUtente(), sessionManager.getCurrentUser().getMatricola())) {
             btnModifica.setDisable(true);
@@ -85,20 +87,6 @@ public class DettaglioInserimentoController {
         this.offertaRepository = offertaRepository;
     }
 
-    @FXML private void handleIndietro() {
-        sessionManager.setDataTransferObject(Inserimento.TIPO_INSERIMENTO.valueOf(richiestaOffertaDTO.getTipoInserimento()));
-        sceneManager.navigateLastScene();
-    }
-
-    @FXML private void handleLogOut() {
-        sessionManager.setCurrentUser(java.util.Optional.empty());
-        sceneManager.navigateLoginPage();
-    }
-
-    @FXML private void handleChiudi() {
-        AllInsertionController.handleChiudi();
-    }
-
     @FXML private void visualizzaPrenotazioni() {
         if(btnPrenotazioni.getText().equals("Prenota")) { // vuol dire che non è mio
             if(richiestaOffertaDTO.getTipoInserimento().equals("RICHIESTA")) {
@@ -130,10 +118,10 @@ public class DettaglioInserimentoController {
                 map.put(richiesta, richiestaOffertaDTO);
                 sessionManager.setDataTransferObject(map);
             }
-            sceneManager.switchScene(SceneManager.SceneType.INSERTION, "TimeBank - Inserimento prenotazione", false, false);
+            sceneManager.switchContent(SceneManager.SceneType.INSERTION, "TimeBank - Inserimento prenotazione");
         } else {
             sessionManager.setDataTransferObject(richiestaOffertaDTO);
-            sceneManager.switchScene(SceneManager.SceneType.PRENOTAZIONI_LIST, "TimeBank - Lista prenotazioni", false, false);
+            sceneManager.switchContent(SceneManager.SceneType.PRENOTAZIONI_LIST, "TimeBank - Lista prenotazioni");
         }
     }
 
