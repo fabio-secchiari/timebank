@@ -17,7 +17,12 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<?import java.net.URL?>
+
 <VBox alignment="CENTER" prefHeight="373.0" prefWidth="612.0" spacing="10.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.fabiojava.timebank.gui.controllers.OfferRequestController">
+    <stylesheets>
+        <URL value="@../styles/light-theme.css" />
+    </stylesheets>
     <padding>
         <Insets bottom="20.0" />
     </padding>
@@ -71,17 +76,15 @@
                 <ButtonBar nodeOrientation="LEFT_TO_RIGHT" prefHeight="25.0" prefWidth="208.0">
                     <buttons>
                         <HBox alignment="CENTER" prefHeight="25.0" prefWidth="273.0" spacing="10.0">
-                            <Button fx:id="submitButton" mnemonicParsing="false" onAction="#saveInsertion" text="Salva" />
+                            <Button mnemonicParsing="false" onAction="#saveInsertion" text="Salva" />
                             <Button mnemonicParsing="false" onAction="#onCancelHandle" text="Annulla" />
                         </HBox>
                     </buttons>
                 </ButtonBar>
             </HBox>
-         <HBox alignment="CENTER" GridPane.columnSpan="2147483647" GridPane.rowIndex="4">
-            <children>
-               <Label fx:id="errorMessage" textFill="RED" />
-            </children>
-         </HBox>
+            <HBox alignment="CENTER" GridPane.columnSpan="2147483647" GridPane.rowIndex="4">
+                <Label fx:id="errorMessage" textFill="RED"/>
+            </HBox>
           <columnConstraints>
               <ColumnConstraints maxWidth="119.33334350585938" minWidth="68.66668701171875" prefWidth="100.66665649414062" />
               <ColumnConstraints maxWidth="474.6666463216145" minWidth="423.9999898274739" prefWidth="442.66667683919263" />

@@ -9,9 +9,13 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
+<?import java.net.URL?>
 
 <HBox alignment="CENTER" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="org.fabiojava.timebank.gui.controllers.LoginController">
+    <stylesheets>
+        <URL value="@../styles/light-theme.css" />
+    </stylesheets>
     <VBox alignment="CENTER" prefHeight="250.0" prefWidth="391.0" spacing="5.0">
         <padding>
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>

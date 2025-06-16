@@ -249,7 +249,7 @@ public class PrenotazioneController {
     private void caricaDati() {
         AllInsertionController.RichiestaCriteria criteria = AllInsertionController.RichiestaCriteria.builder()
                 .pagina(paginaAttuale)
-                .dimensionePagina(14)
+                .dimensionePagina(12)
                 .build();
         Page<PrenotazioneDTO> record = prenotazioniService.filterByInserimento(richiestaOffertaDTO.getId(), criteria,
                 Inserimento.TIPO_INSERIMENTO.valueOf(richiestaOffertaDTO.getTipoInserimento()));
