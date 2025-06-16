@@ -16,6 +16,7 @@ import org.fabiojava.timebank.domain.ports.repositories.*;
 import org.fabiojava.timebank.domain.services.InserimentiService;
 import org.fabiojava.timebank.domain.services.PrenotazioniService;
 import org.fabiojava.timebank.domain.services.UtenteService;
+import org.fabiojava.timebank.gui.components.RatingControl;
 import org.fabiojava.timebank.gui.controllers.dialogs.UtenteDetailsDialogController;
 import org.fabiojava.timebank.gui.services.SceneManager;
 import org.fabiojava.timebank.gui.services.SessionManager;
@@ -26,9 +27,11 @@ import org.springframework.stereotype.Controller;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Log
 @Controller
@@ -53,11 +56,11 @@ public class DashboardController {
     @FXML    private Label creditLabel;
     @FXML    private ProgressIndicator creditBar;
 
-    @FXML    private TableView<?> ratingsTable;
-    @FXML    private TableColumn<?, ?> ratingTypeColumn;
-    @FXML    private TableColumn<?, ?> ratingValueColumn;
-    @FXML    private TableColumn<?, ?> ratingCommentColumn;
-    @FXML    private TableColumn<?, ?> ratingDateColumn;
+    @FXML    private TableView<Valutazione> ratingsTable;
+    @FXML    private TableColumn<Valutazione, String> ratingTypeColumn;
+    @FXML    private TableColumn<Valutazione, Integer> ratingValueColumn;
+    @FXML    private TableColumn<Valutazione, String> ratingCommentColumn;
+    @FXML    private TableColumn<Valutazione, String> ratingDateColumn;
 
     @FXML    private TableView<RichiestaOffertaDTO> hotRecordsTable;
     @FXML    private TableColumn<RichiestaOffertaDTO, String> hotTipoColonna;
@@ -69,7 +72,7 @@ public class DashboardController {
     @FXML    private ListView<Inserimento> userOffersList;
     @FXML    private ListView<Inserimento> userRequestsList;
 
-    @FXML    private Button allRequestButton;
+    //@FXML private Button allRequestButton;
     @FXML    private Button allOfferButton;
 
     @Autowired
@@ -109,6 +112,48 @@ public class DashboardController {
         }
     }
 
+    public static void configuraRatingHistory(TableColumn<Valutazione, String> ratingTypeColumn,
+                                              TableColumn<Valutazione, Integer> ratingValueColumn,
+                                              TableColumn<Valutazione, String> ratingCommentColumn,
+                                              TableColumn<Valutazione, String> ratingDateColumn){
+        ratingTypeColumn.setCellValueFactory(cellData -> {
+            Valutazione.TipoValutatore tipo = cellData.getValue().getTipoValutatore();
+            String visualizzazione = switch (tipo) {
+                case RICHIEDENTE -> "Offerente";
+                case OFFERENTE -> "Richiedente";
+            };
+            return new javafx.beans.property.SimpleStringProperty(visualizzazione);
+        });
+        ratingValueColumn.setCellValueFactory(new PropertyValueFactory<>("punteggio"));
+        ratingValueColumn.setCellFactory(column -> new TableCell<>() {
+            private final RatingControl ratingControl = new RatingControl();
+
+            {
+                ratingControl.setMouseTransparent(true);
+                ratingControl.setFocusTraversable(false);
+                ratingControl.setMaxHeight(20);
+            }
+
+            @Override
+            protected void updateItem(Integer punteggio, boolean empty) {
+                super.updateItem(punteggio, empty);
+                if (empty || punteggio == null) {
+                    setGraphic(null);
+                } else {
+                    ratingControl.setRating(punteggio);
+                    setGraphic(ratingControl);
+                }
+            }
+        });
+        ratingCommentColumn.setCellValueFactory(new PropertyValueFactory<>("commento"));
+        ratingDateColumn.setCellValueFactory(cellData -> {
+            Timestamp timestamp = cellData.getValue().getDataValutazione();
+            return new javafx.beans.property.SimpleStringProperty(
+                    timestamp != null ? new java.text.SimpleDateFormat("dd/MM/yyyy HH:mm").format(timestamp) : ""
+            );
+        });
+    }
+
     private void configuraTabellaColonne() {
         hotTipoColonna.setCellValueFactory(new PropertyValueFactory<>("tipoInserimento"));
         hotAttivitaColonna.setCellValueFactory(new PropertyValueFactory<>("nomeAttivita"));
@@ -118,6 +163,8 @@ public class DashboardController {
 
         userRequestsList.setCellFactory(lv -> new AzioneListViewCell());
         userOffersList.setCellFactory(lv -> new AzioneListViewCell());
+
+        configuraRatingHistory(ratingTypeColumn, ratingValueColumn, ratingCommentColumn, ratingDateColumn);
 
         toDoListDateByColonna.setCellValueFactory(new PropertyValueFactory<>("dataEsecuzione"));
         toDoListAttivitaColonna.setCellValueFactory(new PropertyValueFactory<>("noteFeedback"));
@@ -174,6 +221,7 @@ public class DashboardController {
 
     private void initValutazioni() {
         List<Valutazione> valutazioni = valutazioneRepository.findByUtente(sessionManager.getCurrentUser().getMatricola());
+        ratingsTable.setItems(FXCollections.observableList(valutazioni));
     }
 
     private void initHotInsertion() {
@@ -208,10 +256,8 @@ public class DashboardController {
             UtenteDetailsDialogController controller = loader.getController();
             controller.setDialog(dialog);
 
-            // TODO CALCOLO DELLA MEDIA VALUTAZIONI
             List<Valutazione> valutazioni = valutazioneRepository.findByUtente(utente.getMatricola());
-            double mediaValutazioni = 0, sommaValutazioni = 0;
-
+            double mediaValutazioni = valutazioni.stream().collect(Collectors.averagingInt(Valutazione::getPunteggio));
             controller.setData(utente, mediaValutazioni, valutazioni);
 
             dialog.setOnCloseRequest(event -> dialog.close());

@@ -53,7 +53,7 @@ public class SqlServerValutazioneRepositoryImpl implements ValutazioneRepository
                 .join("prenotazioni p", "p.id_prenotazione = v.id_prenotazione", QuerySpecification.JoinClause.JoinType.INNER)
                 .join("richieste r", "r.id_richiesta = p.id_richiesta", QuerySpecification.JoinClause.JoinType.LEFT)
                 .join("offerte o", "o.id_offerta = p.id_offerta", QuerySpecification.JoinClause.JoinType.LEFT)
-            .where("CASE WHEN v.tipo_valutatore = 'RICHIEDENTE' THEN r.matricola_richiedente ELSE o.matricola_offerente END", "=", username);
+            .where("CASE WHEN v.tipo_valutatore = 'RICHIEDENTE' THEN o.matricola_offerente ELSE r.matricola_richiedente END", "=", username);
         return queryPort.execute(spec, Valutazione.class);
     }
 
