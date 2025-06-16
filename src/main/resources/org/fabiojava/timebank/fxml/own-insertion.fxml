@@ -8,8 +8,13 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
+<?import java.net.URL?>
+
 <VBox alignment="CENTER" prefHeight="532.0" prefWidth="561.0" spacing="20.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.fabiojava.timebank.gui.controllers.OwnInsertionController">
     <!-- Tabella principale -->
+    <stylesheets>
+        <URL value="@../styles/light-theme.css" />
+    </stylesheets>
     <TableView fx:id="tabellaInserimenti" prefHeight="521.0" prefWidth="561.0" VBox.vgrow="ALWAYS">
         <columns>
             <TableColumn style="-fx-alignment: CENTER;" fx:id="dataInizioColonna" prefWidth="75.3333101272583" text="Data Inizio" />

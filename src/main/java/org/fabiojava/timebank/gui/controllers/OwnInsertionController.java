@@ -87,7 +87,7 @@ public class OwnInsertionController {
     private void caricaDati() {
         AllInsertionController.RichiestaCriteria criteria = AllInsertionController.RichiestaCriteria.builder()
                 .pagina(paginaAttuale)
-                .dimensionePagina(14)
+                .dimensionePagina(12)
                 .build();
         if(sessionManager.getDataTransferObject() instanceof Inserimento.TIPO_INSERIMENTO tipo
                 && sessionManager.getCurrentUser() != null) {

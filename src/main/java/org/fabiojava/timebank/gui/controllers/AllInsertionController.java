@@ -127,7 +127,7 @@ public class AllInsertionController {
                 .dataFine(dataFineFiltro.getValue() != null ? Date.valueOf(dataFineFiltro.getValue()) : null)
                 .testoCerca(cercaFiltro.getText())
                 .pagina(paginaAttuale)
-                .dimensionePagina(14)
+                .dimensionePagina(12)
                 .build();
 
         Page<RichiestaOffertaDTO> risultato = inserimentiService.filtraRichiesteOfferteRecenti(criteria, sessionManager.getCurrentUser().getMatricola());
