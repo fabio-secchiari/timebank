@@ -51,7 +51,7 @@ Ogni utente può inserire, prenotare, filtrare e valutare attività all'interno 
 1. Clona la repository:
 
    ```bash
-   git clone <URL_REPOSITORY>
+   git clone https://github.com/fabio-secchiari/timebank.git
    
 2. Configura il file `application.properties` con le credenziali del tuo database.
 
