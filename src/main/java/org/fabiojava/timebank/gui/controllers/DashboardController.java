@@ -8,7 +8,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
 import lombok.extern.java.Log;
 import org.fabiojava.timebank.domain.dto.PrenotazioneDTO;
 import org.fabiojava.timebank.domain.dto.RichiestaOffertaDTO;
@@ -248,6 +250,7 @@ public class DashboardController {
             DialogPane dialogPane = loader.load();
 
             Dialog<ButtonType> dialog = new Dialog<>();
+            ((Stage) dialog.getDialogPane().getScene().getWindow()).getIcons().add(new Image(Objects.requireNonNull(Objects.requireNonNull(getClass().getResource("/org/fabiojava/timebank/images/icon.png")).toExternalForm())));
             dialog.setDialogPane(dialogPane);
             dialog.setTitle("Dettagli Utente");
 
@@ -329,6 +332,12 @@ public class DashboardController {
             alert.setTitle("Richiesta non concessa");
             alert.setHeaderText(null);
             alert.setContentText("Non hai abbastanza crediti per effettuare una richiesta");
+
+            DialogPane dialogPane = alert.getDialogPane();
+            ((Stage) dialogPane.getScene().getWindow()).getIcons().add(new Image(Objects.requireNonNull(Objects.requireNonNull(getClass().getResource("/org/fabiojava/timebank/images/icon.png")).toExternalForm())));
+            dialogPane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/org/fabiojava/timebank/styles/dialog-style.css")).toExternalForm());
+
+            alert.showAndWait();
             log.info("Richiesta non concessa: non hai abbastanza crediti");
             return;
         }

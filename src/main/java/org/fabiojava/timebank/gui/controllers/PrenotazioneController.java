@@ -11,8 +11,10 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
 import lombok.extern.java.Log;
 import org.fabiojava.timebank.domain.dto.MatchingInfoDTO;
 import org.fabiojava.timebank.domain.dto.PrenotazioneDTO;
@@ -152,6 +154,7 @@ public class PrenotazioneController {
                             grid.add(new Label("Note:"), 0, 1);
                             grid.add(noteArea, 1, 1);
 
+                            dialogPane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/org/fabiojava/timebank/styles/light-theme.css")).toExternalForm());
                             dialogPane.setContent(grid);
 
                             dialog.showAndWait().ifPresent(response -> {
@@ -168,6 +171,11 @@ public class PrenotazioneController {
                                                 alert.setTitle("Errore nella prenotazione");
                                                 alert.setHeaderText("La data di esecuzione non è nel range dell'offerta");
                                                 alert.setContentText(null);
+
+                                                DialogPane dialogAlertPane = alert.getDialogPane();
+                                                ((Stage) dialogPane.getScene().getWindow()).getIcons().add(new Image(Objects.requireNonNull(Objects.requireNonNull(getClass().getResource("/org/fabiojava/timebank/images/icon.png")).toExternalForm())));
+                                                dialogAlertPane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/org/fabiojava/timebank/styles/light-theme.css")).toExternalForm());
+
                                                 alert.show();
                                             } else {
                                                 dto.setDataEsecuzione(Date.valueOf(datePicker.getValue()));
@@ -184,6 +192,11 @@ public class PrenotazioneController {
                                                 alert.setTitle("Errore nella prenotazione");
                                                 alert.setHeaderText("La data di esecuzione non è nel range della richiesta");
                                                 alert.setContentText(null);
+
+                                                DialogPane dialogAlertPane = alert.getDialogPane();
+                                                ((Stage) dialogPane.getScene().getWindow()).getIcons().add(new Image(Objects.requireNonNull(Objects.requireNonNull(getClass().getResource("/org/fabiojava/timebank/images/icon.png")).toExternalForm())));
+                                                dialogAlertPane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/org/fabiojava/timebank/styles/light-theme.css")).toExternalForm());
+
                                                 alert.show();
                                             } else {
                                                 dto.setDataEsecuzione(Date.valueOf(datePicker.getValue()));
@@ -203,6 +216,10 @@ public class PrenotazioneController {
                         alert.setHeaderText(null);
                         alert.setGraphic(null);
                         alert.setContentText("Sei sicuro di voler rifiutare questa prenotazione?");
+
+                        DialogPane dialogPane = alert.getDialogPane();
+                        dialogPane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/org/fabiojava/timebank/styles/light-theme.css")).toExternalForm());
+
                         alert.showAndWait().ifPresent(response -> {
                             if (response == ButtonType.OK) rifiutaPrenotazione(getTableRow().getItem());
                             else if (response == ButtonType.CANCEL) alert.close();
@@ -265,12 +282,14 @@ public class PrenotazioneController {
             DialogPane dialogPane = loader.load();
 
             Dialog<ButtonType> dialog = new Dialog<>();
+            ((Stage) dialog.getDialogPane().getScene().getWindow()).getIcons().add(new Image(Objects.requireNonNull(Objects.requireNonNull(getClass().getResource("/org/fabiojava/timebank/images/icon.png")).toExternalForm())));
             dialog.setDialogPane(dialogPane);
             dialog.setTitle("Valutazione Attività");
 
             URL cssPath = getClass().getResource("/org/fabiojava/timebank/styles/dialog-style.css");
             if(cssPath != null && Objects.nonNull(dialog.getDialogPane().getStylesheets()) && !dialog.getDialogPane().getStylesheets().contains(cssPath.toExternalForm()))
                 dialog.getDialogPane().getStylesheets().add(cssPath.toExternalForm());
+            dialog.getDialogPane().getStylesheets().add(Objects.requireNonNull(getClass().getResource("/org/fabiojava/timebank/styles/light-theme.css")).toExternalForm());
 
             ValutazioneDialogController controller = loader.getController();
             controller.setDialog(dialog);

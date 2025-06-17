@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
@@ -27,6 +28,7 @@ import java.util.Stack;
 @Log
 @Controller
 public class MainController {
+    @FXML   private Label userNameLabel;
     @FXML   private StackPane contentArea;
     @FXML   private MenuItem backMenuItem;
 
@@ -53,6 +55,13 @@ public class MainController {
     @FXML
     public void initialize() {
         backMenuItem.setDisable(true);
+        sessionManager.currentUserProperty().addListener((obs, oldUser, newUser) -> {
+            if (newUser != null) {
+                userNameLabel.setText(newUser.getUsername());
+            } else {
+                userNameLabel.setText("");
+            }
+        });
     }
 
     public void registerNavigationCallback(SceneManager.SceneType sceneType, NavigationCallback callback) {

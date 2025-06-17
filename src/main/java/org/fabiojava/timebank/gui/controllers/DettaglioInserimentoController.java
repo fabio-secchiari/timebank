@@ -2,6 +2,8 @@ package org.fabiojava.timebank.gui.controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.stage.Stage;
 import lombok.extern.java.Log;
 import org.fabiojava.timebank.domain.dto.RichiestaOffertaDTO;
 import org.fabiojava.timebank.domain.model.Inserimento;
@@ -61,10 +63,10 @@ public class DettaglioInserimentoController {
             dataInizio.getEditor().setEditable(false);
             dataFine.getEditor().setEditable(false);
             btnPrenotazioni.setText("Prenota");
-        }
-        if(richiestaOffertaDTO.getStato().equals(Offerta.StatoOfferta.PRENOTATA.name()) ||
-            richiestaOffertaDTO.getStato().equals(Richiesta.StatoRichiesta.ASSEGNATA.name())){
-            btnPrenotazioni.setDisable(true);
+            if(richiestaOffertaDTO.getStato().equals(Offerta.StatoOfferta.PRENOTATA.name()) ||
+                richiestaOffertaDTO.getStato().equals(Richiesta.StatoRichiesta.ASSEGNATA.name())){
+                btnPrenotazioni.setDisable(true);
+            }
         }
     }
 
@@ -151,6 +153,11 @@ public class DettaglioInserimentoController {
         alert.setTitle("Conferma eliminazione inserimento");
         alert.setHeaderText("Sei sicuro di voler eliminare l'inserimento?");
         alert.setContentText(null);
+
+        DialogPane dialogPane = alert.getDialogPane();
+        ((Stage) dialogPane.getScene().getWindow()).getIcons().add(new Image(Objects.requireNonNull(Objects.requireNonNull(getClass().getResource("/org/fabiojava/timebank/images/icon.png")).toExternalForm())));
+        dialogPane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/org/fabiojava/timebank/styles/light-theme.css")).toExternalForm());
+
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
             log.info("Eliminazione inserimento effettuata con successo");

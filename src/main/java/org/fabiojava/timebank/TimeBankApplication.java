@@ -2,6 +2,7 @@ package org.fabiojava.timebank;
 
 import com.ulisesbocchio.jasyptspringboot.annotation.EnableEncryptableProperties;
 import javafx.application.Application;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import lombok.extern.java.Log;
 import org.fabiojava.timebank.gui.utils.SceneManager;
@@ -14,6 +15,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
 import java.util.logging.Level;
 
 @EnableEncryptableProperties
@@ -37,6 +39,7 @@ public class TimeBankApplication extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
+            primaryStage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResource("/org/fabiojava/timebank/images/icon.png")).toExternalForm()));
             sceneManager.setPrimaryStage(primaryStage);
             sceneManager.initMainScene();
             sceneManager.switchContent(SceneManager.SceneType.LOGIN);

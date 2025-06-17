@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ButtonBar?>
@@ -17,9 +18,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<?import java.net.URL?>
-
-<VBox alignment="CENTER" prefHeight="373.0" prefWidth="612.0" spacing="10.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.fabiojava.timebank.gui.controllers.OfferRequestController">
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="434.0" prefWidth="635.0" spacing="10.0" styleClass="card" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.fabiojava.timebank.gui.controllers.OfferRequestController">
     <stylesheets>
         <URL value="@../styles/light-theme.css" />
     </stylesheets>
@@ -27,7 +26,7 @@
         <Insets bottom="20.0" />
     </padding>
     <HBox alignment="CENTER">
-        <Label text="INSERIMENTO NUOVO ANNUNCIO" textAlignment="CENTER">
+        <Label styleClass="label-header" text="INSERIMENTO NUOVO ANNUNCIO:" textAlignment="CENTER">
            <font>
                <Font name="System Bold" size="14.0" />
            </font>
@@ -46,14 +45,20 @@
         <VBox.margin>
             <Insets left="20.0" right="20.0" />
         </VBox.margin>
-        <GridPane hgap="10" prefHeight="269.0" prefWidth="572.0" vgap="10">
+        <GridPane hgap="10" prefHeight="301.0" prefWidth="572.0" vgap="10">
             <VBox GridPane.columnIndex="1" GridPane.rowIndex="1">
                 <HBox layoutX="10.0" layoutY="10.0" spacing="50.0">
-                    <Label text="Inizio disponibilità:" />
+                    <Label text="Inizio disponibilità:">
+                  <font>
+                     <Font size="11.0" />
+                  </font></Label>
                     <Label text="Fine disponibilità:">
                         <HBox.margin>
                             <Insets left="100.0" />
                         </HBox.margin>
+                  <font>
+                     <Font size="11.0" />
+                  </font>
                     </Label>
                 </HBox>
                 <HBox alignment="CENTER" spacing="50.0">
@@ -67,12 +72,12 @@
           <Label text="Data:" GridPane.rowIndex="1" />
           <Label text="Attività:" />
             <HBox alignment="CENTER" spacing="25.0" GridPane.columnIndex="1">
-                <ComboBox fx:id="attivitaField" maxWidth="1.7976931348623157E308" prefHeight="25.0" prefWidth="363.0" />
+                <ComboBox fx:id="attivitaField" maxWidth="1.7976931348623157E308" prefHeight="29.0" prefWidth="339.0" />
                 <Button fx:id="newAttivitaButton" mnemonicParsing="false" onAction="#addAttivita" text="Nuova" />
             </HBox>
           <Label text="Note:" GridPane.rowIndex="3" />
           <TextArea fx:id="noteField" prefHeight="77.0" prefWidth="443.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-            <HBox alignment="CENTER" GridPane.columnSpan="2147483647" GridPane.rowIndex="5">
+            <HBox alignment="CENTER" prefHeight="50.0" prefWidth="554.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="5">
                 <ButtonBar nodeOrientation="LEFT_TO_RIGHT" prefHeight="25.0" prefWidth="208.0">
                     <buttons>
                         <HBox alignment="CENTER" prefHeight="25.0" prefWidth="273.0" spacing="10.0">
@@ -83,19 +88,19 @@
                 </ButtonBar>
             </HBox>
             <HBox alignment="CENTER" GridPane.columnSpan="2147483647" GridPane.rowIndex="4">
-                <Label fx:id="errorMessage" textFill="RED"/>
+                <Label fx:id="errorMessage" styleClass="error" />
             </HBox>
           <columnConstraints>
               <ColumnConstraints maxWidth="119.33334350585938" minWidth="68.66668701171875" prefWidth="100.66665649414062" />
               <ColumnConstraints maxWidth="474.6666463216145" minWidth="423.9999898274739" prefWidth="442.66667683919263" />
           </columnConstraints>
           <rowConstraints>
-              <RowConstraints minHeight="10.0" prefHeight="30.0" />
-              <RowConstraints />
-              <RowConstraints />
-              <RowConstraints maxHeight="88.00000000000001" minHeight="10.0" prefHeight="100.0" />
-            <RowConstraints maxHeight="55.333333333333314" minHeight="10.0" prefHeight="31.999989827473968" />
-              <RowConstraints maxHeight="55.333333333333314" minHeight="10.0" prefHeight="31.999989827473968" />
+              <RowConstraints maxHeight="35.333335876464844" minHeight="10.0" />
+              <RowConstraints maxHeight="67.99998982747397" minHeight="26.333343505859375" prefHeight="53.99998982747397" />
+              <RowConstraints maxHeight="87.33331298828124" minHeight="34.66665649414061" />
+              <RowConstraints maxHeight="88.00000000000001" minHeight="10.0" />
+            <RowConstraints maxHeight="55.333333333333314" minHeight="10.0" />
+              <RowConstraints maxHeight="55.333333333333314" minHeight="10.0" />
           </rowConstraints>
           <padding>
               <Insets top="20.0" />

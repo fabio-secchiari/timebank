@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.DatePicker?>
@@ -12,15 +13,14 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<?import java.net.URL?>
-
-<VBox alignment="CENTER" prefHeight="416.0" prefWidth="560.0" spacing="10" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.fabiojava.timebank.gui.controllers.DettaglioInserimentoController">
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="416.0" prefWidth="560.0" spacing="10" styleClass="card" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.fabiojava.timebank.gui.controllers.DettaglioInserimentoController">
     <stylesheets>
         <URL value="@../styles/light-theme.css" />
     </stylesheets>
     <padding>
         <Insets bottom="20.0" top="20.0" />
     </padding>
+   <Label styleClass="label-header" text="DETTAGLI INSERIMENTO:" />
     <!-- Contenuto principale -->
     <HBox alignment="CENTER">
         <GridPane alignment="CENTER" hgap="10" prefHeight="314.0" prefWidth="573.0" vgap="10">
@@ -29,45 +29,45 @@
             </padding>
 
             <!-- Prima riga -->
-            <Label style="-fx-font-weight: bold" text="Tipo Inserimento:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+            <Label text="Tipo Inserimento:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
             <Label fx:id="tipoInserimento" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
             <!-- Seconda riga -->
-            <Label style="-fx-font-weight: bold" text="Data Inizio:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+            <Label text="Data Inizio:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
             <DatePicker fx:id="dataInizio" editable="false" prefHeight="25.0" prefWidth="399.0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="1" />
 
             <!-- Terza riga -->
-            <Label style="-fx-font-weight: bold" text="Data Fine:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+            <Label text="Data Fine:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
             <DatePicker fx:id="dataFine" editable="false" prefHeight="25.0" prefWidth="381.0" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" GridPane.rowIndex="2" />
 
             <!-- Quarta riga - Ore disponibili -->
-            <Label style="-fx-font-weight: bold" text="Ore disponibili:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+            <Label text="Ore disponibili:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
             <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="3">
                 <TextField fx:id="oreDisponibili" prefHeight="25.0" prefWidth="295.0" HBox.hgrow="ALWAYS" />
             </HBox>
 
             <!-- Quinta riga -->
-            <Label style="-fx-font-weight: bold" text="Attività:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+            <Label text="Attività:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
             <Label fx:id="nomeAttivita" GridPane.columnIndex="1" GridPane.rowIndex="4" />
 
             <!-- Sesta riga -->
-            <Label style="-fx-font-weight: bold" text="Stato:" GridPane.columnIndex="0" GridPane.rowIndex="5" />
+            <Label text="Stato:" GridPane.columnIndex="0" GridPane.rowIndex="5" />
             <Label fx:id="stato" GridPane.columnIndex="1" GridPane.rowIndex="5" />
 
             <!-- Settima riga -->
-            <Label style="-fx-font-weight: bold" text="Note:" GridPane.columnIndex="0" GridPane.rowIndex="6" />
+            <Label text="Note:" GridPane.columnIndex="0" GridPane.rowIndex="6" />
             <TextArea fx:id="note" prefHeight="71.0" prefRowCount="3" prefWidth="222.0" wrapText="true" GridPane.columnIndex="1" GridPane.rowIndex="6" />
 
             <!-- Ottava riga -->
-            <Label style="-fx-font-weight: bold" text="Utente:" GridPane.columnIndex="0" GridPane.rowIndex="7" />
+            <Label text="Utente:" GridPane.columnIndex="0" GridPane.rowIndex="7" />
             <Label fx:id="utente" GridPane.columnIndex="1" GridPane.rowIndex="7" />
 
             <!-- Nona riga -->
-            <Label style="-fx-font-weight: bold" text="Data Inserimento:" GridPane.columnIndex="0" GridPane.rowIndex="8" />
+            <Label text="Data Inserimento:" GridPane.columnIndex="0" GridPane.rowIndex="8" />
             <Label fx:id="dataInserimento" GridPane.columnIndex="1" GridPane.rowIndex="8" />
          <columnConstraints>
-            <ColumnConstraints hgrow="ALWAYS" maxWidth="254.66666666666666" minWidth="78.66664632161458" prefWidth="146.66666666666663" />
-            <ColumnConstraints maxWidth="340.66666666666663" minWidth="92.66666666666663" prefWidth="340.66666666666663" />
+            <ColumnConstraints hgrow="ALWAYS" maxWidth="254.66666666666666" minWidth="78.66664632161458" prefWidth="153.9999796549479" />
+            <ColumnConstraints maxWidth="355.3333536783854" minWidth="92.66666666666663" prefWidth="355.3333536783854" />
          </columnConstraints>
          <rowConstraints>
             <RowConstraints />
@@ -85,13 +85,13 @@
 
     <HBox alignment="CENTER">
         <!-- Area messaggi di errore -->
-        <Label fx:id="errorMessage" textFill="RED" visible="false" />
+        <Label fx:id="errorMessage" styleClass="error" visible="false" />
     </HBox>
 
     <!-- Pulsanti di azione -->
     <HBox alignment="CENTER" spacing="10">
         <Button fx:id="btnPrenotazioni" onAction="#visualizzaPrenotazioni" text="Prenotazioni" />
         <Button fx:id="btnModifica" onAction="#modificaInserimento" text="Modifica" />
-        <Button fx:id="btnElimina" onAction="#eliminaInserimento" style="-fx-background-color: #ff4444; -fx-text-fill: white;" text="Elimina" />
+        <Button fx:id="btnElimina" onAction="#eliminaInserimento" styleClass="delete" text="Elimina" />
     </HBox>
 </VBox>

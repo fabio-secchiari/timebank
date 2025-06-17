@@ -10,7 +10,7 @@ import org.fabiojava.timebank.gui.utils.SceneManager;
 import org.fabiojava.timebank.gui.utils.SessionManager;
 import org.springframework.stereotype.Controller;
 
-import java.util.Optional;
+import static org.fabiojava.timebank.gui.controllers.OfferRequestController.confirmCancel;
 
 @Log
 @Controller
@@ -95,14 +95,6 @@ public class AttivitaController {
     }
 
     @FXML private void onCancelHandle() {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Conferma annullamento inserimento");
-        alert.setGraphic(null);
-        alert.setHeaderText("Sei sicuro di voler annullare?");
-        alert.setContentText(null);
-        Optional<ButtonType> result = alert.showAndWait();
-        if (result.isPresent() && result.get() == ButtonType.OK){
-            sceneManager.navigateLastScene();
-        }
+        confirmCancel(AttivitaController.class, sceneManager);
     }
 }

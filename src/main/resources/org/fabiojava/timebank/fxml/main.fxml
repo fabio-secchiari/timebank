@@ -1,25 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.control.*?>
 
 <?import java.net.URL?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
 
-<BorderPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.fabiojava.timebank.gui.controllers.MainController">
+<BorderPane styleClass="root" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.fabiojava.timebank.gui.controllers.MainController">
     <stylesheets>
         <URL value="@../styles/light-theme.css" />
     </stylesheets>
     <top>
-        <MenuBar>
-            <Menu text="Strumenti">
-                <MenuItem text="Indietro" onAction="#handleBackFromMenu" fx:id="backMenuItem"/>
-                <SeparatorMenuItem />
-                <MenuItem text="Logout" onAction="#handleLogout"/>
-                <MenuItem text="Chiudi" onAction="#handleExit"/>
-            </Menu>
-        </MenuBar>
+        <HBox alignment="CENTER_LEFT" style="-fx-padding: 4 8 4 8;">
+            <MenuBar HBox.hgrow="ALWAYS">
+                <Menu text="Strumenti">
+                    <MenuItem fx:id="backMenuItem" onAction="#handleBackFromMenu" text="Indietro" />
+                    <SeparatorMenuItem />
+                    <MenuItem onAction="#handleLogout" text="Logout" />
+                    <MenuItem onAction="#handleExit" text="Chiudi" />
+                </Menu>
+            </MenuBar>
+
+            <HBox alignment="CENTER_RIGHT" spacing="6" styleClass="user-hbox">
+                <Label fx:id="userNameLabel" styleClass="user-label" />
+                <ImageView fitHeight="24" fitWidth="24">
+                    <Image url="@../images/user.png" />
+                </ImageView>
+            </HBox>
+        </HBox>
     </top>
 
     <center>
-        <StackPane fx:id="contentArea"/>
+        <StackPane fx:id="contentArea" />
     </center>
 </BorderPane>

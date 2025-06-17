@@ -1,7 +1,19 @@
 .root {
     -fx-font-family: "Segoe UI", sans-serif;
-    -fx-background-color: #fefefe;
     -fx-text-fill: #2c698d;
+    -fx-background-image: url("../images/background.jpg");
+    -fx-background-repeat: repeat;
+    -fx-background-size: auto;
+}
+
+.card {
+    -fx-background-color: rgba(255, 255, 255, 0.85);
+    -fx-border-color: rgba(44, 105, 141, 0.6);
+    -fx-border-width: 2px;
+    -fx-background-radius: 14px;
+    -fx-border-radius: 14px;
+    -fx-padding: 25px 30px;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.25), 20, 0.2, 0, 6);
 }
 
 .label {
@@ -12,6 +24,13 @@
 .label-header {
     -fx-font-size: 16px;
     -fx-font-weight: bold;
+}
+
+.label.error {
+    -fx-text-fill: #d9534f;
+    -fx-font-size: 11px;
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-font-weight: normal;
 }
 
 .button {
@@ -35,13 +54,31 @@
     -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.03), 2, 0, 0, 1);
 }
 
+.button.delete {
+    -fx-background-color: #f78a8a;
+    -fx-text-fill: white;
+    -fx-background-radius: 12px;
+    -fx-border-radius: 12px;
+    -fx-border-color: transparent;
+    -fx-cursor: hand;
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+.button.delete:hover {
+    -fx-background-color: #f76c6c;
+}
+
+.button.delete:pressed {
+    -fx-background-color: #d9534f;
+}
+
 .button:focused,
 .text-field:focused,
 .password-field:focused,
 .combo-box:focused,
 .date-picker:focused {
     -fx-border-color: #2c698d;
-    -fx-border-width: 2px;
+    -fx-border-width: 1px;
     -fx-effect: dropshadow(two-pass-box, rgba(44, 105, 141, 0.3), 6, 0, 0, 0);
 }
 
@@ -116,6 +153,23 @@
     -fx-background-color: #e8fcf0;
 }
 
+.text-area {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #b0f2c2;
+    -fx-border-radius: 5px;
+}
+.text-area:focused {
+    -fx-border-color: #2c698d;
+    -fx-background-color: #e8fcf0;
+}
+.text-area .content {
+    -fx-background-color: #ffffff;
+}
+.text-area:focused .content {
+    -fx-border-color: transparent;
+    -fx-background-color: #e8fcf0;
+}
+
 .list-view {
     -fx-background-color: #d0f0f9;
     -fx-border-color: transparent;
@@ -142,16 +196,53 @@
     -fx-border-color: transparent;
 }
 
+.date-picker {
+    -fx-background-color: #b0f2c2;
+    -fx-border-color: #b0f2c2;
+    -fx-border-radius: 6px;
+    -fx-border-width: 1px;
+    -fx-background-radius: 6px;
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-font-size: 11px;
+    -fx-text-fill: #2c698d;
+}
+.date-picker .text-field {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #b0f2c2;
+}
+.date-picker .text-field:focused {
+    -fx-border-color: #2c698d;
+    -fx-background-color: #e8fcf0;
+}
+.date-picker .arrow-button {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 0 6px 6px 0;
+}
+.date-picker .arrow-button:hover {
+    -fx-background-color: #d0f0f9;
+}
+
 .combo-box {
-    -fx-background-color: #fff7c2;
-    -fx-border-color: #e0e0e0;
+    -fx-background-color: #b0f2c2;
+    -fx-border-color: #b0f2c2;
     -fx-border-radius: 6px;
     -fx-background-radius: 6px;
     -fx-font-family: "Segoe UI", sans-serif;
     -fx-font-size: 11px;
     -fx-text-fill: #2c698d;
 }
-
+.combo-box .list-cell {
+    -fx-background-color: transparent;
+    -fx-font-size: 11px;
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-background-radius: 6px 0 0 6px;
+}
+.combo-box .list-cell:hover {
+    -fx-background-color: #b0f2c2;
+    -fx-text-fill: #2c698d;
+    -fx-font-weight: bold;
+    -fx-border-color: transparent;
+}
 .combo-box .arrow-button {
     -fx-background-color: #b0f2c2;
     -fx-background-radius: 0 6px 6px 0;
@@ -192,4 +283,41 @@
 
 .menu:selected {
     -fx-background-color: #b0f2c2;
+}
+
+.radio-button {
+    -fx-text-fill: #2c698d;
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-font-size: 13px;
+    -fx-padding: 5px;
+}
+.radio-button .radio {
+    -fx-background-color: #fff7c2;
+    -fx-border-color: #2c698d;
+    -fx-border-width: 2px;
+    -fx-background-radius: 10px;
+    -fx-border-radius: 10px;
+    -fx-padding: 3px;
+}
+.radio-button:focused {
+    -fx-effect: dropshadow(two-pass-box, rgba(44, 105, 141, 0.3), 6, 0, 0, 0);
+}
+
+.icon {
+    -fx-font-family: "FontAwesome";
+    -fx-font-size: 16px;
+    -fx-text-fill: #2c698d;
+}
+
+.user-label {
+    -fx-text-fill: #2c698d;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+.user-hbox {
+    -fx-background-color: #fff7c2;
+    -fx-border-color: #e7e7e7;
+    -fx-border-width: 0 0 2px 0;
+    -fx-padding: 4px 8px;
 }

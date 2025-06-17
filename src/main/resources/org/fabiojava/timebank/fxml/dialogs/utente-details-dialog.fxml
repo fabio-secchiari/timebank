@@ -1,90 +1,83 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.ButtonType?>
+<?import javafx.scene.control.DialogPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 
-<DialogPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="org.fabiojava.timebank.gui.controllers.dialogs.UtenteDetailsDialogController">
+<DialogPane xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.fabiojava.timebank.gui.controllers.dialogs.UtenteDetailsDialogController">
+    <stylesheets>
+        <URL value="@../../styles/light-theme.css" />
+    </stylesheets>
     <buttonTypes>
-        <ButtonType fx:constant="CLOSE"/>
+        <ButtonType fx:constant="CLOSE" />
     </buttonTypes>
 
     <content>
         <VBox spacing="10">
             <padding>
-                <Insets top="20" right="20" bottom="20" left="20"/>
+                <Insets bottom="20" left="20" right="20" top="20" />
             </padding>
 
             <!-- Informazioni Utente -->
             <GridPane hgap="15" vgap="10">
                 <!-- Prima colonna -->
-                <Label text="Nome e Cognome:"
-                       styleClass="label-bold"
-                       GridPane.columnIndex="0"
-                       GridPane.rowIndex="0" />
-                <Label fx:id="nomeCompletoLabel"
-                       GridPane.columnIndex="1"
-                       GridPane.rowIndex="0" />
+                <Label styleClass="label-bold" text="Nome e Cognome:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                <Label fx:id="nomeCompletoLabel" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
-                <Label text="Matricola:"
-                       styleClass="label-bold"
-                       GridPane.columnIndex="0"
-                       GridPane.rowIndex="1" />
-                <Label fx:id="matricolaLabel"
-                       GridPane.columnIndex="1"
-                       GridPane.rowIndex="1" />
+                <Label styleClass="label-bold" text="Matricola:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                <Label fx:id="matricolaLabel" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-                <Label text="Crediti disponibili:"
-                       GridPane.columnIndex="0"
-                       GridPane.rowIndex="2"
-                       styleClass="label-bold"/>
-                <Label fx:id="creditiLabel"
-                       GridPane.columnIndex="1"
-                       GridPane.rowIndex="2"
-                       styleClass="crediti-label"/>
+                <Label styleClass="label-bold" text="Crediti disponibili:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                <Label fx:id="creditiLabel" styleClass="crediti-label" GridPane.columnIndex="1" GridPane.rowIndex="2" />
 
                 <!-- Seconda colonna -->
-                <Label text="Email:"
-                       styleClass="label-bold"
-                       GridPane.columnIndex="2"
-                       GridPane.rowIndex="0" />
-                <Label fx:id="emailLabel"
-                       GridPane.columnIndex="3"
-                       GridPane.rowIndex="0" />
+                <Label styleClass="label-bold" text="Email:" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                <Label fx:id="emailLabel" GridPane.columnIndex="3" GridPane.rowIndex="0" />
 
-                <Label text="Telefono:"
-                       styleClass="label-bold"
-                       GridPane.columnIndex="2"
-                       GridPane.rowIndex="1" />
-                <Label fx:id="telefonoLabel"
-                       GridPane.columnIndex="3"
-                       GridPane.rowIndex="1" />
-                <Label text="Valutazione media:"
-                       GridPane.columnIndex="2"
-                       GridPane.rowIndex="2"
-                       styleClass="label-bold"/>
-                <HBox fx:id="starContainer" spacing="2"
-                      GridPane.columnIndex="3"
-                      GridPane.rowIndex="2"
-                      alignment="CENTER">
+                <Label styleClass="label-bold" text="Telefono:" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                <Label fx:id="telefonoLabel" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                <Label styleClass="label-bold" text="Valutazione media:" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                <HBox fx:id="starContainer" alignment="CENTER" spacing="2" GridPane.columnIndex="3" GridPane.rowIndex="2">
                     <!-- Le stelle verranno aggiunte dinamicamente -->
                 </HBox>
+            <columnConstraints>
+               <ColumnConstraints />
+               <ColumnConstraints />
+               <ColumnConstraints />
+               <ColumnConstraints />
+            </columnConstraints>
+            <rowConstraints>
+               <RowConstraints />
+               <RowConstraints />
+               <RowConstraints />
+            </rowConstraints>
             </GridPane>
 
             <!-- Separatore -->
-            <Separator/>
+            <Separator />
 
             <!-- Tabella Valutazioni -->
-            <Label text="Storico Valutazioni" styleClass="section-header"/>
-            <TableView fx:id="valutazioniTable" VBox.vgrow="ALWAYS">
+            <Label styleClass="section-header" text="Storico Valutazioni" />
+            <TableView fx:id="valutazioniTable" prefHeight="0.0" prefWidth="323.0" VBox.vgrow="ALWAYS">
                 <columns>
-                    <TableColumn fx:id="dataColumn" text="Data"/>
-                    <TableColumn fx:id="punteggioColumn" text="Valutazione"/>
-                    <TableColumn fx:id="commentoColumn" text="Commento"/>
-                    <TableColumn fx:id="tipoValutatoreColumn" text="Ruolo"/>
+                    <TableColumn fx:id="dataColumn" text="Data" />
+                    <TableColumn fx:id="punteggioColumn" text="Valutazione" />
+                    <TableColumn fx:id="commentoColumn" text="Commento" />
+                    <TableColumn fx:id="tipoValutatoreColumn" text="Ruolo" />
                 </columns>
+            <columnResizePolicy>
+               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+            </columnResizePolicy>
             </TableView>
         </VBox>
     </content>

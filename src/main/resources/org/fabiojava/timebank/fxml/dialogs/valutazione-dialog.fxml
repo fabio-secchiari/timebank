@@ -5,10 +5,14 @@
 <?import javafx.geometry.Insets?>
 <?import org.fabiojava.timebank.gui.components.RatingControl?>
 
+<?import java.net.URL?>
 <DialogPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="org.fabiojava.timebank.gui.controllers.dialogs.ValutazioneDialogController"
             prefWidth="400.0">
+    <stylesheets>
+        <URL value="@../../styles/light-theme.css" />
+    </stylesheets>
 
     <headerText>
         Inserisci la tua valutazione

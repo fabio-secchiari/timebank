@@ -3,6 +3,8 @@ package org.fabiojava.timebank.gui.controllers;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.stage.Stage;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.java.Log;
@@ -204,7 +206,7 @@ public class OfferRequestController {
         if(attivita.isEmpty()) { showError("Attività non trovata"); return; }
         if(insertType.getSelectedToggle() == offerRadio){
             if(areDataInvalid()) { showError("Uno o più campi errati"); return; }
-            Offerta offerta = offerta = new Offerta(
+            Offerta offerta = new Offerta(
                     null,
                     sessionManager.getCurrentUser().getMatricola(),
                     attivita.get().getIdAttivita(),
@@ -296,25 +298,24 @@ public class OfferRequestController {
         sceneManager.switchContent(SceneManager.SceneType.ATTIVITA, "TimeBank - Nuova attività");
     }
 
-    @FXML private void onCancelHandle() {
+    public static void confirmCancel(Class<?> obj, SceneManager sceneManager) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Conferma annullamento inserimento");
         alert.setGraphic(null);
         alert.setContentText("Sei sicuro di voler annullare?");
         alert.setHeaderText(null);
+
+        DialogPane dialogPane = alert.getDialogPane();
+        ((Stage) dialogPane.getScene().getWindow()).getIcons().add(new Image(Objects.requireNonNull(Objects.requireNonNull(obj.getResource("/org/fabiojava/timebank/images/icon.png")).toExternalForm())));
+        dialogPane.getStylesheets().add(Objects.requireNonNull(obj.getResource("/org/fabiojava/timebank/styles/light-theme.css")).toExternalForm());
+
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK){
             sceneManager.navigateLastScene();
         }
     }
 
-    @FXML private void onLogOutHandle() {
-        log.info("Logout");
-        sessionManager.clearSession();
-        sceneManager.navigateLoginPage();
-    }
-
-    @FXML private void onExitHandle() {
-        System.exit(0);
+    @FXML private void onCancelHandle() {
+        confirmCancel(OfferRequestController.class, sceneManager);
     }
 }
