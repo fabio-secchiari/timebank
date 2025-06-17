@@ -73,6 +73,7 @@ Ogni utente può inserire, prenotare, filtrare e valutare attività all'interno 
 - ✅ UI responsive e rifinita graficamente  
 - ✅ Sistema completo di gestione utenti, prenotazioni e valutazioni  
 - 🔜 Struttura pronta per estensioni future (es. caricamento file, chat integrata)
+- 📖 Per informazioni dettagliate si veda il [Diario di bordo](https://docs.google.com/document/d/1x5f1vJL4mZGq9r8KXKJBMpCD_TA34Gx0v_Ca7TCMtXQ/edit?usp=sharing)
 
 ## 🤝 Contributi
 
